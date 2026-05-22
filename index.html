@@ -19,10 +19,10 @@
     --gold: #c89968;
     --line: rgba(74, 63, 53, 0.12);
   }
- 
+
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
- 
+
   body {
     font-family: 'Gowun Batang', serif;
     color: var(--ink);
@@ -30,7 +30,7 @@
     line-height: 1.85;
     font-size: 16px;
   }
- 
+
   /* 미세한 종이 질감 */
   body::before {
     content: '';
@@ -42,9 +42,9 @@
     pointer-events: none;
     z-index: 0;
   }
- 
+
   main { position: relative; z-index: 1; }
- 
+
   /* ============================================
      공통 — 섹션 / 컨테이너
   ============================================ */
@@ -53,11 +53,11 @@
     margin: 0 auto;
     padding: 0 1.5rem;
   }
- 
+
   section {
     padding: 5rem 0;
   }
- 
+
   .label {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
@@ -76,7 +76,7 @@
     height: 1px;
     background: var(--rose);
   }
- 
+
   h2 {
     font-family: 'Nanum Myeongjo', serif;
     font-weight: 800;
@@ -86,12 +86,12 @@
     margin-bottom: 2rem;
     letter-spacing: -0.01em;
   }
- 
+
   p {
     color: var(--ink-soft);
     font-size: 1.02rem;
   }
- 
+
   /* ============================================
      1. HERO
   ============================================ */
@@ -99,7 +99,7 @@
     padding: 5rem 1.5rem 4rem;
     text-align: center;
   }
- 
+
   .hero-meta {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
@@ -118,7 +118,7 @@
     display: inline-block;
     margin-top: 0.3rem;
   }
- 
+
   .hero h1 {
     font-family: 'Nanum Myeongjo', serif;
     font-weight: 800;
@@ -135,7 +135,7 @@
     color: var(--rose);
     margin: 0 0.2em;
   }
- 
+
   .hero-sub {
     color: var(--ink-light);
     font-size: 1rem;
@@ -144,7 +144,7 @@
     opacity: 0;
     animation: fadeUp 1s ease 0.8s forwards;
   }
- 
+
   .hero-poster {
     max-width: 380px;
     margin: 0 auto;
@@ -158,12 +158,12 @@
     border-radius: 4px;
     box-shadow: 0 16px 40px rgba(74, 63, 53, 0.18);
   }
- 
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
   }
- 
+
   /* ============================================
      2. ABOUT — 모임 소개
   ============================================ */
@@ -190,21 +190,21 @@
     text-align: center;
     line-height: 1.9;
   }
- 
+
   /* ============================================
      3. HOW — 진행 방식
   ============================================ */
   .how {
     background: var(--paper-warm);
   }
- 
+
   .info-table {
     display: grid;
     gap: 0;
     margin-top: 2rem;
     border-top: 1px solid var(--line);
   }
- 
+
   .info-row {
     display: grid;
     grid-template-columns: 130px 1fr;
@@ -212,7 +212,7 @@
     border-bottom: 1px solid var(--line);
     align-items: baseline;
   }
- 
+
   .info-key {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
@@ -230,7 +230,7 @@
     margin-top: 0.2rem;
     letter-spacing: 0;
   }
- 
+
   .info-val {
     font-size: 1rem;
     color: var(--ink);
@@ -242,7 +242,7 @@
     font-size: 0.88rem;
     margin-top: 0.2rem;
   }
- 
+
   /* ============================================
      4. BOOK — 이번 책
   ============================================ */
@@ -250,7 +250,7 @@
     margin-top: 2rem;
     text-align: center;
   }
- 
+
   .book-img {
     max-width: 420px;
     margin: 0 auto 2.5rem;
@@ -266,7 +266,7 @@
   .book-img img:hover {
     transform: scale(1.02);
   }
- 
+
   .book-text {
     max-width: 480px;
     margin: 0 auto;
@@ -289,14 +289,14 @@
     font-size: 0.97rem;
     margin-bottom: 0.8rem;
   }
- 
+
   /* ============================================
      5. HOSTS — 호스트
   ============================================ */
   .hosts {
     background: var(--paper-warm);
   }
- 
+
   .host {
     padding: 1.5rem 0;
     border-bottom: 1px solid var(--line);
@@ -304,7 +304,7 @@
   .host:last-child {
     border-bottom: none;
   }
- 
+
   .host-name {
     font-family: 'Nanum Myeongjo', serif;
     font-weight: 800;
@@ -325,7 +325,7 @@
     font-size: 0.97rem;
     line-height: 1.8;
   }
- 
+
   /* ============================================
      6. JOIN — 참여
   ============================================ */
@@ -333,16 +333,16 @@
     text-align: center;
     padding-bottom: 6rem;
   }
- 
+
   .join h2 {
     margin-bottom: 1.2rem;
   }
- 
+
   .join p {
     margin-bottom: 2.5rem;
     color: var(--ink-light);
   }
- 
+
   .cta {
     display: inline-block;
     padding: 1rem 2.5rem;
@@ -373,7 +373,7 @@
   .cta:hover::before {
     transform: translateY(0);
   }
- 
+
   .payment {
     margin-top: 3rem;
     padding: 1.5rem;
@@ -408,7 +408,7 @@
     font-size: 0.85rem;
     margin-top: 0.3rem;
   }
- 
+
   .archive-link {
     display: block;
     margin-top: 3rem;
@@ -427,7 +427,7 @@
     border-bottom: 1px solid currentColor;
     padding-bottom: 2px;
   }
- 
+
   /* ============================================
      FOOTER
   ============================================ */
@@ -437,7 +437,7 @@
     border-top: 1px solid var(--line);
     background: var(--paper-warm);
   }
- 
+
   .footer-motto {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
@@ -446,7 +446,7 @@
     letter-spacing: 0.3em;
     margin-bottom: 1.5rem;
   }
- 
+
   .footer-contact {
     font-family: 'Nanum Myeongjo', serif;
     font-size: 0.92rem;
@@ -469,7 +469,7 @@
     margin: 0 0.6rem;
     opacity: 0.5;
   }
- 
+
   .footer-name {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
@@ -481,7 +481,7 @@
     max-width: 280px;
     margin: 0 auto;
   }
- 
+
   /* ============================================
      RESPONSIVE — 모바일
   ============================================ */
@@ -489,23 +489,23 @@
     section {
       padding: 3.5rem 0;
     }
- 
+
     .hero {
       padding: 3rem 1.5rem 3rem;
     }
- 
+
     .hero-poster {
       max-width: 100%;
     }
- 
+
     h2 {
       font-size: 1.5rem;
     }
- 
+
     .book-img {
       max-width: 100%;
     }
- 
+
     .info-row {
       grid-template-columns: 100px 1fr;
       padding: 1rem 0;
@@ -519,7 +519,7 @@
     .info-val {
       font-size: 0.95rem;
     }
- 
+
     .footer-contact {
       font-size: 0.88rem;
       line-height: 2.2;
@@ -534,9 +534,9 @@
 </style>
 </head>
 <body>
- 
+
 <main>
- 
+
   <!-- 1. HERO -->
   <section class="hero">
     <div class="hero-meta">
@@ -555,7 +555,7 @@
       <img src="images/poster.png" alt="모두의 새벽 + 낭만북클럽 - 마음의 시간">
     </div>
   </section>
- 
+
   <!-- 2. ABOUT -->
   <section class="about">
     <div class="wrap">
@@ -569,13 +569,13 @@
       </div>
     </div>
   </section>
- 
+
   <!-- 3. HOW -->
   <section class="how">
     <div class="wrap">
       <div class="label">How It Works</div>
       <h2>모임은 이렇게 진행됩니다</h2>
- 
+
       <div class="info-table">
         <div class="info-row">
           <div class="info-key">Time<span class="info-key-kr">시간</span></div>
@@ -604,13 +604,13 @@
       </div>
     </div>
   </section>
- 
+
   <!-- 4. BOOK -->
   <section class="book">
     <div class="wrap">
       <div class="label">Current Book</div>
       <h2>이번에 함께 읽을 책</h2>
- 
+
       <div class="book-block">
         <div class="book-img">
           <img src="images/book.png" alt="마음의 시간 - 어빈 D. 얄롬 (호스트 농담 & 지평과 함께)">
@@ -626,19 +626,19 @@
       </div>
     </div>
   </section>
- 
+
   <!-- 5. HOSTS -->
   <section class="hosts">
     <div class="wrap">
       <div class="label">Hosts</div>
       <h2>함께 이끄는 사람들</h2>
- 
+
       <div class="host">
         <div class="host-name">지평 (박영준)</div>
         <div class="host-role">Question Artist · Coach</div>
         <p class="host-desc">질문술사. 경영·리더십 분야 20년 경력의 코치이자 작가. 『혁신가의 질문』, 『다시, 묻다』(시집), 『내일, 전환』(공저)의 저자. 인커리G 대표.</p>
       </div>
- 
+
       <div class="host">
         <div class="host-name">농담 (김이영)</div>
         <div class="host-role">Psychological Counselor</div>
@@ -646,18 +646,18 @@
       </div>
     </div>
   </section>
- 
+
   <!-- 6. JOIN -->
   <section class="join">
     <div class="wrap">
       <div class="label" style="justify-content: center;">Join Us</div>
       <h2>새벽의 문을 두드려 주세요</h2>
       <p>책과 벗을 아끼는 마음이면 충분합니다.</p>
- 
+
       <a href="https://pf.kakao.com/_XGbin/chat" target="_blank" rel="noopener noreferrer" class="cta">
         참여 신청하기 · 카카오톡 채널
       </a>
- 
+
       <div class="payment">
         <div class="payment-label">— Payment —</div>
         <div class="payment-account">
@@ -665,15 +665,15 @@
           <small>모임통장 · 박영준 (낭만북클럽)</small>
         </div>
       </div>
- 
+
       <a href="https://padlet.com/questionschool/modoobooks" target="_blank" rel="noopener noreferrer" class="archive-link">
         <span>그동안 함께 읽어온 책 보기 →</span>
       </a>
     </div>
   </section>
- 
+
 </main>
- 
+
 <footer>
   <div class="footer-motto">READING · ALOUD · TOGETHER</div>
   <div class="footer-contact">
@@ -683,6 +683,6 @@
   </div>
   <div class="footer-name">모두의 새벽 + 낭만북클럽</div>
 </footer>
- 
+
 </body>
 </html>
