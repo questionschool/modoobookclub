@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모두의 새벽 + 낭만북클럽 · 마음의 시간 참가자 안내</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f5efe4;
+    --cream-deep: #ebe2d1;
+    --ink: #2a2520;
+    --ink-soft: #4a423a;
+    --ink-muted: #6b6258;
+    --gold: #b08a4a;
+    --gold-deep: #8a6b35;
+    --line: #d4c8b3;
+    --accent: #7a3f2e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(at 15% 10%, rgba(176, 138, 74, 0.06) 0px, transparent 50%),
+      radial-gradient(at 85% 90%, rgba(122, 63, 46, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  /* Subtle paper texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 60px 28px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 30px 0 60px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 60px;
+  }
+
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  h1.title {
+    font-family: 'Nanum Myeongjo', 'Noto Serif KR', serif;
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 38px);
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+
+  .title .accent {
+    color: var(--accent);
+  }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--ink-muted);
+    margin-bottom: 22px;
+  }
+
+  .season-tag {
+    display: inline-block;
+    padding: 8px 22px;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,0.4);
+  }
+
+  /* Section base */
+  section {
+    margin-bottom: 64px;
+    animation: fadeUp 0.9s ease-out backwards;
+  }
+
+  section:nth-child(1) { animation-delay: 0.1s; }
+  section:nth-child(2) { animation-delay: 0.2s; }
+  section:nth-child(3) { animation-delay: 0.3s; }
+  section:nth-child(4) { animation-delay: 0.4s; }
+  section:nth-child(5) { animation-delay: 0.5s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold-deep);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: clamp(22px, 3.5vw, 28px);
+    color: var(--ink);
+    margin-bottom: 24px;
+    letter-spacing: -0.005em;
+    position: relative;
+    padding-bottom: 16px;
+  }
+
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 36px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  h3 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+
+  p {
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.85;
+    margin-bottom: 16px;
+  }
+
+  /* Welcome section */
+  .welcome-quote {
+    font-family: 'Gowun Batang', 'Noto Serif KR', serif;
+    font-size: 18px;
+    line-height: 2;
+    color: var(--ink);
+    padding: 24px 0;
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .welcome-quote em {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--gold-deep);
+    font-size: 17px;
+  }
+
+  /* Card */
+  .card {
+    background: rgba(255, 252, 245, 0.6);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 32px 28px;
+    margin-top: 16px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Chat room section */
+  .chat-block {
+    text-align: center;
+  }
+
+  .qr-frame {
+    display: inline-block;
+    padding: 16px;
+    background: white;
+    border: 1px solid var(--line);
+    margin: 18px 0;
+    box-shadow: 0 4px 18px rgba(74, 66, 58, 0.08);
+  }
+
+  .qr-frame img {
+    display: block;
+    width: 180px;
+    height: 180px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 14px 32px;
+    background: var(--ink);
+    color: var(--cream);
+    text-decoration: none;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--ink);
+    transition: all 0.3s ease;
+    margin-top: 8px;
+  }
+
+  .btn:hover {
+    background: var(--cream);
+    color: var(--ink);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(42, 37, 32, 0.15);
+  }
+
+  .btn.outline {
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .btn.outline:hover {
+    background: var(--ink);
+    color: var(--cream);
+  }
+
+  /* Zoom info */
+  .zoom-info {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    line-height: 2;
+  }
+
+  .zoom-info .label {
+    display: inline-block;
+    width: 80px;
+    color: var(--ink-muted);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+
+  .zoom-info .value {
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  .zoom-info a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--accent);
+  }
+
+  .zoom-info a:hover {
+    color: var(--gold-deep);
+    border-bottom-color: var(--gold-deep);
+  }
+
+  .schedule-banner {
+    text-align: center;
+    padding: 18px;
+    background: var(--cream-deep);
+    border-left: 3px solid var(--gold);
+    margin: 20px 0;
+    font-size: 15px;
+  }
+
+  .schedule-banner .date {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Preparation list */
+  .prep-list {
+    list-style: none;
+    counter-reset: prep;
+  }
+
+  .prep-list li {
+    counter-increment: prep;
+    padding: 18px 0 18px 50px;
+    position: relative;
+    border-bottom: 1px dashed var(--line);
+    color: var(--ink-soft);
+    font-size: 15.5px;
+    line-height: 1.8;
+  }
+
+  .prep-list li:last-child {
+    border-bottom: none;
+  }
+
+  .prep-list li::before {
+    content: counter(prep, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 18px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  .prep-list strong {
+    color: var(--ink);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 16px;
+  }
+
+  /* Form */
+  .form-intro {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .form-intro p {
+    font-style: italic;
+    font-family: 'Gowun Batang', serif;
+    font-size: 16px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  label {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--gold-deep);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  label .ko {
+    font-family: 'Noto Serif KR', serif;
+    color: var(--ink-soft);
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 14px;
+    margin-left: 6px;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.7);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    font-size: 15px;
+    color: var(--ink);
+    transition: all 0.25s ease;
+    resize: vertical;
+  }
+
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(176, 138, 74, 0.1);
+  }
+
+  textarea {
+    min-height: 110px;
+    line-height: 1.7;
+  }
+
+  .submit-btn {
+    align-self: flex-start;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .form-status {
+    text-align: center;
+    padding: 14px;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-muted);
+    min-height: 24px;
+  }
+
+  .form-status.success {
+    color: var(--gold-deep);
+  }
+
+  .form-status.error {
+    color: var(--accent);
+  }
+
+  /* Entries display */
+  .entries {
+    margin-top: 36px;
+  }
+
+  .entries-title {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .entries-title .label-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--gold-deep);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .entries-title h3 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 20px;
+    color: var(--ink);
+  }
+
+  .entry {
+    background: rgba(255, 252, 245, 0.5);
+    border-left: 2px solid var(--gold);
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    position: relative;
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .entry-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .entry-alias {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .entry-meta {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+
+  .entry-message {
+    font-family: 'Gowun Batang', 'Noto Serif KR', serif;
+    font-size: 15.5px;
+    line-height: 1.95;
+    color: var(--ink-soft);
+    white-space: pre-wrap;
+    word-break: keep-all;
+  }
+
+  .entry-intro {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--ink-muted);
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    background: rgba(235, 226, 209, 0.35);
+    border-radius: 2px;
+    white-space: pre-wrap;
+    word-break: keep-all;
+    font-style: italic;
+  }
+
+  .entry-intro::before {
+    content: '✦ ';
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  .entries-loading {
+    text-align: center;
+    color: var(--ink-muted);
+    font-style: italic;
+    padding: 30px;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .entries-empty {
+    text-align: center;
+    color: var(--ink-muted);
+    font-style: italic;
+    padding: 30px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 15px;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding-top: 60px;
+    border-top: 1px solid var(--line);
+    margin-top: 60px;
+  }
+
+  footer .reading {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.25em;
+    font-size: 12px;
+    color: var(--gold-deep);
+    margin-bottom: 18px;
+  }
+
+  footer p {
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+
+  footer a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--ink-muted);
+  }
+
+  /* Ornament divider */
+  .ornament {
+    text-align: center;
+    margin: 40px 0;
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    letter-spacing: 1em;
+  }
+
+  /* Yalom figure */
+  .yalom-figure {
+    margin: 50px auto 10px;
+    text-align: center;
+    max-width: 360px;
+    animation: fadeUp 1.2s ease-out 0.5s backwards;
+  }
+
+  .yalom-image-wrap {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+  }
+
+  .yalom-image-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    background: linear-gradient(135deg, rgba(176, 138, 74, 0.15), rgba(122, 63, 46, 0.08));
+    border-radius: 4px;
+    z-index: 0;
+    transform: rotate(-1.5deg);
+  }
+
+  .yalom-figure img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 2px;
+    box-shadow: 0 10px 30px rgba(74, 66, 58, 0.15);
+  }
+
+  .yalom-figure figcaption {
+    margin-top: 18px;
+    text-align: center;
+  }
+
+  .yalom-figure .cap-en {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+
+  .yalom-figure .cap-kr {
+    display: block;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.03em;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .wrap { padding: 40px 20px 80px; }
+    header { padding: 20px 0 40px; margin-bottom: 40px; }
+    section { margin-bottom: 48px; }
+    .card { padding: 24px 20px; }
+    .zoom-info .label { display: block; width: auto; margin-bottom: -8px; }
+    .zoom-info .value { display: block; margin-bottom: 8px; }
+    .yalom-figure { max-width: 280px; margin: 30px auto 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="eyebrow">Modoo's Dawn · Romantic Book Club</div>
+    <h1 class="title">
+      『<span class="accent">마음의 시간</span>』<br>
+      함께 낭독하기로 약속해 준<br>
+      친구들 모두 환영해!
+    </h1>
+    <div class="subtitle">Hour of the Heart · Irvin D. Yalom</div>
+    <div class="season-tag">2026년 두 번째 시즌 안내</div>
+  </header>
+
+  <!-- 1. 환영인사 -->
+  <section>
+    <span class="section-num">I · Welcome</span>
+    <h2>환영의 인사</h2>
+    <p>
+      안녕? 모두의 새벽 + 낭만북클럽 호스트를 맡고 있는 <strong style="color:var(--accent);">낭만책사 지평</strong>이야.
+    </p>
+    <p>
+      2024년 2월, 농담과 함께 게슈탈트 하일렌에 다녀온 후 시작된 이 여정이,
+      어느덧 열다섯 번째 책을 함께 읽게 됐어.
+      (중간에 방학 기간 동안 잠깐잠깐 읽은 짧은 그림책들은 제외하고도 말이지.) 신기하지?
+      김정규 교수님의 책으로 시작해서, 에크하르트 톨레, 오쇼, 슈테판 츠바이크, 재니너 피셔, 팻 오그던,
+      김선우, 강신주, 데이비드 리코, 어빈 얄롬, 그리고 바로 지난 시즌 노희경 작가까지 — 정말 한 권 한 권 모두 뜻깊었어.
+      그리고 이번엔 다시, 얄롬이야. 얄롬과 그의 아들이 함께 집필한
+      『<strong style="color:var(--accent);">마음의 시간</strong>』 낭독이 다음 주 화요일부터 시작될 예정이야.
+    </p>
+    <p>
+      오래전부터 함께해 온 멤버들, 그리고 이번에 처음 합류하게 될 멤버들 모두 반갑고 환영해.
+      함께 낭독하는 것과 서로의 이야기를 수평어로 진솔하게 나누는 걸 처음엔 어색해 하는 이들도 있던데,
+      다들 금방 적응하더라. 새벽에 일어나는 것은 나도 여전히 힘들어. 참석 못하고 늦잠 잤다고 뭐라 하는 사람 없으니
+      너무 걱정하지는 말고. 혼자였다면 끝까지 가지 못했을 책들을, 우리는 함께라서 한 페이지씩 넘겨왔어.
+      이번 한 권도 그렇게, 천천히 함께, 한 문단씩 소리 내어 읽어 가자.
+    </p>
+    <div class="welcome-quote">
+      <em>"It's the relationship that heals,</em><br>
+      <em>it's the relationship that heals,</em><br>
+      <em>it's the relationship that heals."</em><br><br>
+      치유하는 것은 관계다,<br>
+      치유하는 것은 관계다,<br>
+      치유하는 것은 관계다.<br>
+      <span style="display:block; margin-top: 14px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 14px; color: var(--ink-muted); letter-spacing: 0.1em;">— Irvin D. Yalom</span>
+    </div>
+    <p style="text-align: center; margin-top: 24px; font-family: 'Gowun Batang', serif; color: var(--ink-soft); font-size: 15.5px;">
+      우리 낭독 모임이 치유 모임은 아니지만,<br>
+      자각과 성장 그리고 치유적 경험을 함께 나눌 수 있으면 더 좋겠어.
+    </p>
+  </section>
+
+  <!-- 얄롬 일러스트 -->
+  <figure class="yalom-figure">
+    <div class="yalom-image-wrap">
+      <img src="yalom_drawing.png" alt="Irvin D. Yalom - 일러스트">
+    </div>
+    <figcaption>
+      <span class="cap-en">Irvin D. Yalom</span>
+      <span class="cap-kr">1931 – 2022 · 실존주의 심리치료의 거장</span>
+    </figcaption>
+  </figure>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- 2. 시작 전 준비 -->
+  <section>
+    <span class="section-num">II · Before We Begin</span>
+    <h2>시작하기 전, 세 가지 준비</h2>
+    <ol class="prep-list">
+      <li>
+        <strong>책 준비하기</strong>
+        『마음의 시간』(어빈 D. 얄롬)을 미리 구입해 줘.
+        첫 모임 전까지 책을 손에 쥐고 있어야 함께 낭독할 수 있을 거야.
+        온라인 서점 어디서든 구입할 수 있어. 이북도 판매하는데, 꼭 종이책일 필요는 없어.
+      </li>
+      <li>
+        <strong>이번 시즌의 별칭 정하기</strong>
+        낭만북클럽에서는 본명 대신 <em>별칭</em>으로 서로를 부를 예정이야.
+        직함도, 나이도, 사회적 역할도 잠시 내려놓고 —
+        새벽의 자리에서 만나는 한 사람의 이름을 지어 와 줘. 짧고 부르기 좋은 이름이 좋아.
+        물론 본명이 편하면 본명 그대로 사용해도 좋아. 지난 시즌의 별칭과 달라도 괜찮아.
+      </li>
+      <li>
+        <strong>수평어로 이야기 나누기</strong>
+        모임 안에서는 모두 수평어를 쓸 거야. 이것도 그냥 존댓말이 편하면 높임말 그대로 써도 되지만,
+        가능하면 수평어를 써 보는 작은 실험에 함께 동참했으면 좋겠어.
+        수평어는 다른 말로 <em>'친절하고 다정한 반말'</em>이지.
+        별칭과 수평어는 우리 사이의 위계를 잠시 잊고, 책 앞에 평등하고 수평적으로 마주 앉아
+        진솔하게 이야기를 나누기 위한 작은 실험이야.
+      </li>
+    </ol>
+  </section>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- 3. 팀 채팅방 -->
+  <section>
+    <span class="section-num">III · Team Chat</span>
+    <h2>새 멤버는 팀 채팅방에 가입 신청해 줘</h2>
+    <p>
+      다음 주 화요일 아침부터 새롭게 시작되는 『마음의 시간』 낭독 모임을 신청한 친구들은
+      아래 카카오톡 채팅방에 입장해 줘. 공지와 안내가 모두 이곳에서 이루어져.
+      참가 신청 및 참가비 입금이 확인되면 수락해 줄게.
+    </p>
+    <div class="card chat-block">
+      <h3>낭만북클럽 팀 채팅방</h3>
+      <div class="qr-frame">
+        <img src="qr_kakao.png" alt="카카오톡 오픈채팅 입장 QR 코드">
+      </div>
+      <p style="font-size: 13px; color: var(--ink-muted); margin: 8px 0 18px;">
+        QR을 찍거나 아래 버튼을 눌러 입장해 줘
+      </p>
+      <a href="https://invite.kakao.com/tc/QsiHM5hkkj" target="_blank" rel="noopener" class="btn">
+        카카오톡 채팅방 입장하기 →
+      </a>
+    </div>
+  </section>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- 4. Zoom 안내 -->
+  <section>
+    <span class="section-num">IV · Where We Meet</span>
+    <h2>Zoom 접속 안내</h2>
+    <p>
+      매일(평일) 새벽 6시까지 Zoom으로 접속해 줘. 같은 ID와 암호를 매번 사용해.
+    </p>
+
+    <div class="schedule-banner">
+      <span class="date">2026 · 05 · 26 — 완독하는 날까지</span>
+      <span>매주 월·화·수·목·금 · 새벽 6:00 – 7:00<br>
+      <small style="color: var(--ink-muted); font-size: 13px;">공휴일 제외 · 대략 4~7주 정도 소요 예정</small></span>
+    </div>
+
+    <div class="card">
+      <div class="zoom-info">
+        <div><span class="label">JOIN</span> <a href="https://us02web.zoom.us/j/86324239516?pwd=IIPBgvoepGMyGRptvKLfkRunc4e3pL.1" target="_blank" rel="noopener" class="value">Zoom 회의 참가하기 →</a></div>
+        <div style="margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--line); color: var(--ink-muted); font-size: 14px; font-style: italic; font-family: 'Gowun Batang', serif;">
+          ID & PASSCODE는 팀 채팅방 상단 공지사항에서 확인할 수 있어.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- 5. 참가자 기록 -->
+  <section>
+    <span class="section-num">V · Greetings</span>
+    <h2>모임을 시작하기 전에 서로에게 인삿말 남기기</h2>
+    <div class="form-intro">
+      <p>
+        이름과 별칭, 짧은 자기소개, 그리고 이 시즌을 시작하기 전 마음에 품고 온 한 문장을 남겨 줘.<br>
+        우리는 서로의 글을 통해, 만나기 전에 이미 서로를 짐작할 수 있게 돼.
+      </p>
+    </div>
+
+    <div class="card">
+      <form id="entryForm">
+        <div class="field">
+          <label for="name">Name <span class="ko">· 이름</span></label>
+          <input type="text" id="name" name="name" required placeholder="본명을 적어 줘">
+        </div>
+        <div class="field">
+          <label for="alias">Alias <span class="ko">· 이번 시즌의 별칭</span></label>
+          <input type="text" id="alias" name="alias" required placeholder="모두의 새벽, 낭독 시간에 불릴 이름을 정해 줘 (지난 시즌과 달라도 좋아)">
+        </div>
+        <div class="field">
+          <label for="intro">Introduction <span class="ko">· 자기소개</span></label>
+          <textarea id="intro" name="intro" required placeholder="어디서, 어떤 일을 하며, 어떤 시간을 보내고 있는지 — 편하게 들려 줘"></textarea>
+        </div>
+        <div class="field">
+          <label for="message">Message <span class="ko">· 『마음의 시간』 낭독을 시작하기 전에 남기고 싶은 말</span></label>
+          <textarea id="message" name="message" required placeholder="이 시즌을 시작하며 품고 온 마음, 함께할 친구들에게 건네는 인사를 적어 줘"></textarea>
+        </div>
+        <button type="submit" class="btn submit-btn" id="submitBtn">남기기 →</button>
+      </form>
+      <div class="form-status" id="formStatus"></div>
+    </div>
+
+    <div class="entries">
+      <div class="entries-title">
+        <span class="label-en">Voices in the Dawn</span>
+        <h3>『마음의 시간』 낭독 모임을 기다리며…</h3>
+      </div>
+      <div id="entriesList">
+        <div class="entries-loading">불러오는 중…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="reading">READING · ALOUD · TOGETHER</div>
+    <p><a href="https://bookclub.questionschool.net/" target="_blank">bookclub.questionschool.net</a></p>
+    <p><a href="mailto:thomas@questionschool.net">thomas@questionschool.net</a></p>
+    <p style="margin-top: 14px; font-family: 'Cormorant Garamond', serif; font-style: italic;">모두의 새벽 + 낭만북클럽</p>
+  </footer>
+
+</div>
+
+<script>
+  // ============================================
+  // Google Apps Script 웹앱 URL을 여기에 붙여넣으세요
+  // ============================================
+  const GAS_URL = 'https://script.google.com/macros/s/AKfycbw1rjT7UzjWMMea5UdmD8AxwDLsVNjMH-bdnKLxlJNPaa15xTT80yZlRuTBEthoX3rIbA/exec';
+
+  const form = document.getElementById('entryForm');
+  const statusEl = document.getElementById('formStatus');
+  const listEl = document.getElementById('entriesList');
+  const submitBtn = document.getElementById('submitBtn');
+
+  // 한국 시간으로 날짜 포맷
+  function formatDate(dateStr) {
+    try {
+      const d = new Date(dateStr);
+      if (isNaN(d.getTime())) return dateStr;
+      const yy = String(d.getFullYear()).slice(2);
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      return `${yy}.${mm}.${dd}`;
+    } catch (e) {
+      return '';
+    }
+  }
+
+  // 엔트리 렌더링
+  function renderEntries(entries) {
+    if (!entries || entries.length === 0) {
+      listEl.innerHTML = '<div class="entries-empty">아직 남겨진 글이 없어.<br>첫 번째 마음을 남겨 줘.</div>';
+      return;
+    }
+    listEl.innerHTML = entries.map(e => `
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-alias">${escapeHtml(e.alias)}</span>
+          <span class="entry-meta">_ 『마음의 시간』 낭독을 기다리며</span>
+          ${e.timestamp ? `<span class="entry-meta" style="margin-left: auto; font-size: 12.5px;">${formatDate(e.timestamp)}</span>` : ''}
+        </div>
+        ${e.intro ? `<div class="entry-intro">${escapeHtml(e.intro)}</div>` : ''}
+        <div class="entry-message">${escapeHtml(e.message)}</div>
+      </div>
+    `).join('');
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  // 엔트리 불러오기
+  async function loadEntries() {
+    if (!GAS_URL || GAS_URL.includes('YOUR_GOOGLE')) {
+      listEl.innerHTML = '<div class="entries-empty">⚙️ Google Apps Script 설정이 필요해.<br><span style="font-size:12px;">관리자에게 문의해 줘.</span></div>';
+      return;
+    }
+    try {
+      const res = await fetch(GAS_URL + '?action=list', { method: 'GET' });
+      const data = await res.json();
+      if (data.entries) {
+        renderEntries(data.entries);
+      } else {
+        renderEntries([]);
+      }
+    } catch (err) {
+      console.error(err);
+      listEl.innerHTML = '<div class="entries-empty">글을 불러오지 못했어. 잠시 후 다시 시도해 줘.</div>';
+    }
+  }
+
+  // 폼 제출
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    if (!GAS_URL || GAS_URL.includes('YOUR_GOOGLE')) {
+      statusEl.textContent = '⚙️ 아직 시트 연결이 완료되지 않았어. 관리자에게 문의해 줘.';
+      statusEl.className = 'form-status error';
+      return;
+    }
+
+    const name = document.getElementById('name').value.trim();
+    const alias = document.getElementById('alias').value.trim();
+    const intro = document.getElementById('intro').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!name || !alias || !intro || !message) {
+      statusEl.textContent = '모든 항목을 채워 줘.';
+      statusEl.className = 'form-status error';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = '남기는 중…';
+    statusEl.textContent = '';
+    statusEl.className = 'form-status';
+
+    try {
+      // text/plain 으로 보내야 CORS preflight 우회 가능 (Apps Script 표준 방식)
+      const res = await fetch(GAS_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'add', name, alias, intro, message })
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        statusEl.textContent = '✦ 마음을 잘 받았어. 새벽의 자리에서 만나자.';
+        statusEl.className = 'form-status success';
+        form.reset();
+        loadEntries();
+      } else {
+        throw new Error(data.error || 'Unknown error');
+      }
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = '남기지 못했어. 잠시 후 다시 시도해 줘.';
+      statusEl.className = 'form-status error';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '남기기 →';
+      setTimeout(() => {
+        if (statusEl.classList.contains('success')) {
+          statusEl.textContent = '';
+          statusEl.className = 'form-status';
+        }
+      }, 5000);
+    }
+  });
+
+  // 페이지 로드 시 엔트리 불러오기
+  loadEntries();
+</script>
+</body>
+</html>
