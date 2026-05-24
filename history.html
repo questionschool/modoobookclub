@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>모두의 새벽 + 낭만북클럽 — 함께 읽어온 시간</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #2a2520;
+    --ink-soft: #5a4d40;
+    --ink-light: #8a7a6a;
+    --paper: #faf5ea;
+    --paper-warm: #f4ede0;
+    --paper-deep: #ede4d2;
+    --rose: #c47b73;
+    --rose-light: #d4928a;
+    --rose-pale: #e8c5c0;
+    --gold: #c89968;
+    --line: rgba(74, 63, 53, 0.12);
+    --line-soft: rgba(74, 63, 53, 0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Gowun Batang', serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.85;
+    font-size: 16px;
+  }
+
+  /* 종이 질감 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 12% 15%, rgba(212, 146, 138, 0.05) 0%, transparent 45%),
+      radial-gradient(circle at 88% 85%, rgba(200, 153, 104, 0.05) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  main { position: relative; z-index: 1; }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ============================================
+     HERO
+  ============================================ */
+  .hero {
+    padding: 6rem 1.5rem 4rem;
+    text-align: center;
+  }
+
+  .hero-tag {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    letter-spacing: 0.4em;
+    color: var(--rose);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: clamp(2rem, 5.5vw, 2.8rem);
+    line-height: 1.35;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 .amp {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--rose);
+    margin: 0 0.15em;
+  }
+
+  .hero-sub {
+    color: var(--ink-light);
+    font-size: 1.02rem;
+    max-width: 480px;
+    margin: 0 auto 3rem;
+    line-height: 1.9;
+  }
+
+  /* HERO STATS */
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--line);
+    max-width: 540px;
+    margin: 0 auto;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 2.5rem;
+    color: var(--rose);
+    line-height: 1;
+  }
+  .stat-label {
+    font-family: 'Gowun Batang', serif;
+    font-size: 0.82rem;
+    color: var(--ink-light);
+    letter-spacing: 0.15em;
+    margin-top: 0.5rem;
+  }
+
+  /* ============================================
+     OPENING NARRATIVE
+  ============================================ */
+  .opening {
+    padding: 4rem 0 3rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .opening-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    letter-spacing: 0.35em;
+    color: var(--rose);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .opening-label::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--rose);
+  }
+
+  .opening h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: 1.7rem;
+    line-height: 1.45;
+    margin-bottom: 2rem;
+  }
+
+  .opening p {
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+    margin-bottom: 1.3rem;
+  }
+  .opening p:first-of-type::first-letter {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 3.2rem;
+    font-weight: 800;
+    float: left;
+    line-height: 0.9;
+    margin: 0.2rem 0.4rem -0.1rem 0;
+    color: var(--rose);
+  }
+
+  /* ============================================
+     ERA HEADER
+  ============================================ */
+  .era {
+    padding: 4rem 0 2rem;
+  }
+
+  .era-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .era-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    letter-spacing: 0.3em;
+    color: var(--rose);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .era-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: var(--ink);
+    margin-bottom: 0.6rem;
+  }
+
+  .era-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--ink-light);
+    font-size: 1.05rem;
+  }
+
+  /* ============================================
+     SEASON CARD
+  ============================================ */
+  .season {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 1.8rem;
+    margin-bottom: 4rem;
+    position: relative;
+  }
+
+  .season:last-child {
+    margin-bottom: 2rem;
+  }
+
+  .season-rail {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .season-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.7rem;
+    color: var(--rose);
+    background: var(--paper);
+    padding: 0.3rem 0.5rem;
+    margin-top: 0.4rem;
+    z-index: 2;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .season-line {
+    position: absolute;
+    top: 3rem;
+    bottom: -4rem;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--rose-pale), var(--line) 80%);
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
+  .season:last-child .season-line {
+    background: linear-gradient(to bottom, var(--rose-pale), transparent);
+    bottom: 0;
+  }
+
+  .season-body {
+    padding-top: 0.3rem;
+  }
+
+  .season-meta {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.7rem;
+  }
+  .meta-sep {
+    margin: 0 0.4rem;
+    color: var(--rose-pale);
+  }
+
+  .season-book {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: 1.35rem;
+    line-height: 1.45;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.005em;
+  }
+
+  .season-author {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--rose);
+    font-size: 0.98rem;
+    margin-bottom: 1.4rem;
+    letter-spacing: 0.03em;
+  }
+
+  .season-epigraph {
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.6rem;
+    padding-left: 1rem;
+    border-left: 2px solid var(--rose-pale);
+    line-height: 1.7;
+  }
+
+  .season-story {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1.95;
+    margin-bottom: 2rem;
+  }
+
+  /* Members chips */
+  .season-members {
+    margin-bottom: 1.8rem;
+    padding: 1.2rem 0 0;
+    border-top: 1px solid var(--line-soft);
+  }
+  .members-label, .themes-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.78rem;
+    letter-spacing: 0.25em;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .chip {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--ink);
+    padding: 0.25rem 0.7rem;
+    background: var(--paper-warm);
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    letter-spacing: 0.01em;
+  }
+
+  /* Themes */
+  .themes {
+    margin-top: 0;
+    padding: 1.2rem 0 0;
+    border-top: 1px solid var(--line-soft);
+  }
+  .themes ul {
+    list-style: none;
+    padding: 0;
+  }
+  .themes li {
+    position: relative;
+    padding-left: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: var(--ink-soft);
+    font-size: 0.96rem;
+    line-height: 1.7;
+  }
+  .themes li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 6px;
+    height: 1px;
+    background: var(--rose);
+  }
+
+  /* Future season styling */
+  .season--future .season-num {
+    color: var(--gold);
+  }
+  .season--future .season-epigraph {
+    border-left-color: var(--gold);
+  }
+
+  /* ============================================
+     CLOSING REFLECTION
+  ============================================ */
+  .closing {
+    background: var(--paper-warm);
+    padding: 5rem 0;
+    margin-top: 4rem;
+  }
+
+  .closing-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    letter-spacing: 0.35em;
+    color: var(--rose);
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .closing-label::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--rose);
+  }
+
+  .closing h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+  }
+
+  .closing p {
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .closing-quote {
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: var(--ink);
+    text-align: center;
+    line-height: 1.9;
+    margin: 3rem auto 0;
+    padding: 2rem 0 0;
+    border-top: 1px solid var(--line);
+    max-width: 480px;
+  }
+
+  /* ============================================
+     FOOTER
+  ============================================ */
+  footer {
+    padding: 3rem 1.5rem 2.5rem;
+    text-align: center;
+    border-top: 1px solid var(--line);
+  }
+
+  .footer-motto {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--rose);
+    letter-spacing: 0.3em;
+    margin-bottom: 1.5rem;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    margin-top: 1.2rem;
+  }
+  .footer-links a {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rose);
+    padding-bottom: 3px;
+    transition: color 0.3s ease;
+  }
+  .footer-links a:hover {
+    color: var(--rose);
+  }
+  .footer-links a .arrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--rose);
+    margin-left: 0.3rem;
+  }
+
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.78rem;
+    color: var(--ink-light);
+    letter-spacing: 0.2em;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ============================================
+     RESPONSIVE
+  ============================================ */
+  @media (max-width: 600px) {
+    .hero {
+      padding: 4rem 1.5rem 3rem;
+    }
+    .hero-stats {
+      gap: 2rem;
+      padding-top: 2rem;
+    }
+    .stat-num {
+      font-size: 2rem;
+    }
+    .opening h2, .closing h2 {
+      font-size: 1.4rem;
+    }
+    .era-title {
+      font-size: 1.35rem;
+    }
+    .season {
+      grid-template-columns: 50px 1fr;
+      gap: 1.2rem;
+      margin-bottom: 3rem;
+    }
+    .season-num {
+      font-size: 1.4rem;
+    }
+    .season-book {
+      font-size: 1.2rem;
+    }
+    .season-meta {
+      font-size: 0.78rem;
+    }
+    .meta-sep {
+      margin: 0 0.3rem;
+    }
+    .chip {
+      font-size: 0.83rem;
+      padding: 0.2rem 0.6rem;
+    }
+    .closing {
+      padding: 3.5rem 0;
+    }
+  }
+
+  /* Subtle entrance animation */
+  .season {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.7s ease forwards;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  /* Stagger first few cards */
+  .season:nth-child(1) { animation-delay: 0s; }
+  .season:nth-child(2) { animation-delay: 0.05s; }
+  .season:nth-child(3) { animation-delay: 0.1s; }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-tag">A History of Reading Together</div>
+    <h1>함께 읽어온<br>새벽의 시간들</h1>
+    <p class="hero-sub">
+      2024년 2월 어느 새벽부터 시작된,<br>
+      열다섯 권의 책과 서른 명 남짓한 사람들의 기록.
+    </p>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">15</div>
+        <div class="stat-label">권</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">483</div>
+        <div class="stat-label">시간</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">27</div>
+        <div class="stat-label">개월</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPENING NARRATIVE -->
+  <section class="opening">
+    <div class="wrap">
+      <div class="opening-label">Prologue</div>
+      <h2>새벽 여섯 시,<br>줌 화면이 켜질 때마다</h2>
+      <p>아침 낭독모임은 2024년 2월, '하일렌 체험집단' 멤버들과의 인연으로 시작되었습니다. 집단이 끝난 이후에 아쉬움이 남은 삼봄의 제안으로 '하일렌 낭독모임'이라는 이름으로 온라인에서 다시 모이기로 했지요. 김정규 교수님의 『이해받는 것은 모욕이다』를 함께 소리내어 읽으며 게슈탈트 심리치료 공부를 이어가는 것이 그 출발이었답니다.</p>
+      <p>그때 모인 이들은 농담·삼봄·지금나·바람결·그냥나·오후·저냥·레이·알아차림·기린걸음·아니. 그리고 또 다른 게슈탈트 공부모임의 인연으로 참여하게 된 바람까지. (혹시 참여했는데 이름이 빠진 이가 있다면 미안합니다.) 잠깐 들어왔다 나갔던 친구들도 있고, 긴 시간을 함께 책을 낭독하고 삶의 이야기를 나누며 점점 더 깊은 친밀감을 나누게 된 친구들도 있었습니다.</p>
+      <p>책 한 권만 더 읽자며 1년 가까이 계속 이어온 1기의 인연은 결국 끝나게 되었습니다. 오후와 농담은 개인 상담소를 오픈하게 되었고, 삼봄은 농담이 살고 있던 대구로 내려오게 되었습니다. 2025년 '모두의 새벽 + 낭만북클럽'이라는 이름으로 새롭게 출발했습니다. 멤버는 바뀌었고 호스트의 별칭도 삼봄에서 담담으로, 다시 지평으로 변해갔지만, 매일 새벽 30분을 함께 낭독하고 30분을 서로의 삶에 머무는 시간만은 변하지 않았습니다.</p>
+      <p>이 페이지는 그 새벽들의 기록입니다. 어떤 책을 읽었는지보다, 그 책을 매개로 누가 모여 어떤 이야기를 길어 올렸는지에 더 가까운 기록이지요.</p>
+    </div>
+  </section>
+
+  <!-- 1기 -->
+  <div class="era">
+    <div class="wrap">
+      <div class="era-header">
+        <div class="era-eyebrow">Era I · 2024–2025</div>
+        <h3 class="era-title">하일렌 + 낭만북클럽</h3>
+        <p class="era-sub">게슈탈트 · 영성 · 트라우마</p>
+      </div>
+      
+    <article class="season" id="s01">
+      <div class="season-rail">
+        <div class="season-num">01</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2024-02-13 → 2024-03-15</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">23일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">5명</span>
+        </div>
+        <h3 class="season-book">이해받는 것은 모욕이다</h3>
+        <div class="season-author">김정규</div>
+        <div class="season-epigraph">— 별칭과 정체성을 새로 찾는 시간 —</div>
+        <p class="season-story">낭독 모임의 첫 시즌. 게슈탈트 심리치료의 핵심 개념인 '상전과 하인'을 함께 읽으며, 내 안의 비판하는 목소리와 위축된 자기가 벌이는 내적 전쟁을 알아차렸다. 당시에 농담은 항복이라는 이름을 썼고, 지평은 이전부터 써오던 삼봄이라는 이름을 그대로 썼다. 알아차림은 지식으로 쌓을 수 없고, 생각에 빠진 자신을 발견하는 순간에서 시작된다는 깨달음이 시즌 전체를 관통했다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">삼봄</span><span class="chip">항복이</span><span class="chip">지금나</span><span class="chip">바람결</span><span class="chip">그냥나</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>상전과 하인</li><li>별칭과 정체성</li><li>알아차림 vs 생각</li><li>부끄러움·수치심·열등감</li><li>본래 나를 찾는 종교적 비유</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s02">
+      <div class="season-rail">
+        <div class="season-num">02</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2024-03-25 → 2024-04-29</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">26일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">5명</span>
+        </div>
+        <h3 class="season-book">삶으로 다시 떠오르기</h3>
+        <div class="season-author">에크하르트 톨레</div>
+        <div class="season-epigraph">— 지금 이 순간으로 떠오르기 —</div>
+        <p class="season-story">톨레의 책을 읽으며 '알아차림'과 '지금 이 순간'에 함께 머물며 '알아차림'을 나누는 시간이었다. 무상함, 모든 것은 덧없기에 오히려 이 순간이 소중하다는 가르침이 일상으로 스며들었다. 내 안의 여러 에고들 — 상전, 비판자, 보호자 —을 적이 아닌 손님으로 초대해 대화하는 연습을 했다. 항복이는 자신의 에고들이 파티를 여는 풍경을 시처럼 적어 보내왔고, 호스트 자리도 돌아가며 맡으면서 통제와 내려놓음의 결을 함께 익혔다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">삼봄</span><span class="chip">항복이</span><span class="chip">그냥나</span><span class="chip">지금나</span><span class="chip">바람결</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>무상과 지금 이 순간</li><li>에고의 파티</li><li>사랑의 서툼</li><li>감정을 마주하는 용기</li><li>이끄는 자리와 따르는 자리의 교대</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s03">
+      <div class="season-rail">
+        <div class="season-num">03</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2024-05-07 → 2024-06-18</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">35일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">4명</span>
+        </div>
+        <h3 class="season-book">삶의 길 흰 구름의 길</h3>
+        <div class="season-author">오쇼 (장자 강의 1/2)</div>
+        <div class="season-epigraph">— 곤이 대붕으로 날아오르듯 —</div>
+        <p class="season-story">오쇼의 장자 강의로 동양 사유의 결로 들어섰다. 어두운 호수의 물고기 곤이 대붕으로 날아올라 자신을 멀리서 바라보는 비유는 시즌 내내 회자됐다. 머리로 답을 구하는 습관을 내려놓고 '오직 모를 뿐, 그저 할 뿐'을 연습했다. 빈 배의 마음으로 채워야 한다는 강박을 내려놓을 때 오히려 일이 흘러간다는 장자식 통찰이 자주 인용됐다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">삼봄</span><span class="chip">항복이</span><span class="chip">그냥나</span><span class="chip">바람결</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>곤·붕·대붕</li><li>오직 모를 뿐 그저 할 뿐</li><li>빈 배의 마음</li><li>꿈과 현실의 경계</li><li>돌봄을 주고받는 모임</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s04">
+      <div class="season-rail">
+        <div class="season-num">04</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2024-06-19 → 2024-08-14</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">31일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">7명</span>
+        </div>
+        <h3 class="season-book">장자, 도를 말하다</h3>
+        <div class="season-author">오쇼 (장자 강의 2/2)</div>
+        <div class="season-epigraph">— 삶이 그 자체로 자유이게 하라 —</div>
+        <p class="season-story">오쇼의 장자 강의 두 번째. '삶이 그 자체로 자유이게 하라'는 오쇼의 메시지를 깊이 음미하곤 했다. '내가 지금 당신 앞에 와 있어요'라는 현존(presence)의 의미가 모임의 핵심어로 자리 잡았다. 내 안에 살고 있는 작은 불안들을 외면하지 않고 이름 붙여 함께 사는 법을 연습했다. 한동안 멀어졌던 지금나가 '노을진 바다'라는 새 별칭으로 다시 모임에 돌아왔고, 오후·바람이 새로 합류해 7인 체제로 확장됐다. 삼봄은 '담담'으로 자신을 새롭게 부르기 시작했다 — 심리치료를 받을 때마다 아프고 흔들리지만, 담담히 받아들이는 삶으로 나아가고 싶다는 이야기를 종종 나눴다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">삼봄</span><span class="chip">항복이</span><span class="chip">노을진 바다</span><span class="chip">바람결</span><span class="chip">그냥나</span><span class="chip">오후</span><span class="chip">바람</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>자유인이 되기</li><li>현존(presence)과 접촉</li><li>불안이라는 쥐 한 마리</li><li>이별과 헤어짐 다루기</li><li>'담담'이라는 정체성 실험</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s05">
+      <div class="season-rail">
+        <div class="season-num">05</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2024-08-16 → 2024-09-25</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">26일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">7명</span>
+        </div>
+        <h3 class="season-book">고요함의 지혜</h3>
+        <div class="season-author">에크하르트 톨레</div>
+        <div class="season-epigraph">— 소란 속에서 발견하는 고요 —</div>
+        <p class="season-story">게슈탈트 하일렌 체험집단에서 구가달님이 읽어준 책이지만, 멤버들과 다시 함께 낭독하기로 했다. 마음의 소란을 없애려 하지 않고, 그 소란을 알아차리는 자리가 곧 고요임을 함께 발견한 시즌. 모임 안에서 작은 마찰이 있었지만 회피하지 않고 솔직하게 표현하며 오히려 관계가 깊어졌다. '아무 쓸모없이 곁에 머무는 일'이 주는 위로와, 그것조차 어려운 자기를 발견하는 시간. 항복이는 이 시즌부터 '농담'이라는 별칭으로 안정적으로 자리잡았고, 기린걸음이 새 멤버로 합류했다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">삼봄</span><span class="chip">농담</span><span class="chip">바람</span><span class="chip">오후</span><span class="chip">노을진 바다</span><span class="chip">기린걸음</span><span class="chip">바람결</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>소란스러움 속의 고요</li><li>생각에서 깨어있는 마음으로</li><li>갈등 속에서 자기를 잃지 않기</li><li>모임의 친밀감과 거리감</li><li>역할 없이 곁에 머물기</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s06">
+      <div class="season-rail">
+        <div class="season-num">06</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2024-09-26 → 2024-11-22</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">45일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">6명</span>
+        </div>
+        <h3 class="season-book">조각난 마음을 치유합니다</h3>
+        <div class="season-author">재니너 피셔</div>
+        <div class="season-epigraph">— 내면의 부분들과 화해하기 —</div>
+        <p class="season-story">톡방 메시지 수가 가장 많았던, 가장 깊은 시즌. IFS(내면가족체계)와 트라우마 작업이 본격적으로 펼쳐졌다. 어린 나, 보호자 나, 비판하는 나 — 각자의 부분에 이름 붙이고 대화하는 작업을 함께했다. 담담은 이혼 과정과 회사 생활에서 직면한 수치심·죄책감·외로움을 모임 안에서 풀어놓았다. 다른 참가자들도 모두 각자의 내면의 부분들을 꺼내보고 화해를 시도했다. 침묵으로, 눈빛으로, 짧은 글로 서로를 지지하는 단톡방의 역할이 또렷해진 시기.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">담담</span><span class="chip">농담</span><span class="chip">바람결</span><span class="chip">오후</span><span class="chip">바람</span><span class="chip">기린걸음</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>내면의 부분(parts)들과 만나기</li><li>트라우마와 애착 외상</li><li>수치심·죄책감·외로움</li><li>아버지와의 관계</li><li>곁에 있어 주는 사람의 힘</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s07">
+      <div class="season-rail">
+        <div class="season-num">07</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2024-12-02 → 2025-01-14</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">32일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">3명</span>
+        </div>
+        <h3 class="season-book">초조한 마음</h3>
+        <div class="season-author">슈테판 츠바이크</div>
+        <div class="season-epigraph">— 연민과 동정 사이에서 —</div>
+        <p class="season-story">1기의 마지막 시즌. 가장 적은 인원이 함께한 시간이었다. 진심으로 함께하는 연민과, 부담을 못 견뎌 도망치고 싶은 동정 사이의 미묘한 구분을 책 속 인물들을 통해 살폈다. 케케스팔바와 에디트의 욕망, 신체적 무력감과의 충돌을 자신의 삶에 비추어 보기. 떠난 멤버들에 대한 아쉬움을 뒤로하고 다음 시즌을 준비하는 시간이 되기도 했다. 소설을 소리내어 읽는 재미에 푹 빠지기도 했다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">담담</span><span class="chip">농담</span><span class="chip">기린걸음</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>연민과 동정의 차이</li><li>케케스팔바와 에디트의 욕망</li><li>모임에 머물고 떠나기</li><li>소설을 통한 정치·역사 읽기</li><li>빈자리에 대한 그리움</li></ul></div>
+      </div>
+    </article>
+    </div>
+  </div>
+
+  <!-- 2기 -->
+  <div class="era">
+    <div class="wrap">
+      <div class="era-header">
+        <div class="era-eyebrow">Era II · 2025–현재</div>
+        <h3 class="era-title">모두의 새벽 + 낭만북클럽</h3>
+        <p class="era-sub">사랑 · 집단치료 · 몸 · 삶</p>
+      </div>
+      
+    <article class="season" id="s08-09">
+      <div class="season-rail">
+        <div class="season-num">08·09</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2025-02-03 → 2025-03-26</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">37일 (18+19)</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">6명</span>
+        </div>
+        <h3 class="season-book">사랑, 어쩌면 그게 전부 / 한 공기의 사랑, 아낌의 인문학</h3>
+        <div class="season-author">김선우 · 강신주</div>
+        <div class="season-epigraph">— 사랑이라는 한 주제, 두 권의 책 —</div>
+        <p class="season-story">2기 '모두의 새벽 + 낭만북클럽'이 새로운 결로 출발한 시즌. 시인의 책과 철학자의 책을 같은 기간에 병행 낭독했다. 첫날 멤버들은 각자 사랑을 한 단어로 정의했다 — '첫사랑', '경험시키고 싶은 것', '노력의 영역', '눈부심', '행운'. 권태 속의 안정보다 사랑 속의 불안이 더 사랑스럽다는 김선우의 시와 강신주가 풀어주는 선불교의 가르침을 통해 어제도 내일도 아닌 '바로 이 순간'에 머물며 타자라는 낯선 세계를 향해 나아가는 법을 배우기 시작했다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">담담</span><span class="chip">농담</span><span class="chip">해봐라기</span><span class="chip">윤슬</span><span class="chip">미피</span><span class="chip">밈밈</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>사랑은 무엇인가</li><li>권태와 사랑</li><li>일체개고의 사랑</li><li>자기 자신을 사랑하는 출발점</li><li>무상과 오늘 하루의 충만함</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s10">
+      <div class="season-rail">
+        <div class="season-num">10</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2025-04-01 → 2025-05-26</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">38일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">4명</span>
+        </div>
+        <h3 class="season-book">나는 사랑의 처형자가 되기 싫다</h3>
+        <div class="season-author">어빈 D. 얄롬</div>
+        <div class="season-epigraph">— 지금 여기에서의 진솔한 만남 —</div>
+        <p class="season-story">실존주의 심리치료 사례들을 소설 형식으로 집필한 얄롬의 책을 함께 읽기 시작했다. 도덕적으로 불편한 존재를 어디까지 수용할 수 있는가에 대한 깊은 토론도 오갔다. 베티·페니·칼로스의 자기 작업이 어떻게 멤버 각자의 작업과 연결되는지 발견하면서, 참가자들은 '심리치료의 최종 목적지는 과거로부터의 자유가 아니라 사랑하는 능력을 되찾는 것'이라는 통찰을 나눴다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">담담</span><span class="chip">농담</span><span class="chip">윤슬</span><span class="chip">해봐라기</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>지금 여기에서의 만남</li><li>치료자의 윤리적 한계</li><li>베티·페니·칼로스의 자기 작업</li><li>모임의 친밀도와 위축</li><li>사랑하는 능력의 회복</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s11">
+      <div class="season-rail">
+        <div class="season-num">11</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2025-06-23 → 2025-08-08</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">35일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">5명</span>
+        </div>
+        <h3 class="season-book">나는 왜 이 사랑을 하는가?</h3>
+        <div class="season-author">데이비드 리코</div>
+        <div class="season-epigraph">— 연습으로서의 사랑 —</div>
+        <p class="season-story">사랑은 타고나는 것이 아니라 매일 익히고 실천할 수 있는 기술이자, 더 성숙한 사랑의 관점을 탐구했던 시간들이었다. 리코의 다섯 가지 A — Attention·Acceptance·Appreciation·Affection·Allowing — 를 자기 관계에 적용해 보는 실험을 했다. '인생에서 비극은 어떤 사건이 아니라 사랑하는 능력을 잃어버리는 것'이라는 문장에 오래 머물렀다. 우주인이 새로 합류했다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">담담</span><span class="chip">농담</span><span class="chip">해봐라기</span><span class="chip">우주인</span><span class="chip">윤슬</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>연습으로서의 사랑</li><li>성숙한 사랑의 다섯 가지 A</li><li>사랑하는 능력의 회복</li><li>그림책으로 만나는 부모-자녀 관계</li><li>모임의 받아들여짐</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s12">
+      <div class="season-rail">
+        <div class="season-num">12</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2025-09-01 → 2025-10-24</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">35일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">8명</span>
+        </div>
+        <h3 class="season-book">쇼펜하우어, 집단심리치료</h3>
+        <div class="season-author">어빈 D. 얄롬</div>
+        <div class="season-epigraph">— 이 모임이 곧 집단치료다 —</div>
+        <p class="season-story">쇼펜하우어의 의지 개념을 빌려, 욕망에서 벗어나려는 의지조차 또 다른 의지임을 받아들이는 작업. 매일 아침 한 시간이 곧 치료집단의 장이 되기도 했다. 긍정·젬마·체리향기 등 새 멤버가 합류했다. 추석 연휴 중간에는 해봐라기가 추천한 그림책 *아나톨의 작은 냄비*로 막간 모임을 열어 사랑·결핍·돌봄을 나누는 쉼표를 찍었다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">담담</span><span class="chip">농담</span><span class="chip">해봐라기</span><span class="chip">긍정</span><span class="chip">윤슬</span><span class="chip">우주인</span><span class="chip">젬마</span><span class="chip">체리향기</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>욕망과 고통의 본질</li><li>이 모임이 집단치료다</li><li>떠나는 멤버, 머무는 마음</li><li>그림책으로 쉬어가기</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s13">
+      <div class="season-rail">
+        <div class="season-num">13</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2025-11-10 → 2026-02-03</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">60일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">12명</span>
+        </div>
+        <h3 class="season-book">감각운동 심리치료</h3>
+        <div class="season-author">팻 오그던 · 재니너 피셔</div>
+        <div class="season-epigraph">— 몸으로 만나는 알아차림 —</div>
+        <p class="season-story">가장 많은 멤버인 12명으로 출발한 시즌. 담담은 다시 지평이라 불러달라고 이름을 바꿨고, 멤버들 간 수평어를 사용하는 실험을 시작했다. 트라우마를 머리가 아닌 몸으로 다루는 감각운동 심리치료의 워크시트를 직접 출력해 연습했다. 학교 업무·논문·육아 등 각자의 삶의 무게를 들고 와서, 매일의 새벽이 어떻게 '자원'이 되는지를 나눴다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">지평</span><span class="chip">농담</span><span class="chip">밝은열정</span><span class="chip">루리</span><span class="chip">우주인</span><span class="chip">연경</span><span class="chip">윤슬</span><span class="chip">냐옹이</span><span class="chip">프란체스코</span><span class="chip">쿠도</span><span class="chip">흐름</span><span class="chip">햇살</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>수평어와 별칭 문화</li><li>그라운딩과 신체 기반 알아차림</li><li>번아웃과 자기 돌봄</li><li>친절하게 싸우는 법</li><li>연결과 거리의 균형</li></ul></div>
+      </div>
+    </article>
+    <article class="season" id="s14">
+      <div class="season-rail">
+        <div class="season-num">14</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2026-02-23 → 2026-05-19</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">60일</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">7명</span>
+        </div>
+        <h3 class="season-book">우리들의 블루스 (상·하)</h3>
+        <div class="season-author">노희경</div>
+        <div class="season-epigraph">— 드라마 대본으로 만난 사람들 —</div>
+        <p class="season-story">심리치료서를 떠나 드라마 대본집을 함께 읽은 첫 시즌. 한수·은희·동석·옥동·영주·현 — 인물들에게 자신을 비춰 보며 인생 이야기를 길어 올렸다. 대사 속 '썅' 한마디를 두고 친밀한 욕과 비참한 욕의 차이를 진솔하게 이야기했고, 동창회 장면을 매개로 오래 지켜온 우정과 새로 만드는 친구 관계를 돌아봤다. 자연과 자유가 이 시즌부터 합류했다.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽은 사람들</div>
+          <div class="chips"><span class="chip">지평</span><span class="chip">농담</span><span class="chip">밝은열정</span><span class="chip">연경</span><span class="chip">자유</span><span class="chip">프란체스코</span><span class="chip">자연</span></div>
+        </div>
+        <div class="themes"><div class="themes-label">그날 우리가 머문 자리</div><ul><li>드라마 대본으로 만난 인물의 결</li><li>돌봄과 자기돌봄</li><li>욕설과 친밀감의 경계</li><li>친구·동창·오래된 관계</li><li>거짓말과 관계의 보호</li></ul></div>
+      </div>
+    </article>
+    <article class="season season--future" id="s15">
+      <div class="season-rail">
+        <div class="season-num">15</div>
+        <div class="season-line"></div>
+      </div>
+      <div class="season-body">
+        <div class="season-meta">
+          <span class="meta-period">2026-05-26 → 2026-06-30 (예정)</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-days">약 25일 예정</span>
+          <span class="meta-sep">·</span>
+          <span class="meta-count">11명</span>
+        </div>
+        <h3 class="season-book">마음의 시간</h3>
+        <div class="season-author">어빈 D. 얄롬 · 벤저민 얄롬</div>
+        <div class="season-epigraph">— 여기 그리고 지금과 연결하기 —</div>
+        <p class="season-story">다시 얄롬과 함께. 시간과 마음에 대한 사유를 11명이 함께 길어 올릴 시즌. 안정적으로 자리잡은 코어 멤버들(자유·자연·프란체스코·연경·밝은열정) 위에 마성·여운·보나·목마가렛 네 명이 새로 합류한다. 낭독은 2026년 5월 26일 화요일, 6시부터 시작. Coming soon.</p>
+        <div class="season-members">
+          <div class="members-label">함께 읽을 사람들</div>
+          <div class="chips"><span class="chip">지평</span><span class="chip">농담</span><span class="chip">자유</span><span class="chip">자연</span><span class="chip">프란체스코</span><span class="chip">연경</span><span class="chip">밝은열정</span><span class="chip">마성</span><span class="chip">여운</span><span class="chip">보나</span><span class="chip">목마가렛</span></div>
+        </div>
+        
+      </div>
+    </article>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <section class="closing">
+    <div class="wrap">
+      <div class="closing-label">Epilogue</div>
+      <h2>한 권의 책,<br>그리고 매일의 한 시간</h2>
+      <p>1기에서는 게슈탈트와 영성의 결로 내면의 부분들과 화해하는 작업을 이어갔습니다. 2기에서는 사랑이라는 한 주제를 네 권의 책으로 깊게 파고들었고, 대학교재처럼 두꺼운 감각운동 심리치료 책과 두 권으로 된 대본집을 더했습니다. 그 긴 시간을 마무리하고 이제는 다시 얄롬의 시간으로 돌아왔습니다.</p>
+      <p>책은 매개일 뿐, 진짜 텍스트는 멤버 각자의 삶이었습니다. 매일 새벽 한 시간이 누군가에게는 치유와 회복을, 또 누군가에게는 만남과 성숙의 체험을 선물해주고 될 것입니다. 시즌이 거듭될수록 우리의 장은 마치 우리 삶의 풍경처럼 다채로워지고 있습니다.</p>
+      <div class="closing-quote">
+        함께 소리 내어 읽는 동안<br>
+        우리는 서로의 새벽을 밝혀주는<br>
+        빛과 온기의 존재가 됩니다.
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-motto">READING · ALOUD · TOGETHER</div>
+  <div class="footer-links">
+    <a href="https://bookclub.questionschool.net/welcome_15.html" target="_blank" rel="noopener noreferrer">『마음의 시간』 낭독 참가자 안내문 <span class="arrow">→</span></a>
+    <a href="https://bookclub.questionschool.net/" target="_blank" rel="noopener noreferrer">15번째 시즌 참가자 모집글 <span class="arrow">→</span></a>
+    <a href="https://questionschool.net/" target="_blank" rel="noopener noreferrer">질문예술학교 <span class="arrow">→</span></a>
+  </div>
+  <div class="footer-name">모두의 새벽 + 낭만북클럽</div>
+</footer>
+
+</body>
+</html>
