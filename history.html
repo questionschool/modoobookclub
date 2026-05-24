@@ -390,6 +390,52 @@
   }
 
   /* ============================================
+     TRANSITION IMAGE (14 → 15)
+  ============================================ */
+  .transition {
+    padding: 3rem 1.5rem 1rem;
+    max-width: 920px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .transition-caption {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.85rem;
+    letter-spacing: 0.3em;
+    color: var(--rose);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+  }
+  .transition-caption::before,
+  .transition-caption::after {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--rose);
+    opacity: 0.6;
+  }
+  .transition img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+    box-shadow: 0 16px 40px rgba(74, 63, 53, 0.15);
+  }
+  .transition-note {
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-light);
+    margin-top: 1.2rem;
+    line-height: 1.7;
+  }
+
+  /* ============================================
      CLOSING REFLECTION
   ============================================ */
   .closing {
@@ -547,6 +593,16 @@
     }
     .closing {
       padding: 3.5rem 0;
+    }
+    .transition {
+      padding: 2rem 1rem 0.5rem;
+    }
+    .transition-caption {
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+    }
+    .transition-note {
+      font-size: 0.9rem;
     }
   }
 
@@ -964,6 +1020,13 @@
     </article>
     </div>
   </div>
+
+  <!-- TRANSITION IMAGE (14 → 15) -->
+  <section class="transition">
+    <div class="transition-caption">From the 14th, Into the 15th</div>
+    <img src="images/from14to15.png" alt="우리들의 블루스에서 마음의 시간으로 — 14번째 시즌의 마무리와 15번째 시즌의 시작">
+    <p class="transition-note">두 권의 대본집을 마무리하고, 다시 얄롬의 시간으로.</p>
+  </section>
 
   <!-- CLOSING -->
   <section class="closing">
