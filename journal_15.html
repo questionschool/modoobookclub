@@ -1247,9 +1247,10 @@
     <div class="reading">READING · ALOUD · TOGETHER</div>
     <p>
       모두의 새벽 + 낭만북클럽 · 시즌 15 『마음의 시간』<br>
+      <a href="welcome_15.html">환영 페이지 →</a> &nbsp;·&nbsp;
       <a href="my_journal_15.html">나의 기록 모아보기 →</a> &nbsp;·&nbsp;
       <a href="contents_15.html">책의 지도 →</a> &nbsp;·&nbsp;
-      <a href="welcome_15.html">환영 페이지 →</a>
+      <a href="journal_edit_15.html" style="opacity: 0.6;">관리자 →</a>
     </p>
   </footer>
 
@@ -1503,7 +1504,14 @@ function renderSessionCard(s) {
     <span class="attendee${a.lead ? ' lead' : ''}">${escapeHtml(a.alias)}</span>
   `).join('');
 
-  const reflections = s.reflections || [];
+  const reflections = (s.reflections || []).slice().sort((a, b) => {
+    // 최신이 위로 (timestamp 내림차순)
+    const ta = a.timestamp || '';
+    const tb = b.timestamp || '';
+    if (tb < ta) return -1;
+    if (tb > ta) return 1;
+    return 0;
+  });
   const reflectionsHtml = reflections.length === 0
     ? `<div style="font-style: italic; color: var(--ink-faint); font-family: 'Cormorant Garamond', serif; padding: 8px 14px;">아직 기록이 없어. 위에서 한 줄을 남겨 줘.</div>`
     : reflections.map(r => renderReflection(r, s.day)).join('');
