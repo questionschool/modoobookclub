@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>일지 입력 · 마음의 시간 · 진행자 전용</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;500&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream: #f5efe4;
+    --cream-deep: #ebe2d1;
+    --cream-soft: #faf5ea;
+    --ink: #2a2520;
+    --ink-soft: #4a423a;
+    --ink-muted: #6b6258;
+    --ink-faint: #9a9085;
+    --gold: #b08a4a;
+    --gold-deep: #8a6b35;
+    --gold-soft: #d4b97e;
+    --line: #d4c8b3;
+    --line-soft: #e5dcc8;
+    --accent: #7a3f2e;
+    --accent-soft: #a55c47;
+    --success: #6b8e5a;
+    --error: #b54c3e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(at 15% 10%, rgba(176, 138, 74, 0.06) 0px, transparent 50%),
+      radial-gradient(at 85% 90%, rgba(122, 63, 46, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ============ HEADER ============ */
+  header {
+    text-align: center;
+    padding: 20px 0 30px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: 26px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  h1 .accent { color: var(--accent); }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-muted);
+  }
+
+  /* ============ GATE ============ */
+  .gate {
+    background: rgba(255, 252, 245, 0.7);
+    border: 1px solid var(--line);
+    padding: 36px 32px;
+    text-align: center;
+    border-radius: 2px;
+  }
+
+  .gate-icon {
+    font-size: 24px;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+
+  .gate p {
+    font-family: 'Gowun Batang', serif;
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+  }
+
+  .gate input {
+    width: 100%;
+    max-width: 360px;
+    padding: 12px 16px;
+    border: 1px solid var(--line);
+    background: var(--cream-soft);
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 14px;
+    border-radius: 2px;
+    text-align: center;
+    letter-spacing: 0.05em;
+  }
+
+  .gate input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .gate button {
+    padding: 10px 28px;
+    background: var(--accent);
+    color: var(--cream-soft);
+    border: none;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+
+  .gate button:hover { background: var(--accent-soft); }
+
+  /* ============ TOOLBAR ============ */
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 14px 18px;
+    background: rgba(255, 252, 245, 0.5);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-info {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .toolbar-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-link {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+    text-decoration: none;
+    padding: 4px 10px;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .btn-link:hover {
+    color: var(--accent);
+    border-color: var(--line);
+  }
+
+  /* ============ FORM ============ */
+  .form-card {
+    background: rgba(255, 252, 245, 0.6);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--gold);
+    padding: 28px 30px;
+    border-radius: 2px;
+    margin-bottom: 24px;
+  }
+
+  .field {
+    margin-bottom: 22px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+
+  .field-row .field { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  label .ko {
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0;
+    margin-left: 6px;
+  }
+
+  label .hint {
+    display: block;
+    font-family: 'Gowun Batang', serif;
+    font-style: normal;
+    font-size: 11px;
+    color: var(--ink-faint);
+    letter-spacing: 0;
+    margin-top: 2px;
+    text-transform: none;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    background: var(--cream-soft);
+    font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    font-size: 14.5px;
+    color: var(--ink);
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+
+  textarea {
+    min-height: 90px;
+    resize: vertical;
+    line-height: 1.7;
+    font-family: 'Gowun Batang', serif;
+  }
+
+  textarea.large { min-height: 140px; }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+  }
+
+  /* ============ ATTENDEE TOGGLES ============ */
+  .attendee-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .attendee-toggle {
+    padding: 5px 14px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .attendee-toggle:hover {
+    border-color: var(--gold);
+    color: var(--ink-soft);
+  }
+
+  .attendee-toggle.on {
+    background: rgba(176, 138, 74, 0.15);
+    border-color: var(--gold);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .attendee-toggle.lead.on {
+    background: rgba(122, 63, 46, 0.12);
+    border-color: var(--accent);
+  }
+
+  .attendee-add {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .attendee-add input {
+    flex: 1;
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+
+  .attendee-add button {
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+
+  .attendee-add button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ============ PAGE SECTION ============ */
+  .page-section-grid {
+    display: grid;
+    grid-template-columns: 140px 1fr 1fr;
+    gap: 12px;
+    align-items: end;
+  }
+
+  /* ============ CHAPTER HINT ============ */
+  .chapter-hint {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: rgba(176, 138, 74, 0.08);
+    border-left: 2px solid var(--gold-soft);
+    font-family: 'Gowun Batang', serif;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    border-radius: 2px;
+    min-height: 32px;
+  }
+
+  .chapter-hint.empty {
+    color: var(--ink-faint);
+    font-style: italic;
+  }
+
+  /* ============ SUBMIT ============ */
+  .submit-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 24px;
+    border-top: 1px dashed var(--line);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .submit-info {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  button.primary {
+    padding: 11px 28px;
+    background: var(--accent);
+    color: var(--cream-soft);
+    border: none;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+
+  button.primary:hover:not(:disabled) {
+    background: var(--accent-soft);
+  }
+
+  button.primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .status {
+    margin-top: 18px;
+    padding: 12px 16px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 14px;
+    border-radius: 2px;
+    display: none;
+  }
+
+  .status.show { display: block; }
+  .status.success { background: rgba(107, 142, 90, 0.12); color: var(--success); border: 1px solid rgba(107, 142, 90, 0.3); }
+  .status.error { background: rgba(181, 76, 62, 0.1); color: var(--error); border: 1px solid rgba(181, 76, 62, 0.3); }
+
+  /* ============ EXISTING SESSIONS LIST ============ */
+  .existing-list {
+    margin-top: 40px;
+  }
+
+  .existing-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .existing-title .count {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 400;
+  }
+
+  .existing-row {
+    display: grid;
+    grid-template-columns: 60px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 14px;
+    background: rgba(255, 252, 245, 0.4);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+    margin-bottom: 8px;
+    transition: background 0.15s;
+  }
+
+  .existing-row:hover {
+    background: rgba(255, 252, 245, 0.8);
+  }
+
+  .existing-day {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--gold-deep);
+    text-align: center;
+  }
+
+  .existing-info {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .existing-info .pages {
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 8px;
+  }
+
+  .existing-actions {
+    display: flex;
+    gap: 6px;
+  }
+
+  .existing-actions button {
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 2px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 12px;
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+
+  .existing-actions button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .existing-actions button.danger:hover {
+    border-color: var(--error);
+    color: var(--error);
+  }
+
+  .empty {
+    text-align: center;
+    padding: 30px;
+    color: var(--ink-muted);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 30px 16px 60px; }
+    .form-card { padding: 22px 18px; }
+    .field-row { grid-template-columns: 1fr; gap: 0; }
+    .field-row .field { margin-bottom: 22px; }
+    .page-section-grid { grid-template-columns: 1fr; }
+    .existing-row { grid-template-columns: 50px 1fr; }
+    .existing-actions { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Season 15 · Editor</div>
+    <h1>일지 입력 — <span class="accent">마음의 시간</span></h1>
+    <p class="subtitle">A space only the hosts walk into.</p>
+  </header>
+
+  <!-- ============ GATE (키 없을 때) ============ -->
+  <div id="gateView" class="gate" style="display:none;">
+    <div class="gate-icon">✦</div>
+    <p>진행자 전용 페이지야. 입력 키를 적어 줘.</p>
+    <input type="password" id="gateKey" placeholder="입력 키" autocomplete="off">
+    <br>
+    <button onclick="enterGate()">들어가기 →</button>
+  </div>
+
+  <!-- ============ EDITOR (키 통과 시) ============ -->
+  <div id="editorView" style="display:none;">
+
+    <div class="toolbar">
+      <span class="toolbar-info" id="toolbarInfo">불러오는 중…</span>
+      <div class="toolbar-actions">
+        <a href="journal_15.html" class="btn-link">📖 일지 보기</a>
+        <a href="my_journal_15.html" class="btn-link">✿ 나의 기록</a>
+        <a href="contents_15.html" class="btn-link">📋 목차</a>
+        <a href="#" class="btn-link" onclick="logout(); return false;">🔒 잠그기</a>
+      </div>
+    </div>
+
+    <!-- ============ FORM ============ -->
+    <div class="form-card">
+      <input type="hidden" id="editDay" value="">
+
+      <div class="field-row">
+        <div class="field">
+          <label>Day <span class="ko">· 회차 번호</span></label>
+          <input type="number" id="fDay" min="1" max="40" placeholder="1, 2, 3…">
+        </div>
+        <div class="field">
+          <label>Date <span class="ko">· 날짜</span></label>
+          <input type="date" id="fDate">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Section &amp; Pages <span class="ko">· 섹션과 페이지</span><span class="hint">모임 전에는 시작 페이지만, 모임 끝난 뒤 끝 페이지를 추가하면 돼.</span></label>
+        <div class="page-section-grid">
+          <select id="fSection" onchange="updateChapterHint()">
+            <option value="">섹션 선택</option>
+            <option value="front">서론·앞부분 (로마 숫자)</option>
+            <option value="main">본문 (아라비아 숫자)</option>
+            <option value="back">후기·끝부분</option>
+          </select>
+          <input type="text" id="fStartPage" placeholder="시작 (예: xvi 또는 49)" oninput="updateChapterHint()">
+          <input type="text" id="fEndPage" placeholder="끝 (모임 후 입력)" oninput="updateChapterHint()">
+        </div>
+        <div class="chapter-hint empty" id="chapterHint">섹션과 페이지를 입력하면 어떤 챕터에 해당하는지 보여줘.</div>
+      </div>
+
+      <div class="field">
+        <label>Leader <span class="ko">· 진행자</span></label>
+        <input type="text" id="fLeader" placeholder="농담 / 지평 / 농담 & 지평">
+      </div>
+
+      <div class="field">
+        <label>Attendees <span class="ko">· 함께한 사람들</span><span class="hint">탭하면 토글돼. 진행자는 두 번 탭하면 진행자로 표시.</span></label>
+        <div class="attendee-toggles" id="attendeeToggles"></div>
+        <div class="attendee-add">
+          <input type="text" id="newAttendee" placeholder="새 별칭 추가" onkeydown="if(event.key==='Enter'){addAttendee();event.preventDefault();}">
+          <button onclick="addAttendee()">+ 추가</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Reading Note <span class="ko">· 낭독한 구간 메모</span></label>
+        <textarea id="fReadingNote" placeholder="이번 회차에 어디를 어떤 결로 읽었는지 짧게…"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Quote <span class="ko">· 인상 깊은 문장</span><span class="hint">선택 사항. 없으면 비워 둬도 돼.</span></label>
+        <textarea id="fQuoteText" placeholder="문장 한두 줄…"></textarea>
+      </div>
+      <div class="field">
+        <label>Quote Source <span class="ko">· 출처와 메모</span></label>
+        <input type="text" id="fQuoteMeta" placeholder="예: 챕터 4, p. 61 · 윤슬이 골라 읽다">
+      </div>
+
+      <div class="field">
+        <label>Sharing <span class="ko">· 나눔에서 오간 이야기</span></label>
+        <textarea id="fSharing" class="large" placeholder="30분간의 나눔에서 어떤 이야기가 오갔는지…"></textarea>
+      </div>
+
+      <div class="submit-row">
+        <span class="submit-info" id="formMode">새 회차 추가</span>
+        <div>
+          <button class="primary" id="submitBtn" onclick="submitForm()">저장 →</button>
+        </div>
+      </div>
+
+      <div class="status" id="status"></div>
+    </div>
+
+    <!-- ============ EXISTING SESSIONS ============ -->
+    <div class="existing-list">
+      <div class="existing-title">
+        <span>지금까지 기록된 회차</span>
+        <span class="count" id="existingCount">—</span>
+      </div>
+      <div id="existingList">
+        <div class="empty">불러오는 중…</div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// 설정 — GAS 배포 후 여기에 URL 붙여넣기
+// ════════════════════════════════════════════════════════
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
+
+// 시즌 15 참가자 (가나다 순) — 폼에서 자동 토글 가능
+const DEFAULT_MEMBERS = [
+  { alias: '농담', lead: true },
+  { alias: '마성' },
+  { alias: '목마가렛' },
+  { alias: '밝은열정' },
+  { alias: '보나' },
+  { alias: '여운' },
+  { alias: '연경' },
+  { alias: '자연' },
+  { alias: '자유' },
+  { alias: '지평', lead: true },
+  { alias: '프란체스코' }
+];
+
+// ════════════════════════════════════════════════════════
+// 상태
+// ════════════════════════════════════════════════════════
+let editKey = null;
+let contents = [];
+let sessions = [];
+let attendeePool = [];   // [{alias, lead, on}]
+
+// ════════════════════════════════════════════════════════
+// 게이트
+// ════════════════════════════════════════════════════════
+function getKeyFromUrl() {
+  const m = location.search.match(/[?&]key=([^&]+)/);
+  return m ? decodeURIComponent(m[1]) : null;
+}
+
+function enterGate() {
+  const k = document.getElementById('gateKey').value.trim();
+  if (!k) return;
+  // 게이트는 클라이언트에선 키 형태만 확인하고, 실제 검증은 저장할 때 GAS가 함
+  editKey = k;
+  sessionStorage.setItem('journal15_key', k);
+  showEditor();
+}
+
+function logout() {
+  editKey = null;
+  sessionStorage.removeItem('journal15_key');
+  document.getElementById('editorView').style.display = 'none';
+  document.getElementById('gateView').style.display = 'block';
+}
+
+function showEditor() {
+  document.getElementById('gateView').style.display = 'none';
+  document.getElementById('editorView').style.display = 'block';
+  initAttendeePool();
+  refreshAll();
+}
+
+// ════════════════════════════════════════════════════════
+// API 호출
+// ════════════════════════════════════════════════════════
+async function apiGet(action) {
+  if (!GAS_URL || GAS_URL.startsWith('PASTE_')) {
+    throw new Error('GAS_URL이 아직 설정되지 않았어');
+  }
+  const res = await fetch(`${GAS_URL}?action=${action}`);
+  return res.json();
+}
+
+async function apiPost(body) {
+  if (!GAS_URL || GAS_URL.startsWith('PASTE_')) {
+    throw new Error('GAS_URL이 아직 설정되지 않았어');
+  }
+  const res = await fetch(GAS_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(body)
+  });
+  return res.json();
+}
+
+// ════════════════════════════════════════════════════════
+// 초기 로딩
+// ════════════════════════════════════════════════════════
+async function refreshAll() {
+  try {
+    const data = await apiGet('list_all');
+    contents = data.contents || [];
+    sessions = data.sessions || [];
+    document.getElementById('toolbarInfo').textContent =
+      `${sessions.length}개 회차 기록됨 · ${contents.length}개 챕터`;
+    renderExistingList();
+    updateChapterHint();
+  } catch (err) {
+    document.getElementById('toolbarInfo').textContent = '⚠️ 데이터 불러오기 실패';
+    console.error(err);
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// 참석자 풀
+// ════════════════════════════════════════════════════════
+function initAttendeePool() {
+  attendeePool = DEFAULT_MEMBERS.map(m => ({ ...m, on: false }));
+  renderAttendees();
+}
+
+function renderAttendees() {
+  const el = document.getElementById('attendeeToggles');
+  el.innerHTML = attendeePool.map((m, i) => `
+    <span class="attendee-toggle ${m.on ? 'on' : ''} ${m.lead ? 'lead' : ''}"
+          onclick="toggleAttendee(${i})"
+          ondblclick="toggleLead(${i})">
+      ${escapeHtml(m.alias)}${m.lead ? ' ✦' : ''}
+    </span>
+  `).join('');
+}
+
+function toggleAttendee(i) {
+  attendeePool[i].on = !attendeePool[i].on;
+  renderAttendees();
+}
+
+function toggleLead(i) {
+  attendeePool[i].lead = !attendeePool[i].lead;
+  renderAttendees();
+}
+
+function addAttendee() {
+  const input = document.getElementById('newAttendee');
+  const alias = input.value.trim();
+  if (!alias) return;
+  if (attendeePool.find(m => m.alias === alias)) {
+    input.value = '';
+    return;
+  }
+  attendeePool.push({ alias, lead: false, on: true });
+  input.value = '';
+  renderAttendees();
+}
+
+// ════════════════════════════════════════════════════════
+// 챕터 힌트 (입력한 페이지 범위가 어떤 챕터에 해당하는지)
+// ════════════════════════════════════════════════════════
+function updateChapterHint() {
+  const section = document.getElementById('fSection').value;
+  const start = document.getElementById('fStartPage').value.trim();
+  const end = document.getElementById('fEndPage').value.trim();
+  const hint = document.getElementById('chapterHint');
+
+  if (!section || !start) {
+    hint.textContent = '섹션과 페이지를 입력하면 어떤 챕터에 해당하는지 보여줘.';
+    hint.classList.add('empty');
+    return;
+  }
+
+  if (section !== 'main') {
+    const label = section === 'front' ? '서론·앞부분' : '후기·끝부분';
+    hint.textContent = `${label} · p. ${start}${end ? ' → ' + end : ''}`;
+    hint.classList.remove('empty');
+    return;
+  }
+
+  // 본문: 챕터 범위를 본다
+  const startNum = parseInt(start, 10);
+  const endNum = parseInt(end, 10) || startNum;
+  if (isNaN(startNum)) {
+    hint.textContent = '본문 페이지는 숫자로 입력해 줘 (예: 49)';
+    hint.classList.add('empty');
+    return;
+  }
+
+  const matches = contents.filter(c =>
+    c.section_type === 'main' &&
+    Number(c.page_start) <= endNum &&
+    Number(c.page_end) >= startNum
+  );
+
+  if (matches.length === 0) {
+    hint.textContent = '해당하는 챕터를 찾지 못했어. 페이지를 확인해 줘.';
+    hint.classList.add('empty');
+    return;
+  }
+
+  const label = matches.length === 1
+    ? `Ch. ${matches[0].num} 「${matches[0].title}」`
+    : `Ch. ${matches[0].num} 「${matches[0].title}」 → Ch. ${matches[matches.length-1].num} 「${matches[matches.length-1].title}」`;
+  const pageCount = endNum - startNum + 1;
+  hint.textContent = `📖 ${label} · ${pageCount}쪽`;
+  hint.classList.remove('empty');
+}
+
+// ════════════════════════════════════════════════════════
+// 폼 제출
+// ════════════════════════════════════════════════════════
+async function submitForm() {
+  const day = document.getElementById('fDay').value.trim();
+  const date = document.getElementById('fDate').value;
+  const section = document.getElementById('fSection').value;
+  const startPage = document.getElementById('fStartPage').value.trim();
+  const endPage = document.getElementById('fEndPage').value.trim();
+  const leader = document.getElementById('fLeader').value.trim();
+  const readingNote = document.getElementById('fReadingNote').value.trim();
+  const quoteText = document.getElementById('fQuoteText').value.trim();
+  const quoteMeta = document.getElementById('fQuoteMeta').value.trim();
+  const sharing = document.getElementById('fSharing').value.trim();
+
+  if (!day) return showStatus('Day를 입력해 줘.', 'error');
+  if (!date) return showStatus('날짜를 입력해 줘.', 'error');
+  if (!section) return showStatus('섹션을 선택해 줘.', 'error');
+  if (!startPage) return showStatus('시작 페이지를 입력해 줘.', 'error');
+
+  const attendees = attendeePool
+    .filter(m => m.on)
+    .map(m => ({ alias: m.alias, lead: !!m.lead }));
+
+  const payload = {
+    day: Number(day),
+    date,
+    section,
+    start_page: startPage,
+    end_page: endPage,
+    leader,
+    attendees,
+    reading_note: readingNote,
+    quote_text: quoteText,
+    quote_meta: quoteMeta,
+    sharing
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '저장 중…';
+
+  try {
+    const editDay = document.getElementById('editDay').value;
+    const action = editDay ? 'update_session' : 'add_session';
+    const body = { action, key: editKey, payload };
+    if (editDay) body.day = Number(editDay);
+
+    const data = await apiPost(body);
+    if (data.ok) {
+      showStatus('✦ 저장됐어. 일지 페이지에서 확인할 수 있어.', 'success');
+      resetForm();
+      await refreshAll();
+    } else {
+      throw new Error(data.error || 'unknown');
+    }
+  } catch (err) {
+    showStatus('저장에 실패했어: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '저장 →';
+  }
+}
+
+function resetForm() {
+  document.getElementById('editDay').value = '';
+  document.getElementById('fDay').value = '';
+  document.getElementById('fDate').value = '';
+  document.getElementById('fSection').value = '';
+  document.getElementById('fStartPage').value = '';
+  document.getElementById('fEndPage').value = '';
+  document.getElementById('fLeader').value = '';
+  document.getElementById('fReadingNote').value = '';
+  document.getElementById('fQuoteText').value = '';
+  document.getElementById('fQuoteMeta').value = '';
+  document.getElementById('fSharing').value = '';
+  attendeePool.forEach(m => m.on = false);
+  renderAttendees();
+  document.getElementById('formMode').textContent = '새 회차 추가';
+  updateChapterHint();
+}
+
+// ════════════════════════════════════════════════════════
+// 기존 회차 목록 / 편집 / 삭제
+// ════════════════════════════════════════════════════════
+function renderExistingList() {
+  const el = document.getElementById('existingList');
+  document.getElementById('existingCount').textContent = `${sessions.length}개`;
+
+  if (sessions.length === 0) {
+    el.innerHTML = '<div class="empty">아직 기록된 회차가 없어. 첫 회차를 입력해 줘.</div>';
+    return;
+  }
+
+  el.innerHTML = sessions.map(s => `
+    <div class="existing-row">
+      <div class="existing-day">Day ${escapeHtml(s.day)}</div>
+      <div class="existing-info">
+        <span class="pages">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '<span style="font-style:italic; color:var(--ink-muted); font-weight: 400;">(진행 중)</span>'}</span>
+        ${escapeHtml(formatDateShort(s.date))} · 진행 ${escapeHtml(s.leader || '?')} · ${(s.attendees || []).length}명
+      </div>
+      <div class="existing-actions">
+        <button onclick="editSession(${s.day})">편집</button>
+        <button class="danger" onclick="deleteSessionConfirm(${s.day})">삭제</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function editSession(day) {
+  const s = sessions.find(x => Number(x.day) === Number(day));
+  if (!s) return;
+
+  document.getElementById('editDay').value = s.day;
+  document.getElementById('fDay').value = s.day;
+  document.getElementById('fDate').value = s.date || '';
+  document.getElementById('fSection').value = s.section || '';
+  document.getElementById('fStartPage').value = s.start_page || '';
+  document.getElementById('fEndPage').value = s.end_page || '';
+  document.getElementById('fLeader').value = s.leader || '';
+  document.getElementById('fReadingNote').value = s.reading_note || '';
+  document.getElementById('fQuoteText').value = s.quote_text || '';
+  document.getElementById('fQuoteMeta').value = s.quote_meta || '';
+  document.getElementById('fSharing').value = s.sharing || '';
+
+  // 참석자 적용: 기존 풀에 있으면 on, 없으면 풀에 추가
+  attendeePool.forEach(m => m.on = false);
+  (s.attendees || []).forEach(a => {
+    let found = attendeePool.find(m => m.alias === a.alias);
+    if (!found) {
+      found = { alias: a.alias, lead: !!a.lead, on: true };
+      attendeePool.push(found);
+    } else {
+      found.on = true;
+      if (a.lead) found.lead = true;
+    }
+  });
+  renderAttendees();
+
+  document.getElementById('formMode').textContent = `Day ${s.day} 편집 중`;
+  updateChapterHint();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function deleteSessionConfirm(day) {
+  if (!confirm(`Day ${day}을(를) 삭제할까? 되돌릴 수 없어.`)) return;
+  try {
+    const data = await apiPost({ action: 'delete_session', key: editKey, day: Number(day) });
+    if (data.ok) {
+      showStatus(`Day ${day} 삭제됨.`, 'success');
+      await refreshAll();
+    } else {
+      throw new Error(data.error || 'unknown');
+    }
+  } catch (err) {
+    showStatus('삭제 실패: ' + err.message, 'error');
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// 유틸
+// ════════════════════════════════════════════════════════
+function showStatus(msg, type) {
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.className = `status show ${type}`;
+  if (type === 'success') {
+    setTimeout(() => el.className = 'status', 5000);
+  }
+}
+
+function formatDateShort(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return iso;
+  return `${d.getMonth() + 1}/${d.getDate()}`;
+}
+
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// ════════════════════════════════════════════════════════
+// 진입점
+// ════════════════════════════════════════════════════════
+(function init() {
+  // URL 쿼리 ?key=… 또는 sessionStorage
+  const k = getKeyFromUrl() || sessionStorage.getItem('journal15_key');
+  if (k) {
+    editKey = k;
+    sessionStorage.setItem('journal15_key', k);
+    showEditor();
+  } else {
+    document.getElementById('gateView').style.display = 'block';
+  }
+})();
+</script>
+
+</body>
+</html>
