@@ -1483,25 +1483,51 @@ function restoreInputState() {
 // ════════════════════════════════════════════════════════
 // 시간 헬퍼: 한국 시간 기준 모임 시작/종료 판단
 // ════════════════════════════════════════════════════════
-// 모임 시작: 모임 날짜 06:00 KST
-// 모임 종료: 모임 날짜 07:00 KST
+// session.date는 시트에 따라 여러 형태로 올 수 있음:
+//   - "2026-05-26"               (사용자 입력 그대로)
+//   - "2026-05-26T00:00:00.000Z" (Sheets가 자동 변환한 ISO)
+//   - "Tue May 26 2026..."       (Date 객체의 문자열)
+// → 어떤 형태든 KST 기준 년/월/일을 뽑아냄
+
+function extractKSTDate(dateValue) {
+  if (!dateValue) return null;
+
+  // 이미 YYYY-MM-DD 형태이면 그대로 사용
+  if (typeof dateValue === 'string') {
+    const m = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) {
+      return { y: Number(m[1]), m: Number(m[2]), d: Number(m[3]) };
+    }
+  }
+
+  // Date 객체로 파싱 시도
+  const d = new Date(dateValue);
+  if (isNaN(d.getTime())) return null;
+
+  // KST(UTC+9) 기준 년/월/일 계산
+  // d의 UTC 시각에 9시간 더한 것이 KST 시각
+  const kstMs = d.getTime() + 9 * 60 * 60 * 1000;
+  const kst = new Date(kstMs);
+  return {
+    y: kst.getUTCFullYear(),
+    m: kst.getUTCMonth() + 1,
+    d: kst.getUTCDate()
+  };
+}
+
 function isSessionStarted(session) {
-  if (!session.date) return false;
-  const parts = String(session.date).split('-');
-  const y = Number(parts[0]), m = Number(parts[1]), d = Number(parts[2]);
-  if (!y || !m || !d) return false;
-  // KST 06:00 = UTC 21:00 (전날)
-  const startUtcMs = Date.UTC(y, m - 1, d, 6 - 9, 0, 0);
+  const ymd = extractKSTDate(session.date);
+  if (!ymd) return false;
+  // 모임 시작: 모임 날짜 06:00 KST = (전날) 21:00 UTC
+  const startUtcMs = Date.UTC(ymd.y, ymd.m - 1, ymd.d, 6 - 9, 0, 0);
   return Date.now() >= startUtcMs;
 }
 
 function isSessionFinished(session) {
-  if (!session.date) return false;
-  const parts = String(session.date).split('-');
-  const y = Number(parts[0]), m = Number(parts[1]), d = Number(parts[2]);
-  if (!y || !m || !d) return false;
-  // KST 07:00 = UTC 22:00 (전날)
-  const endUtcMs = Date.UTC(y, m - 1, d, 7 - 9, 0, 0);
+  const ymd = extractKSTDate(session.date);
+  if (!ymd) return false;
+  // 모임 종료: 모임 날짜 07:00 KST = (전날) 22:00 UTC
+  const endUtcMs = Date.UTC(ymd.y, ymd.m - 1, ymd.d, 7 - 9, 0, 0);
   return Date.now() >= endUtcMs;
 }
 
@@ -2038,6 +2064,28 @@ function escapeAttr(s) {
 
 // ════════════════════════════════════════════════════════
 loadAll();
+
+// ════════════════════════════════════════════════════════
+// 자동 새로고침: 시간 기반 상태(예정→진행 중→마침)가 자동으로 전환되도록
+// 5분마다 대시보드와 회차 카드를 다시 렌더
+// (전체 데이터 재호출은 아님 — 클라이언트 시간만 다시 평가)
+// ════════════════════════════════════════════════════════
+setInterval(() => {
+  if (sessions.length > 0) {
+    renderDashboard();
+    populateDayDisplay();
+    renderSessions();
+  }
+}, 5 * 60 * 1000); // 5분마다
+
+// 페이지가 다시 활성화될 때도 갱신 (탭 전환, 화면 깸 등)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && sessions.length > 0) {
+    renderDashboard();
+    populateDayDisplay();
+    renderSessions();
+  }
+});
 </script>
 
 </body>
