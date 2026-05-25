@@ -652,33 +652,38 @@ async function loadAll() {
 // ════════════════════════════════════════════════════════
 // 시간 헬퍼: 한국 시간 기준 모임 종료 시각 판단
 // ════════════════════════════════════════════════════════
-// 회차의 date (YYYY-MM-DD)와 한국 새벽 7시를 비교
-// 7시 이전이면 아직 모임이 안 끝난 것
+// session.date는 여러 형태로 올 수 있음 (Sheets 자동 변환 등)
+function extractKSTDate(dateValue) {
+  if (!dateValue) return null;
+  if (typeof dateValue === 'string') {
+    const m = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return { y: Number(m[1]), m: Number(m[2]), d: Number(m[3]) };
+  }
+  const d = new Date(dateValue);
+  if (isNaN(d.getTime())) return null;
+  const kstMs = d.getTime() + 9 * 60 * 60 * 1000;
+  const kst = new Date(kstMs);
+  return {
+    y: kst.getUTCFullYear(),
+    m: kst.getUTCMonth() + 1,
+    d: kst.getUTCDate()
+  };
+}
+
 function isSessionFinished(session) {
-  if (!session.date) return false;
-  // 한국시간 7시 = UTC 22:00 (전날)
-  // session.date가 "2026-05-26"이면 한국 시간 2026-05-26 07:00 = UTC 2026-05-25 22:00
-  const d = new Date(session.date);
-  if (isNaN(d.getTime())) return false;
-
-  // 한국 모임 종료 시점: YYYY-MM-DD 07:00 KST = (YYYY-MM-DD-1) 22:00 UTC
-  // 더 안전한 방법: 명시적으로 UTC 시각 만들기
-  const [y, m, day] = session.date.split('-').map(Number);
-  if (!y || !m || !day) return false;
-  // Date.UTC는 month가 0-based
-  const meetingEndUtcMs = Date.UTC(y, m - 1, day, 7 - 9, 0, 0);
-  // 7시(KST) = -2시(UTC) → 즉 전날 22시 UTC
-
-  return Date.now() >= meetingEndUtcMs;
+  const ymd = extractKSTDate(session.date);
+  if (!ymd) return false;
+  // 모임 종료: 모임 날짜 07:00 KST
+  const endUtcMs = Date.UTC(ymd.y, ymd.m - 1, ymd.d, 7 - 9, 0, 0);
+  return Date.now() >= endUtcMs;
 }
 
 function isSessionStarted(session) {
-  if (!session.date) return false;
-  const [y, m, day] = session.date.split('-').map(Number);
-  if (!y || !m || !day) return false;
-  // 한국 모임 시작: YYYY-MM-DD 06:00 KST = 전날 21:00 UTC
-  const meetingStartUtcMs = Date.UTC(y, m - 1, day, 6 - 9, 0, 0);
-  return Date.now() >= meetingStartUtcMs;
+  const ymd = extractKSTDate(session.date);
+  if (!ymd) return false;
+  // 모임 시작: 모임 날짜 06:00 KST
+  const startUtcMs = Date.UTC(ymd.y, ymd.m - 1, ymd.d, 6 - 9, 0, 0);
+  return Date.now() >= startUtcMs;
 }
 
 // ════════════════════════════════════════════════════════
@@ -934,6 +939,21 @@ function escapeHtml(s) {
 }
 
 loadAll();
+
+// 시간 기반 상태가 자동 전환되도록 — 5분마다 + 탭 활성화 시
+setInterval(() => {
+  if (contents.length > 0) {
+    renderSummary();
+    renderContents();
+  }
+}, 5 * 60 * 1000);
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && contents.length > 0) {
+    renderSummary();
+    renderContents();
+  }
+});
 </script>
 
 </body>
