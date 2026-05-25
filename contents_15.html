@@ -374,6 +374,11 @@
     opacity: 0.7;
   }
 
+  .chapter.scheduled {
+    border-left-color: var(--gold-soft);
+    background: rgba(176, 138, 74, 0.04);
+  }
+
   .chapter-num {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
@@ -459,6 +464,12 @@
   .status-pill.future {
     color: var(--ink-faint);
     border: 1px dashed var(--line);
+  }
+
+  .status-pill.scheduled {
+    color: var(--gold-deep);
+    background: rgba(176, 138, 74, 0.08);
+    border: 1px solid rgba(176, 138, 74, 0.3);
   }
 
   /* LOADING */
@@ -626,35 +637,75 @@ async function loadAll() {
 }
 
 // ════════════════════════════════════════════════════════
+// 시간 헬퍼: 한국 시간 기준 모임 종료 시각 판단
+// ════════════════════════════════════════════════════════
+// 회차의 date (YYYY-MM-DD)와 한국 새벽 7시를 비교
+// 7시 이전이면 아직 모임이 안 끝난 것
+function isSessionFinished(session) {
+  if (!session.date) return false;
+  // 한국시간 7시 = UTC 22:00 (전날)
+  // session.date가 "2026-05-26"이면 한국 시간 2026-05-26 07:00 = UTC 2026-05-25 22:00
+  const d = new Date(session.date);
+  if (isNaN(d.getTime())) return false;
+
+  // 한국 모임 종료 시점: YYYY-MM-DD 07:00 KST = (YYYY-MM-DD-1) 22:00 UTC
+  // 더 안전한 방법: 명시적으로 UTC 시각 만들기
+  const [y, m, day] = session.date.split('-').map(Number);
+  if (!y || !m || !day) return false;
+  // Date.UTC는 month가 0-based
+  const meetingEndUtcMs = Date.UTC(y, m - 1, day, 7 - 9, 0, 0);
+  // 7시(KST) = -2시(UTC) → 즉 전날 22시 UTC
+
+  return Date.now() >= meetingEndUtcMs;
+}
+
+function isSessionStarted(session) {
+  if (!session.date) return false;
+  const [y, m, day] = session.date.split('-').map(Number);
+  if (!y || !m || !day) return false;
+  // 한국 모임 시작: YYYY-MM-DD 06:00 KST = 전날 21:00 UTC
+  const meetingStartUtcMs = Date.UTC(y, m - 1, day, 6 - 9, 0, 0);
+  return Date.now() >= meetingStartUtcMs;
+}
+
+// ════════════════════════════════════════════════════════
 // 챕터별 진행 상태 계산
+//
+// 상태:
+//   done      - 마침 (시간상 모임 끝났고, 페이지도 챕터 끝까지 도달)
+//   current   - 진행 중 (모임 시작했고, 아직 끝나지 않았거나 페이지 미달)
+//   scheduled - 예정 (회차 입력은 됐지만 모임 시작 전)
+//   future    - 아직 (회차 자체가 입력되지 않음)
 // ════════════════════════════════════════════════════════
 function computeChapterStatus(chapter) {
   // 본문 외 섹션 (front/back)
   if (chapter.section_type !== 'main') {
-    // 해당 섹션을 다룬 회차가 있는지
     const relevantSessions = sessions.filter(s => s.section === chapter.section_type);
     if (relevantSessions.length === 0) {
       return { status: 'future', daysLabel: '' };
     }
-    // 가장 최근 회차의 end_page와 비교
     const days = relevantSessions.map(s => Number(s.day)).filter(d => !isNaN(d)).sort((a,b) => a-b);
-    return {
-      status: 'done',
-      daysLabel: days.length === 1 ? `Day ${days[0]}` : `Day ${days[0]} – ${days[days.length-1]}`
-    };
+    const allFinished = relevantSessions.every(isSessionFinished);
+    const anyStarted = relevantSessions.some(isSessionStarted);
+
+    let status;
+    if (allFinished) status = 'done';
+    else if (anyStarted) status = 'current';
+    else status = 'scheduled';
+
+    const daysLabel = days.length === 1 ? `Day ${days[0]}` : `Day ${days[0]} – ${days[days.length-1]}`;
+    return { status, daysLabel };
   }
 
-  // 본문 챕터: page_start ~ page_end 사이를 다룬 회차들
+  // 본문 챕터
   const chStart = Number(chapter.page_start);
   const chEnd = Number(chapter.page_end);
 
-  // 이 챕터를 다룬 회차들
   const relevantSessions = sessions.filter(s => {
     if (s.section !== 'main') return false;
     const sStart = parseInt(s.start_page, 10);
     const sEnd = parseInt(s.end_page, 10) || sStart;
     if (isNaN(sStart)) return false;
-    // 회차의 범위가 챕터 범위와 겹치면 관련
     return sStart <= chEnd && sEnd >= chStart;
   });
 
@@ -662,23 +713,32 @@ function computeChapterStatus(chapter) {
     return { status: 'future', daysLabel: '' };
   }
 
-  // 최대 end_page 찾기
   const maxEndPage = Math.max(...relevantSessions.map(s => {
     return parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0;
   }));
+  const reachedEnd = maxEndPage >= chEnd;
 
-  // 챕터 끝 페이지보다 멀리 갔으면 완료, 아니면 진행 중
-  const status = maxEndPage >= chEnd ? 'done' : 'current';
+  // 챕터 끝에 도달한 회차들 중 가장 늦은 것이 시간상 끝났는지
+  const lastReachingSession = relevantSessions
+    .filter(s => (parseInt(s.end_page, 10) || 0) >= chEnd)
+    .sort((a, b) => Number(b.day) - Number(a.day))[0];
 
-  // Day 라벨
+  const lastFinished = lastReachingSession ? isSessionFinished(lastReachingSession) : false;
+  const anyStarted = relevantSessions.some(isSessionStarted);
+
+  let status;
+  if (reachedEnd && lastFinished) {
+    status = 'done';
+  } else if (anyStarted) {
+    status = 'current';
+  } else {
+    status = 'scheduled';
+  }
+
   const days = relevantSessions.map(s => Number(s.day)).filter(d => !isNaN(d)).sort((a,b) => a-b);
   let daysLabel = '';
-  if (days.length === 1) {
-    daysLabel = `Day ${days[0]}`;
-  } else if (days.length > 1) {
-    daysLabel = `Day ${days[0]} – ${days[days.length-1]}`;
-  }
-  if (status === 'current') daysLabel += ' (진행 중)';
+  if (days.length === 1) daysLabel = `Day ${days[0]}`;
+  else if (days.length > 1) daysLabel = `Day ${days[0]} – ${days[days.length-1]}`;
 
   return { status, daysLabel };
 }
@@ -687,7 +747,6 @@ function computeChapterStatus(chapter) {
 // SUMMARY 렌더링
 // ════════════════════════════════════════════════════════
 function renderSummary() {
-  // 본문 챕터들만 보고 완료/진행/미정 카운트
   const mainChapters = contents.filter(c => c.section_type === 'main');
 
   let done = 0;
@@ -699,28 +758,36 @@ function renderSummary() {
     else if (status === 'current' && !currentCh) currentCh = ch;
   });
 
-  // 페이지 진도 계산
-  const mainSessions = sessions.filter(s => s.section === 'main');
-  const maxMainPage = mainSessions.length > 0
-    ? Math.max(...mainSessions.map(s => parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0))
+  // 페이지 진도: 시간상 끝난 회차만 계산에 반영
+  const finishedMainSessions = sessions.filter(s =>
+    s.section === 'main' && isSessionFinished(s)
+  );
+  const maxMainPage = finishedMainSessions.length > 0
+    ? Math.max(...finishedMainSessions.map(s =>
+        parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0))
     : 0;
-  const hasFront = sessions.some(s => s.section === 'front');
-  let pagesRead = maxMainPage + (hasFront ? 17 : 0);
-  const hasBack = sessions.some(s => s.section === 'back');
-  if (hasBack) {
-    const backEnds = sessions.filter(s => s.section === 'back')
+
+  const hasFinishedFront = sessions.some(s => s.section === 'front' && isSessionFinished(s));
+  let pagesRead = maxMainPage + (hasFinishedFront ? 17 : 0);
+
+  const hasFinishedBack = sessions.some(s => s.section === 'back' && isSessionFinished(s));
+  if (hasFinishedBack) {
+    const backEnds = sessions.filter(s => s.section === 'back' && isSessionFinished(s))
       .map(s => parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0);
     pagesRead = Math.max(pagesRead, Math.max(...backEnds) + 17);
   }
+
+  // Sessions 카운트도 시간상 끝난 것만
+  const finishedSessions = sessions.filter(isSessionFinished);
 
   document.getElementById('statCompleted').innerHTML =
     `${done} <span class="small">/ ${mainChapters.length} ch.</span>`;
   document.getElementById('statCurrent').innerHTML = currentCh
     ? `Ch. ${currentCh.num}`
-    : (sessions.length > 0 ? '—' : '시작 전');
+    : (finishedSessions.length > 0 ? '—' : '시작 전');
   document.getElementById('statPages').innerHTML =
     `${pagesRead} <span class="small">/ ${TOTAL_PAGES}</span>`;
-  document.getElementById('statSessions').textContent = sessions.length;
+  document.getElementById('statSessions').textContent = finishedSessions.length;
 
   const pct = Math.min(100, Math.round((pagesRead / TOTAL_PAGES) * 100));
   document.getElementById('progressFill').style.width = pct + '%';
@@ -805,6 +872,8 @@ function renderChapter(chapter, sectionType) {
     pillHtml = '<span class="status-pill done">✓ 마침</span>';
   } else if (status === 'current') {
     pillHtml = '<span class="status-pill current">⟶ 진행 중</span>';
+  } else if (status === 'scheduled') {
+    pillHtml = '<span class="status-pill scheduled">⌛ 예정</span>';
   } else {
     pillHtml = '<span class="status-pill future">아직</span>';
   }
