@@ -4,7 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>마음의 시간 — 모두의 기록</title>
-<meta name="description" content="어빈 D. 얄롬의 『마음의 시간』을 함께 낭독한 새벽들의 기록.">
+<meta name="description" content="오늘의 독서와 마음 기록을 남겨주세요.">
+
+<!-- Open Graph (카톡, 페북 등 공유 미리보기) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="마음의 시간 — 모두의 기록">
+<meta property="og:description" content="오늘의 독서와 마음 기록을 남겨주세요.">
+<meta property="og:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://bookclub.questionschool.net/journal_15.html">
+<meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="마음의 시간 — 모두의 기록">
+<meta name="twitter:description" content="오늘의 독서와 마음 기록을 남겨주세요.">
+<meta name="twitter:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -149,6 +164,61 @@
     border-radius: 50%;
     background: var(--gold);
     display: inline-block;
+  }
+
+  /* ============ ZOOM JOIN BUTTON ============ */
+  .zoom-join {
+    margin-top: 22px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .zoom-join a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    background: linear-gradient(180deg, rgba(255, 252, 245, 0.9), rgba(245, 239, 228, 0.7));
+    border: 1px solid var(--gold);
+    border-radius: 100px;
+    text-decoration: none;
+    color: var(--accent);
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(176, 138, 74, 0.1);
+  }
+
+  .zoom-join a:hover {
+    background: linear-gradient(180deg, rgba(255, 252, 245, 1), rgba(245, 239, 228, 0.9));
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(122, 63, 46, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .zoom-join .zoom-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .zoom-join .zoom-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--gold-deep);
+    font-weight: 400;
+  }
+
+  .zoom-join .zoom-text {
+    font-size: 14px;
+  }
+
+  .zoom-join .zoom-arrow {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-deep);
   }
 
   /* ============ JOURNAL INPUT (위로 올라온 입력 영역) ============ */
@@ -356,6 +426,12 @@
     resize: vertical;
   }
 
+  .input-card textarea::placeholder {
+    color: var(--ink-faint);
+    opacity: 0.55;
+    font-style: italic;
+  }
+
   .input-card textarea:focus {
     outline: none;
     border-color: var(--accent);
@@ -379,7 +455,8 @@
   }
 
   .input-card-page input {
-    width: 80px;
+    flex: 1;
+    min-width: 0;
     padding: 5px 9px;
     border: 1px solid var(--line);
     background: rgba(255, 255, 255, 0.7);
@@ -388,6 +465,14 @@
     color: var(--ink);
     border-radius: 2px;
     text-align: center;
+  }
+
+  .input-card-page input::placeholder {
+    color: var(--ink-faint);
+    opacity: 0.55;
+    font-style: italic;
+    font-family: 'Gowun Batang', serif;
+    font-size: 12px;
   }
 
   .input-submit-row {
@@ -1137,7 +1222,15 @@
     <div class="season-meta">
       <span><span class="dot"></span>어빈 D. 얄롬 · 벤저민 얄롬</span>
       <span><span class="dot"></span>2026. 5. 26 — 6. 30 (예상)</span>
-      <span><span class="dot"></span>매일 새벽 6:00 – 7:00</span>
+      <span><span class="dot"></span>평일 새벽 6:00 – 7:00</span>
+    </div>
+    <div class="zoom-join">
+      <a href="https://us02web.zoom.us/j/86324239516?pwd=IIPBgvoepGMyGRptvKLfkRunc4e3pL.1" target="_blank" rel="noopener">
+        <span class="zoom-icon">📹</span>
+        <span class="zoom-label">JOIN</span>
+        <span class="zoom-text">Zoom Meeting 참가하기</span>
+        <span class="zoom-arrow">→</span>
+      </a>
     </div>
   </header>
 
@@ -1172,10 +1265,10 @@
           <span class="hint">선택</span>
         </div>
         <div class="input-card-sub">책에서 가져온 문장을 그대로</div>
-        <textarea id="inputQuote" placeholder="…"></textarea>
+        <textarea id="inputQuote" placeholder="문장을 옮겨 적어 주세요"></textarea>
         <div class="input-card-page">
           <label>p.</label>
-          <input type="text" id="inputQuotePage" placeholder="61">
+          <input type="text" id="inputQuotePage" placeholder="페이지 번호">
         </div>
       </div>
 
@@ -1186,7 +1279,7 @@
           <span class="hint">선택</span>
         </div>
         <div class="input-card-sub">책을 읽으며 떠오른 마음도 좋고, 이야기 나누고 나서 기록하고 싶은 마음을 남겨도 좋아.</div>
-        <textarea id="inputMind" placeholder="…"></textarea>
+        <textarea id="inputMind" placeholder="떠오른 마음을 적어 주세요"></textarea>
       </div>
     </div>
 
