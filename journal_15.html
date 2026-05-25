@@ -1388,27 +1388,64 @@ function restoreInputState() {
 }
 
 // ════════════════════════════════════════════════════════
+// 시간 헬퍼: 한국 시간 기준 모임 시작/종료 판단
+// ════════════════════════════════════════════════════════
+// 모임 시작: 모임 날짜 06:00 KST
+// 모임 종료: 모임 날짜 07:00 KST
+function isSessionStarted(session) {
+  if (!session.date) return false;
+  const parts = String(session.date).split('-');
+  const y = Number(parts[0]), m = Number(parts[1]), d = Number(parts[2]);
+  if (!y || !m || !d) return false;
+  // KST 06:00 = UTC 21:00 (전날)
+  const startUtcMs = Date.UTC(y, m - 1, d, 6 - 9, 0, 0);
+  return Date.now() >= startUtcMs;
+}
+
+function isSessionFinished(session) {
+  if (!session.date) return false;
+  const parts = String(session.date).split('-');
+  const y = Number(parts[0]), m = Number(parts[1]), d = Number(parts[2]);
+  if (!y || !m || !d) return false;
+  // KST 07:00 = UTC 22:00 (전날)
+  const endUtcMs = Date.UTC(y, m - 1, d, 7 - 9, 0, 0);
+  return Date.now() >= endUtcMs;
+}
+
+// ════════════════════════════════════════════════════════
 // 대시보드
 // ════════════════════════════════════════════════════════
 function renderDashboard() {
-  // Day: 실제 낭독한 회차 수 (누적일수)
-  const cumulativeDays = sessions.length;
+  // Day: 실제 낭독을 마친 회차 수만 카운트
+  const finishedSessions = sessions.filter(isSessionFinished);
+  const cumulativeDays = finishedSessions.length;
+
+  // 가장 최근 회차 (시간 무관 — 진행 중인 회차도 보여주려고)
   const latestSession = sessions.length > 0
     ? sessions.reduce((a, b) => (Number(b.day) || 0) > (Number(a.day) || 0) ? b : a)
     : null;
 
-  // Today's Pages: 가장 최근 회차의 페이지 구간
+  // Today's Pages: 가장 최근 회차의 페이지 구간 (상태에 따라 다른 라벨)
   let pagesDisplay = '—';
   let pagesSubDisplay = '오늘의 낭독 구간';
 
   if (latestSession) {
+    const dateInfo = formatSessionDate(latestSession.date);
+    const started = isSessionStarted(latestSession);
+    const finished = isSessionFinished(latestSession);
+
     if (latestSession.start_page && latestSession.end_page) {
       pagesDisplay = `p.${latestSession.start_page}<span class="small"> ~ </span>p.${latestSession.end_page}`;
-      const dateInfo = formatSessionDate(latestSession.date);
-      pagesSubDisplay = `${dateInfo.date} 낭독`;
+      if (!started) {
+        pagesSubDisplay = `${dateInfo.date} 낭독 예정`;
+      } else if (!finished) {
+        pagesSubDisplay = `${dateInfo.date} 진행 중`;
+      } else {
+        pagesSubDisplay = `${dateInfo.date} 낭독`;
+      }
     } else if (latestSession.start_page) {
       pagesDisplay = `p.${latestSession.start_page}<span class="small"> ~ </span>?`;
-      pagesSubDisplay = '아직 진행 중';
+      pagesSubDisplay = !started ? `${dateInfo.date} 예정` : '진행 중';
     }
   }
 
@@ -1419,7 +1456,6 @@ function renderDashboard() {
     (s.attendees || []).forEach(a => uniqueMembers.add(a.alias));
     (s.reflections || []).forEach(r => {
       uniqueMembers.add(r.alias);
-      // 한 사람이 한 번 남긴 기록은 1개 (문장+마음 함께 적어도 1개)
       recordCount++;
     });
   });
@@ -1430,7 +1466,7 @@ function renderDashboard() {
     : '—';
   document.getElementById('statDaySub').textContent = cumulativeDays > 0
     ? `누적 ${cumulativeDays}회 낭독`
-    : '아직 시작 전';
+    : (sessions.length > 0 ? '곧 첫 새벽' : '아직 시작 전');
 
   document.getElementById('statPages').innerHTML = pagesDisplay;
   document.getElementById('statPagesSub').textContent = pagesSubDisplay;
@@ -1438,16 +1474,16 @@ function renderDashboard() {
   document.getElementById('statMembers').textContent = uniqueMembers.size || '—';
   document.getElementById('statRecords').textContent = recordCount;
 
-  // Progress bar — 전체 페이지 진행률
-  const mainPages = sessions
-    .filter(s => s.section === 'main')
-    .map(s => Number(s.end_page) || 0);
-  const maxMainPage = mainPages.length > 0 ? Math.max(...mainPages) : 0;
-  const hasFront = sessions.some(s => s.section === 'front');
-  let pagesRead = maxMainPage + (hasFront ? 17 : 0);
-  const hasBack = sessions.some(s => s.section === 'back');
-  if (hasBack) {
-    const backEnds = sessions.filter(s => s.section === 'back').map(s => Number(s.end_page) || 0);
+  // Progress bar — 시간상 끝난 회차만 반영
+  const finishedMainSessions = finishedSessions.filter(s => s.section === 'main');
+  const maxMainPage = finishedMainSessions.length > 0
+    ? Math.max(...finishedMainSessions.map(s => Number(s.end_page) || Number(s.start_page) || 0))
+    : 0;
+  const hasFinishedFront = finishedSessions.some(s => s.section === 'front');
+  let pagesRead = maxMainPage + (hasFinishedFront ? 17 : 0);
+  const hasFinishedBack = finishedSessions.some(s => s.section === 'back');
+  if (hasFinishedBack) {
+    const backEnds = finishedSessions.filter(s => s.section === 'back').map(s => Number(s.end_page) || 0);
     pagesRead = Math.max(pagesRead, Math.max(...backEnds) + 17);
   }
 
@@ -1467,7 +1503,7 @@ function renderDashboard() {
   document.getElementById('progressText').textContent =
     cumulativeDays > 0
       ? `${pct}% · 누적 ${pagesRead}쪽${currentChapter}`
-      : '아직 시작 전';
+      : (sessions.length > 0 ? '곧 첫 새벽' : '아직 시작 전');
 }
 
 // ════════════════════════════════════════════════════════
