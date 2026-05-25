@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>모두의 새벽 + 낭만북클럽 · 마음의 시간 목차</title>
+<title>책의 지도 — 마음의 시간</title>
 <meta name="description" content="어빈 D. 얄롬의 『마음의 시간』 챕터 지도. 우리가 어디까지 왔는지, 어디로 가고 있는지.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,7 +65,7 @@
     z-index: 1;
   }
 
-  /* ============ NAV ============ */
+  /* NAV */
   .nav {
     display: flex;
     justify-content: center;
@@ -73,6 +73,7 @@
     margin-bottom: 40px;
     padding-bottom: 18px;
     border-bottom: 1px solid var(--line-soft);
+    flex-wrap: wrap;
   }
 
   .nav a {
@@ -84,17 +85,12 @@
     text-decoration: none;
     text-transform: uppercase;
     padding-bottom: 6px;
-    transition: color 0.2s;
   }
 
   .nav a:hover { color: var(--accent); }
+  .nav a.current { color: var(--accent); border-bottom: 1px solid var(--accent); }
 
-  .nav a.current {
-    color: var(--accent);
-    border-bottom: 1px solid var(--accent);
-  }
-
-  /* ============ HEADER ============ */
+  /* HEADER */
   header {
     text-align: center;
     padding: 20px 0 50px;
@@ -154,10 +150,93 @@
     height: 4px;
     border-radius: 50%;
     background: var(--gold);
-    display: inline-block;
   }
 
-  /* ============ LEGEND ============ */
+  /* SUMMARY */
+  .summary {
+    background: rgba(255, 252, 245, 0.7);
+    border: 1px solid var(--line);
+    padding: 28px 30px;
+    margin-bottom: 56px;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .summary::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 30px;
+    width: 50px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .summary-stat {
+    text-align: center;
+  }
+
+  .summary-stat-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .summary-stat-value {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .summary-stat-value .small {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 400;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--line-soft);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 18px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold));
+    width: 0%;
+    transition: width 0.6s ease;
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* LEGEND */
   .legend {
     display: flex;
     justify-content: center;
@@ -196,17 +275,7 @@
     border: 1.5px solid var(--status-future);
   }
 
-  /* ============ SECTION ============ */
-  .section-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: var(--gold-deep);
-    letter-spacing: 0.2em;
-    margin-bottom: 10px;
-    display: block;
-  }
-
+  /* SECTION */
   h2 {
     font-family: 'Nanum Myeongjo', serif;
     font-weight: 700;
@@ -266,7 +335,7 @@
     letter-spacing: 0.05em;
   }
 
-  /* ============ CHAPTERS ============ */
+  /* CHAPTERS */
   .chapters {
     display: flex;
     flex-direction: column;
@@ -284,13 +353,11 @@
     border-left: 2px solid var(--line-soft);
     border-radius: 2px;
     transition: all 0.2s ease;
-    cursor: pointer;
     position: relative;
   }
 
   .chapter:hover {
     background: rgba(255, 252, 245, 0.9);
-    transform: translateX(2px);
   }
 
   .chapter.done {
@@ -394,122 +461,22 @@
     border: 1px dashed var(--line);
   }
 
-  /* Quote indicator inside chapter */
-  .chapter-quotes {
-    margin-top: 12px;
-    padding-top: 10px;
-    border-top: 1px dashed rgba(176, 138, 74, 0.2);
-    grid-column: 2 / -1;
-  }
-
-  .chapter-quote {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 13.5px;
-    line-height: 1.7;
-    color: var(--ink-soft);
-    padding: 6px 0 6px 14px;
-    border-left: 2px solid var(--gold-soft);
-    margin-bottom: 6px;
-    font-style: italic;
-    word-break: keep-all;
-  }
-
-  .chapter-quote:last-child { margin-bottom: 0; }
-
-  .chapter-quote .quote-source {
-    display: block;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 11px;
-    color: var(--ink-muted);
-    font-style: italic;
-    margin-top: 2px;
-    letter-spacing: 0.05em;
-  }
-
-  /* ============ PROGRESS SUMMARY ============ */
-  .summary {
-    background: rgba(255, 252, 245, 0.7);
-    border: 1px solid var(--line);
-    padding: 28px 30px;
-    margin-bottom: 56px;
+  /* LOADING */
+  .loading-skeleton {
+    background: linear-gradient(90deg, rgba(255,252,245,0.3) 0%, rgba(255,252,245,0.8) 50%, rgba(255,252,245,0.3) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite;
+    height: 60px;
     border-radius: 2px;
-    position: relative;
+    margin-bottom: 10px;
   }
 
-  .summary::before {
-    content: '';
-    position: absolute;
-    top: -1px;
-    left: 30px;
-    width: 50px;
-    height: 2px;
-    background: var(--gold);
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-
-  .summary-stat {
-    text-align: center;
-  }
-
-  .summary-stat-label {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 12px;
-    letter-spacing: 0.15em;
-    color: var(--gold-deep);
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-
-  .summary-stat-value {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--ink);
-    line-height: 1.1;
-  }
-
-  .summary-stat-value .small {
-    font-size: 13px;
-    color: var(--ink-muted);
-    font-weight: 400;
-  }
-
-  .progress-bar {
-    height: 3px;
-    background: var(--line-soft);
-    border-radius: 2px;
-    overflow: hidden;
-    position: relative;
-    margin-top: 18px;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--gold-soft), var(--gold));
-    width: 30%;
-    position: relative;
-  }
-
-  .progress-fill::after {
-    content: '';
-    position: absolute;
-    right: -3px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--accent);
-  }
-
-  /* Footer */
+  /* FOOTER */
   footer {
     text-align: center;
     padding-top: 56px;
@@ -541,7 +508,6 @@
 
   footer a:hover { border-bottom-color: var(--accent); }
 
-  /* Responsive */
   @media (max-width: 640px) {
     .wrap { padding: 40px 18px 80px; }
     .summary-grid { grid-template-columns: repeat(2, 1fr); }
@@ -559,7 +525,6 @@
 
 <div class="wrap">
 
-  <!-- NAV between Journal and Contents -->
   <nav class="nav">
     <a href="journal_15.html">📖 일지</a>
     <a href="my_journal_15.html">✿ 나의 기록</a>
@@ -567,7 +532,6 @@
     <a href="welcome_15.html">✦ 환영</a>
   </nav>
 
-  <!-- HEADER -->
   <header>
     <div class="eyebrow">Season 15 · Table of Contents</div>
     <h1 class="title">책의 지도 — <span class="accent">마음의 시간</span></h1>
@@ -584,23 +548,23 @@
     <div class="summary-grid">
       <div class="summary-stat">
         <div class="summary-stat-label">Completed</div>
-        <div class="summary-stat-value">4 <span class="small">/ 22 ch.</span></div>
+        <div class="summary-stat-value" id="statCompleted">—</div>
       </div>
       <div class="summary-stat">
         <div class="summary-stat-label">In Progress</div>
-        <div class="summary-stat-value">Ch. 5</div>
+        <div class="summary-stat-value" id="statCurrent">—</div>
       </div>
       <div class="summary-stat">
         <div class="summary-stat-label">Pages Read</div>
-        <div class="summary-stat-value">68 <span class="small">/ 342</span></div>
+        <div class="summary-stat-value" id="statPages">— <span class="small">/ 342</span></div>
       </div>
       <div class="summary-stat">
         <div class="summary-stat-label">Sessions</div>
-        <div class="summary-stat-value">5 <span class="small">/ 25</span></div>
+        <div class="summary-stat-value" id="statSessions">—</div>
       </div>
     </div>
     <div class="progress-bar">
-      <div class="progress-fill"></div>
+      <div class="progress-fill" id="progressFill"></div>
     </div>
   </div>
 
@@ -617,472 +581,13 @@
     </span>
   </div>
 
-  <!-- ============ FRONT MATTER ============ -->
-  <div class="part">
-    <div class="part-label">PART · 시작 글</div>
-    <div class="part-title">
-      <span>책의 들머리</span>
-      <span class="meta">v – xxi · 17쪽</span>
-    </div>
-
-    <div class="chapters">
-
-      <article class="chapter done">
-        <div class="chapter-num special">序</div>
-        <div class="chapter-body">
-          <div class="chapter-title">역자 서문</div>
-          <div class="chapter-info">
-            <span>p. v – xii</span>
-            <span class="sep">·</span>
-            <span>8쪽</span>
-            <span class="sep">·</span>
-            <span class="days">(낭독 외 · 진행자 안내로 대체)</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill done">✓ 마침</span>
-        </div>
-      </article>
-
-      <article class="chapter done">
-        <div class="chapter-num special">序</div>
-        <div class="chapter-body">
-          <div class="chapter-title">서론</div>
-          <div class="chapter-info">
-            <span>p. xvi – xxi</span>
-            <span class="sep">·</span>
-            <span>6쪽</span>
-            <span class="sep">·</span>
-            <span class="days">Day 1</span>
-          </div>
-          <div class="chapter-quotes">
-            <div class="chapter-quote">
-              이 책은 길지 않다. 그러나 매 페이지가 한 시간의 만남이 되도록 썼다.
-              <span class="quote-source">— 서론, Day 1 · 자연이 골라 읽다</span>
-            </div>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill done">✓ 마침</span>
-        </div>
-      </article>
-
-    </div>
+  <!-- 본문은 JS로 동적 생성 -->
+  <div id="contentsList">
+    <div class="loading-skeleton"></div>
+    <div class="loading-skeleton"></div>
+    <div class="loading-skeleton"></div>
   </div>
 
-  <!-- ============ MAIN CHAPTERS ============ -->
-  <div class="part">
-    <div class="part-label">PART · 본문</div>
-    <div class="part-title">
-      <span>스물두 개의 새벽</span>
-      <span class="meta">p. 1 – 314 · 22 chapters</span>
-    </div>
-
-    <div class="chapters">
-
-      <article class="chapter done">
-        <div class="chapter-num">01</div>
-        <div class="chapter-body">
-          <div class="chapter-title">늙은 치료사의 하루</div>
-          <div class="chapter-info">
-            <span>p. 1 – 22</span>
-            <span class="sep">·</span>
-            <span>22쪽</span>
-            <span class="sep">·</span>
-            <span class="days">Day 1 – 3</span>
-          </div>
-          <div class="chapter-quotes">
-            <div class="chapter-quote">
-              치유하는 것은 관계다. 이 말을 나는 평생 세 번씩 되뇌어 왔다.
-              <span class="quote-source">— Ch.1 p. 22, Day 2 · 지평이 골라 읽다</span>
-            </div>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill done">✓ 마침</span>
-        </div>
-      </article>
-
-      <article class="chapter done">
-        <div class="chapter-num">02</div>
-        <div class="chapter-body">
-          <div class="chapter-title">그 오두막에서 나갈 수 있다면</div>
-          <div class="chapter-info">
-            <span>p. 23 – 34</span>
-            <span class="sep">·</span>
-            <span>12쪽</span>
-            <span class="sep">·</span>
-            <span class="days">Day 3 – 4</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill done">✓ 마침</span>
-        </div>
-      </article>
-
-      <article class="chapter done">
-        <div class="chapter-num">03</div>
-        <div class="chapter-body">
-          <div class="chapter-title">두 번째 데이트는 없다</div>
-          <div class="chapter-info">
-            <span>p. 35 – 48</span>
-            <span class="sep">·</span>
-            <span>14쪽</span>
-            <span class="sep">·</span>
-            <span class="days">Day 4</span>
-          </div>
-          <div class="chapter-quotes">
-            <div class="chapter-quote">
-              나이가 들수록 시간은 압축된다. 그러나 그 압축된 시간은 더 가볍지 않고, 오히려 더 무겁고 빛난다.
-              <span class="quote-source">— Ch.3 p. 47, Day 4</span>
-            </div>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill done">✓ 마침</span>
-        </div>
-      </article>
-
-      <article class="chapter current">
-        <div class="chapter-num">04</div>
-        <div class="chapter-body">
-          <div class="chapter-title">식민지화, 또는 과시</div>
-          <div class="chapter-info">
-            <span>p. 49 – 68</span>
-            <span class="sep">·</span>
-            <span>20쪽</span>
-            <span class="sep">·</span>
-            <span class="days">Day 5 (진행 중)</span>
-          </div>
-          <div class="chapter-quotes">
-            <div class="chapter-quote">
-              우리는 결국 죽음 앞에서 혼자가 된다. 그러나 그 혼자임을 함께 견뎌 줄 수 있는 누군가가 있다면, 외로움은 조금 다른 모양이 된다.
-              <span class="quote-source">— Ch.4 p. 61, Day 5 · 윤슬이 골라 읽다</span>
-            </div>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill current">⟶ 진행 중</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">05</div>
-        <div class="chapter-body">
-          <div class="chapter-title">궤도를 도는 혜성처럼</div>
-          <div class="chapter-info">
-            <span>p. 69 – 80</span>
-            <span class="sep">·</span>
-            <span>12쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">06</div>
-        <div class="chapter-body">
-          <div class="chapter-title">기억, 아 기억</div>
-          <div class="chapter-info">
-            <span>p. 81 – 92</span>
-            <span class="sep">·</span>
-            <span>12쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">07</div>
-        <div class="chapter-body">
-          <div class="chapter-title">고요함과의 스파링</div>
-          <div class="chapter-info">
-            <span>p. 93 – 106</span>
-            <span class="sep">·</span>
-            <span>14쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">08</div>
-        <div class="chapter-body">
-          <div class="chapter-title">인바시오네(침입)와 아그레시오네(공격)</div>
-          <div class="chapter-info">
-            <span>p. 107 – 122</span>
-            <span class="sep">·</span>
-            <span>16쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">09</div>
-        <div class="chapter-body">
-          <div class="chapter-title">'왜'라는 이유의 창, '언제'라는 때의 속삭임</div>
-          <div class="chapter-info">
-            <span>p. 123 – 134</span>
-            <span class="sep">·</span>
-            <span>12쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">10</div>
-        <div class="chapter-body">
-          <div class="chapter-title">외로이, 외로이, 외로이</div>
-          <div class="chapter-info">
-            <span>p. 135 – 144</span>
-            <span class="sep">·</span>
-            <span>10쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">11</div>
-        <div class="chapter-body">
-          <div class="chapter-title">물물교환</div>
-          <div class="chapter-info">
-            <span>p. 145 – 164</span>
-            <span class="sep">·</span>
-            <span>20쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">12</div>
-        <div class="chapter-body">
-          <div class="chapter-title">앨버트의 불안감</div>
-          <div class="chapter-info">
-            <span>p. 165 – 178</span>
-            <span class="sep">·</span>
-            <span>14쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">13</div>
-        <div class="chapter-body">
-          <div class="chapter-title">고요함과의 스파링, 트라우마와의 결투</div>
-          <div class="chapter-info">
-            <span>p. 179 – 196</span>
-            <span class="sep">·</span>
-            <span>18쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">14</div>
-        <div class="chapter-body">
-          <div class="chapter-title">엄격한 사랑</div>
-          <div class="chapter-info">
-            <span>p. 197 – 212</span>
-            <span class="sep">·</span>
-            <span>16쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">15</div>
-        <div class="chapter-body">
-          <div class="chapter-title">역할을 바꿔 봅시다</div>
-          <div class="chapter-info">
-            <span>p. 213 – 224</span>
-            <span class="sep">·</span>
-            <span>12쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">16</div>
-        <div class="chapter-body">
-          <div class="chapter-title">나의 최악의 악몽</div>
-          <div class="chapter-info">
-            <span>p. 225 – 240</span>
-            <span class="sep">·</span>
-            <span>16쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">17</div>
-        <div class="chapter-body">
-          <div class="chapter-title">기억, 기억, 그대는 어디에 있는가?</div>
-          <div class="chapter-info">
-            <span>p. 241 – 254</span>
-            <span class="sep">·</span>
-            <span>14쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">18</div>
-        <div class="chapter-body">
-          <div class="chapter-title">주디 스타인버그의 생일</div>
-          <div class="chapter-info">
-            <span>p. 255 – 270</span>
-            <span class="sep">·</span>
-            <span>16쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">19</div>
-        <div class="chapter-body">
-          <div class="chapter-title">런던에서의 지루한 날들</div>
-          <div class="chapter-info">
-            <span>p. 271 – 282</span>
-            <span class="sep">·</span>
-            <span>12쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">20</div>
-        <div class="chapter-body">
-          <div class="chapter-title">끔찍한 시작</div>
-          <div class="chapter-info">
-            <span>p. 283 – 292</span>
-            <span class="sep">·</span>
-            <span>10쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">21</div>
-        <div class="chapter-body">
-          <div class="chapter-title">멋진 시작</div>
-          <div class="chapter-info">
-            <span>p. 293 – 304</span>
-            <span class="sep">·</span>
-            <span>12쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num">22</div>
-        <div class="chapter-body">
-          <div class="chapter-title">치매, 아 치매</div>
-          <div class="chapter-info">
-            <span>p. 305 – 314</span>
-            <span class="sep">·</span>
-            <span>10쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-    </div>
-  </div>
-
-  <!-- ============ BACK MATTER ============ -->
-  <div class="part">
-    <div class="part-label">PART · 끝맺음</div>
-    <div class="part-title">
-      <span>책의 마무리</span>
-      <span class="meta">p. 315 – 325 · 11쪽</span>
-    </div>
-
-    <div class="chapters">
-
-      <article class="chapter future">
-        <div class="chapter-num special">跋</div>
-        <div class="chapter-body">
-          <div class="chapter-title">벤저민 얄롬의 후기</div>
-          <div class="chapter-info">
-            <span>p. 315 – 322</span>
-            <span class="sep">·</span>
-            <span>8쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-      <article class="chapter future">
-        <div class="chapter-num special">謝</div>
-        <div class="chapter-body">
-          <div class="chapter-title">감사의 글</div>
-          <div class="chapter-info">
-            <span>p. 323 – 325</span>
-            <span class="sep">·</span>
-            <span>3쪽</span>
-          </div>
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill future">아직</span>
-        </div>
-      </article>
-
-    </div>
-  </div>
-
-  <!-- FOOTER -->
   <footer>
     <div class="reading">READING · ALOUD · TOGETHER</div>
     <p>
@@ -1095,6 +600,259 @@
   </footer>
 
 </div>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
+const TOTAL_PAGES = 342;
+
+let sessions = [];
+let contents = [];
+
+async function loadAll() {
+  try {
+    const res = await fetch(`${GAS_URL}?action=list_all`);
+    const data = await res.json();
+    sessions = data.sessions || [];
+    contents = data.contents || [];
+    renderSummary();
+    renderContents();
+  } catch (err) {
+    console.error(err);
+    document.getElementById('contentsList').innerHTML = `
+      <div style="text-align: center; padding: 40px; color: var(--ink-muted); font-style: italic;">
+        불러오기 실패. 잠시 후 새로고침해 줘.
+      </div>`;
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// 챕터별 진행 상태 계산
+// ════════════════════════════════════════════════════════
+function computeChapterStatus(chapter) {
+  // 본문 외 섹션 (front/back)
+  if (chapter.section_type !== 'main') {
+    // 해당 섹션을 다룬 회차가 있는지
+    const relevantSessions = sessions.filter(s => s.section === chapter.section_type);
+    if (relevantSessions.length === 0) {
+      return { status: 'future', daysLabel: '' };
+    }
+    // 가장 최근 회차의 end_page와 비교
+    const days = relevantSessions.map(s => Number(s.day)).filter(d => !isNaN(d)).sort((a,b) => a-b);
+    return {
+      status: 'done',
+      daysLabel: days.length === 1 ? `Day ${days[0]}` : `Day ${days[0]} – ${days[days.length-1]}`
+    };
+  }
+
+  // 본문 챕터: page_start ~ page_end 사이를 다룬 회차들
+  const chStart = Number(chapter.page_start);
+  const chEnd = Number(chapter.page_end);
+
+  // 이 챕터를 다룬 회차들
+  const relevantSessions = sessions.filter(s => {
+    if (s.section !== 'main') return false;
+    const sStart = parseInt(s.start_page, 10);
+    const sEnd = parseInt(s.end_page, 10) || sStart;
+    if (isNaN(sStart)) return false;
+    // 회차의 범위가 챕터 범위와 겹치면 관련
+    return sStart <= chEnd && sEnd >= chStart;
+  });
+
+  if (relevantSessions.length === 0) {
+    return { status: 'future', daysLabel: '' };
+  }
+
+  // 최대 end_page 찾기
+  const maxEndPage = Math.max(...relevantSessions.map(s => {
+    return parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0;
+  }));
+
+  // 챕터 끝 페이지보다 멀리 갔으면 완료, 아니면 진행 중
+  const status = maxEndPage >= chEnd ? 'done' : 'current';
+
+  // Day 라벨
+  const days = relevantSessions.map(s => Number(s.day)).filter(d => !isNaN(d)).sort((a,b) => a-b);
+  let daysLabel = '';
+  if (days.length === 1) {
+    daysLabel = `Day ${days[0]}`;
+  } else if (days.length > 1) {
+    daysLabel = `Day ${days[0]} – ${days[days.length-1]}`;
+  }
+  if (status === 'current') daysLabel += ' (진행 중)';
+
+  return { status, daysLabel };
+}
+
+// ════════════════════════════════════════════════════════
+// SUMMARY 렌더링
+// ════════════════════════════════════════════════════════
+function renderSummary() {
+  // 본문 챕터들만 보고 완료/진행/미정 카운트
+  const mainChapters = contents.filter(c => c.section_type === 'main');
+
+  let done = 0;
+  let currentCh = null;
+
+  mainChapters.forEach(ch => {
+    const { status } = computeChapterStatus(ch);
+    if (status === 'done') done++;
+    else if (status === 'current' && !currentCh) currentCh = ch;
+  });
+
+  // 페이지 진도 계산
+  const mainSessions = sessions.filter(s => s.section === 'main');
+  const maxMainPage = mainSessions.length > 0
+    ? Math.max(...mainSessions.map(s => parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0))
+    : 0;
+  const hasFront = sessions.some(s => s.section === 'front');
+  let pagesRead = maxMainPage + (hasFront ? 17 : 0);
+  const hasBack = sessions.some(s => s.section === 'back');
+  if (hasBack) {
+    const backEnds = sessions.filter(s => s.section === 'back')
+      .map(s => parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0);
+    pagesRead = Math.max(pagesRead, Math.max(...backEnds) + 17);
+  }
+
+  document.getElementById('statCompleted').innerHTML =
+    `${done} <span class="small">/ ${mainChapters.length} ch.</span>`;
+  document.getElementById('statCurrent').innerHTML = currentCh
+    ? `Ch. ${currentCh.num}`
+    : (sessions.length > 0 ? '—' : '시작 전');
+  document.getElementById('statPages').innerHTML =
+    `${pagesRead} <span class="small">/ ${TOTAL_PAGES}</span>`;
+  document.getElementById('statSessions').textContent = sessions.length;
+
+  const pct = Math.min(100, Math.round((pagesRead / TOTAL_PAGES) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ════════════════════════════════════════════════════════
+// 챕터 카드 렌더링
+// ════════════════════════════════════════════════════════
+function renderContents() {
+  if (contents.length === 0) {
+    document.getElementById('contentsList').innerHTML = `
+      <div style="text-align: center; padding: 40px; color: var(--ink-muted); font-style: italic;">
+        목차 데이터가 없어. 진행자에게 문의해 줘.
+      </div>`;
+    return;
+  }
+
+  // 섹션별로 그루핑
+  const front = contents.filter(c => c.section_type === 'front');
+  const main = contents.filter(c => c.section_type === 'main');
+  const back = contents.filter(c => c.section_type === 'back');
+
+  const html = `
+    ${front.length > 0 ? renderPart('PART · 시작 글', '책의 들머리', 'v – xxi · 17쪽', front, 'front') : ''}
+    ${main.length > 0 ? renderPart('PART · 본문', '스물두 개의 새벽', `p. 1 – 314 · ${main.length} chapters`, main, 'main') : ''}
+    ${back.length > 0 ? renderPart('PART · 끝맺음', '책의 마무리', 'p. 315 – 325 · 11쪽', back, 'back') : ''}
+  `;
+
+  document.getElementById('contentsList').innerHTML = html;
+}
+
+function renderPart(label, title, meta, chapters, sectionType) {
+  const chaptersHtml = chapters.map(ch => renderChapter(ch, sectionType)).join('');
+  return `
+    <div class="part">
+      <div class="part-label">${escapeHtml(label)}</div>
+      <div class="part-title">
+        <span>${escapeHtml(title)}</span>
+        <span class="meta">${escapeHtml(meta)}</span>
+      </div>
+      <div class="chapters">${chaptersHtml}</div>
+    </div>
+  `;
+}
+
+function renderChapter(chapter, sectionType) {
+  const { status, daysLabel } = computeChapterStatus(chapter);
+
+  // 챕터 번호 표시
+  let numDisplay = '';
+  if (sectionType === 'main') {
+    numDisplay = `<div class="chapter-num">${String(chapter.num).padStart(2, '0')}</div>`;
+  } else if (sectionType === 'front') {
+    numDisplay = `<div class="chapter-num special">序</div>`;
+  } else {
+    // back: 후기는 跋, 감사의 글은 謝
+    const symbol = chapter.title.includes('감사') ? '謝' : '跋';
+    numDisplay = `<div class="chapter-num special">${symbol}</div>`;
+  }
+
+  // 페이지 정보
+  const pageInfo = chapter.section_type === 'main'
+    ? `p. ${chapter.page_start} – ${chapter.page_end}`
+    : `p. ${chapter.page_start} – ${chapter.page_end}`;
+
+  // 분량 계산 (대략)
+  const pStart = chapter.page_start;
+  const pEnd = chapter.page_end;
+  let pageCount = '';
+  if (typeof pStart === 'number' && typeof pEnd === 'number') {
+    pageCount = `${pEnd - pStart + 1}쪽`;
+  } else {
+    // 로마 숫자는 단순 계산이 어려우니 챕터마다 다름
+    const rs = romanToNum(pStart);
+    const re = romanToNum(pEnd);
+    if (rs && re) pageCount = `${re - rs + 1}쪽`;
+  }
+
+  // 상태 pill
+  let pillHtml = '';
+  if (status === 'done') {
+    pillHtml = '<span class="status-pill done">✓ 마침</span>';
+  } else if (status === 'current') {
+    pillHtml = '<span class="status-pill current">⟶ 진행 중</span>';
+  } else {
+    pillHtml = '<span class="status-pill future">아직</span>';
+  }
+
+  return `
+    <article class="chapter ${status}">
+      ${numDisplay}
+      <div class="chapter-body">
+        <div class="chapter-title">${escapeHtml(chapter.title)}</div>
+        <div class="chapter-info">
+          <span>${escapeHtml(pageInfo)}</span>
+          ${pageCount ? `<span class="sep">·</span><span>${escapeHtml(pageCount)}</span>` : ''}
+          ${daysLabel ? `<span class="sep">·</span><span class="days">${escapeHtml(daysLabel)}</span>` : ''}
+        </div>
+      </div>
+      <div class="chapter-status">${pillHtml}</div>
+    </article>
+  `;
+}
+
+// 로마 숫자 → 아라비아 (대략)
+function romanToNum(s) {
+  if (!s) return null;
+  s = String(s).toLowerCase().trim();
+  const map = { i: 1, v: 5, x: 10, l: 50, c: 100 };
+  let result = 0;
+  for (let i = 0; i < s.length; i++) {
+    const cur = map[s[i]];
+    const next = map[s[i + 1]];
+    if (cur === undefined) return null;
+    if (next && cur < next) result -= cur;
+    else result += cur;
+  }
+  return result || null;
+}
+
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+loadAll();
+</script>
 
 </body>
 </html>
