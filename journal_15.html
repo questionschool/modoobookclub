@@ -25,6 +25,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 
+<!-- 다운로드 라이브러리 (이미지/PDF) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
   :root {
     --cream: #f5efe4;
@@ -665,6 +669,83 @@
     scroll-margin-top: 20px;
   }
 
+  /* 회차 카드 다운로드 버튼 */
+  .session-download-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 252, 245, 0.7);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ink-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0;
+    line-height: 1;
+    opacity: 0.6;
+  }
+
+  .session:hover .session-download-btn {
+    opacity: 1;
+  }
+
+  .session-download-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: #fff;
+    transform: scale(1.05);
+  }
+
+  .session-download-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* 시즌 다운로드 영역 (Sessions 섹션 상단) */
+  .season-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .season-action-btn {
+    padding: 7px 16px;
+    background: rgba(255, 252, 245, 0.6);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .season-action-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .season-action-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .season-action-btn .icon {
+    font-size: 13px;
+  }
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
@@ -895,17 +976,23 @@
   .reflection.has-mind { border-left-color: var(--accent-soft); }
   .reflection.has-both { border-left-color: var(--gold); }
 
-  /* 본인 + 당일 기록일 때만 보이는 액션 버튼 */
+  /* 액션 버튼: 다운로드는 항상, 수정·삭제는 본인+당일에만 */
   .reflection-actions {
     position: absolute;
     top: 8px;
     right: 10px;
-    display: none;
+    display: flex;
     gap: 4px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+
+  .reflection:hover .reflection-actions {
+    opacity: 1;
   }
 
   .reflection.editable .reflection-actions {
-    display: flex;
+    opacity: 1;
   }
 
   .reflection-action-btn {
@@ -1111,6 +1198,20 @@
     color: var(--gold-deep);
     margin-left: 8px;
     font-style: italic;
+  }
+
+  .reflection-quote-source {
+    display: block;
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px dotted rgba(176, 138, 74, 0.25);
+    font-family: 'Gowun Batang', serif;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    text-align: right;
+    font-style: normal;
+    line-height: 1.5;
+    word-break: keep-all;
   }
 
   .reflection-mind {
@@ -1356,6 +1457,10 @@
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
 const TOTAL_PAGES = 342;
 const TOTAL_DAYS = 25;
+
+// 책 정보 (인용 표시에 사용)
+const BOOK_AUTHOR = '얄롬';
+const BOOK_TITLE = '마음의 시간 : 여기 그리고 지금과 연결되기';
 
 const WEEKDAYS = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
 const SECTION_LABELS = { front: '서론', main: '본문', back: '후기' };
@@ -1673,6 +1778,7 @@ function renderSessionCard(s) {
 
   return `
     <article class="session" id="session-${s.day}">
+      <button class="session-download-btn" title="이 하루 전체를 PDF로 저장" onclick="downloadSessionPdf(${s.day})">⬇</button>
       <div class="session-head">
         <div>
           <div class="session-day">${escapeHtml(dayLabel)}</div>
@@ -1738,11 +1844,12 @@ function renderReflection(r, dayNum) {
 
   return `
     <div class="reflection ${cls} ${editable ? 'editable' : ''}" id="${refId}" data-day="${dayNum}" data-timestamp="${escapeAttr(r.timestamp || '')}" data-alias="${escapeAttr(r.alias)}">
-      ${editable ? `
-        <div class="reflection-actions">
+      <div class="reflection-actions">
+        <button class="reflection-action-btn" title="이 기록을 이미지로 저장" onclick="downloadReflectionImage('${refId}')">⬇</button>
+        ${editable ? `
           <button class="reflection-action-btn" title="수정" onclick="startEditReflection('${refId}')">✏️</button>
-          <button class="reflection-action-btn danger" title="삭제" onclick="deleteReflectionConfirm('${refId}')">🗑</button>
-        </div>` : ''}
+          <button class="reflection-action-btn danger" title="삭제" onclick="deleteReflectionConfirm('${refId}')">🗑</button>` : ''}
+      </div>
       <div class="reflection-content" id="${refId}-content">
         <div class="reflection-header">
           <span class="reflection-alias">
@@ -1753,7 +1860,9 @@ function renderReflection(r, dayNum) {
         ${hasQuote ? `
           <div class="reflection-quote" data-quote-text="${escapeAttr(r.quote_text)}" data-quote-page="${escapeAttr(r.quote_page || '')}">
             ${escapeHtml(r.quote_text)}
-            ${r.quote_page ? `<span class="reflection-quote-page">— p. ${escapeHtml(r.quote_page)}</span>` : ''}
+            <div class="reflection-quote-source">
+              — ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ` · p. ${escapeHtml(r.quote_page)}` : ''}
+            </div>
           </div>` : ''}
         ${hasMind ? `<div class="reflection-mind" data-mind="${escapeAttr(r.my_mind)}">${escapeHtml(r.my_mind)}</div>` : ''}
       </div>
@@ -2061,6 +2170,290 @@ function escapeHtml(s) {
 function escapeAttr(s) {
   return escapeHtml(s);
 }
+
+
+// ════════════════════════════════════════════════════════
+// 다운로드 — 깔끔한 전용 레이아웃 생성 후 캡쳐/PDF화
+// ════════════════════════════════════════════════════════
+
+// ─────────────── 공용 헬퍼 ───────────────
+
+async function captureElement(html, widthPx) {
+  widthPx = widthPx || 760;
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'fixed';
+  wrapper.style.left = '-9999px';
+  wrapper.style.top = '0';
+  wrapper.style.width = widthPx + 'px';
+  wrapper.innerHTML = html;
+  document.body.appendChild(wrapper);
+
+  if (document.fonts && document.fonts.ready) {
+    try { await document.fonts.ready; } catch (e) {}
+  }
+  await new Promise(r => setTimeout(r, 200));
+
+  const canvas = await html2canvas(wrapper.firstElementChild, {
+    scale: 2,
+    backgroundColor: '#f5efe4',
+    logging: false,
+    useCORS: true
+  });
+
+  document.body.removeChild(wrapper);
+  return canvas;
+}
+
+function getTodayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function watermarkHtml() {
+  return `
+    <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid #d4c8b3; text-align: center;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 0.25em; color: #8a6b35; font-size: 11px; margin-bottom: 6px;">READING · ALOUD · TOGETHER</div>
+      <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #6b6258;">모두의 새벽 + 낭만북클럽 · 시즌 15 『마음의 시간』</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10px; color: #9a9085; margin-top: 4px;">bookclub.questionschool.net</div>
+    </div>
+  `;
+}
+
+function pageHeaderHtml(eyebrowText) {
+  return `
+    <div style="text-align: center; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid #d4c8b3;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #8a6b35; text-transform: uppercase; margin-bottom: 10px;">${escapeHtml(eyebrowText)}</div>
+      <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 22px; color: #2a2520;"><span style="color: #7a3f2e;">마음의 시간</span> — 모두의 기록</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #6b6258; margin-top: 6px;">Connection in the Here and Now</div>
+    </div>
+  `;
+}
+
+// ─────────────── 1. Reflection 카드 PNG ───────────────
+
+function buildPrintableReflection(r, s) {
+  const dateInfo = formatSessionDate(s.date);
+  const time = formatTimeShort(r.timestamp);
+  const editedMark = r.updated_at ? ' (수정됨)' : '';
+
+  let inner = '';
+  // 별칭 + 시간
+  inner += `
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;">
+      <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 22px; color: #7a3f2e;">${escapeHtml(r.alias)}</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #9a9085;">${escapeHtml(time)}${editedMark}</div>
+    </div>
+  `;
+
+  if (r.quote_text) {
+    inner += `
+      <div style="margin-bottom: 16px; padding: 16px 20px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #d4b97e;">
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; line-height: 1.95; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.quote_text)}</div>
+        <div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>
+      </div>
+    `;
+  }
+
+  if (r.my_mind) {
+    inner += `
+      <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #2a2520; padding: 14px 18px; background: rgba(255,255,255,0.5); border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>
+    `;
+  }
+
+  // 회차 정보 (작은 라벨)
+  const sectionLabel = SECTION_LABELS[s.section] || '';
+  const pageInfo = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
+
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+      ${pageHeaderHtml('Season 15 · A Mark Left')}
+
+      <!-- 회차 정보 -->
+      <div style="text-align: center; margin-bottom: 22px;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(s.day).padStart(2,'0')}</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #4a423a;">${dateInfo.date} ${dateInfo.weekday}${sectionLabel ? ' · ' + sectionLabel : ''} · ${escapeHtml(pageInfo)}</div>
+      </div>
+
+      <!-- 메인 카드 -->
+      <div style="background: rgba(255,252,245,0.6); border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 26px 30px; border-radius: 2px;">
+        ${inner}
+      </div>
+
+      ${watermarkHtml()}
+    </div>
+  `;
+}
+
+async function downloadReflectionImage(refId) {
+  const el = document.getElementById(refId);
+  if (!el) return;
+  const day = Number(el.dataset.day);
+  const timestamp = el.dataset.timestamp;
+  const session = sessions.find(s => Number(s.day) === day);
+  if (!session) return;
+  const ref = (session.reflections || []).find(r => r.timestamp === timestamp);
+  if (!ref) return;
+
+  const btn = el.querySelector('.reflection-actions .reflection-action-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+
+  try {
+    const html = buildPrintableReflection(ref, session);
+    const canvas = await captureElement(html, 680);
+
+    canvas.toBlob((blob) => {
+      if (!blob) throw new Error('이미지 생성 실패');
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `마음의시간_Day${String(day).padStart(2,'0')}_${ref.alias}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  } catch (err) {
+    console.error(err);
+    alert('이미지 저장 실패: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '⬇'; }
+  }
+}
+
+// ─────────────── 2. 하루 회차 전체 PDF ───────────────
+
+function buildPrintableSessionDay(s) {
+  const dateInfo = formatSessionDate(s.date);
+  const sectionInfo = (s.section ? `${SECTION_LABELS[s.section] || s.section}` : '');
+  const pageRange = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
+  const attendeesList = (s.attendees || []).map(a => a.alias).join(' · ');
+  const reflections = (s.reflections || []).slice().sort((a, b) => {
+    const ta = a.timestamp || '', tb = b.timestamp || '';
+    if (tb < ta) return -1; if (tb > ta) return 1; return 0;
+  });
+
+  // 각 멤버 기록을 카드로
+  const refsHtml = reflections.map(r => {
+    const time = formatTimeShort(r.timestamp);
+    let html = '<div style="margin-bottom: 16px; padding: 14px 18px; background: rgba(255,255,255,0.55); border-left: 2px solid #b08a4a; border-radius: 2px; page-break-inside: avoid;">';
+    html += `<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">`;
+    html += `<div style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 15px; color: #7a3f2e;">${escapeHtml(r.alias)}</div>`;
+    html += `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; color: #9a9085;">${escapeHtml(time)}</div>`;
+    html += `</div>`;
+
+    if (r.quote_text) {
+      html += `<div style="margin-bottom: 10px; padding: 12px 16px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #d4b97e;">`;
+      html += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 14px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.quote_text)}</div>`;
+      html += `<div style="margin-top: 8px; padding-top: 6px; padding-left: 12px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>`;
+      html += `</div>`;
+    }
+    if (r.my_mind) {
+      html += `<div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>`;
+    }
+    html += '</div>';
+    return html;
+  }).join('');
+
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 46px 52px; max-width: 720px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+      ${pageHeaderHtml('Season 15 · One Morning')}
+
+      <!-- 회차 큰 정보 -->
+      <div style="background: rgba(255,252,245,0.6); border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 24px 28px; border-radius: 2px; margin-bottom: 26px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px dashed #d4c8b3; flex-wrap: wrap;">
+          <div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(s.day).padStart(2,'0')}${Number(s.day) === 1 ? ' · 첫 새벽' : ''}</div>
+            <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 20px; color: #2a2520;">${dateInfo.date} <span style="color: #6b6258; font-weight: 400; font-size: 16px;">${dateInfo.weekday}</span></div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Pages</div>
+            ${sectionInfo ? `<div style="font-size: 12px; color: #6b6258; margin-bottom: 2px;"><span style="display: inline-block; padding: 2px 8px; background: rgba(176,138,74,0.12); border: 1px solid rgba(176,138,74,0.25); border-radius: 100px; font-size: 11px; color: #8a6b35;">${escapeHtml(sectionInfo)}</span></div>` : ''}
+            <div style="font-family: 'Nanum Myeongjo', serif; font-size: 18px; color: #7a3f2e; font-weight: 700;">${escapeHtml(pageRange)}</div>
+            ${s.leader ? `<div style="font-size: 11px; color: #6b6258; font-style: italic; margin-top: 2px; font-family: 'Cormorant Garamond', serif;">진행 ${escapeHtml(s.leader)}</div>` : ''}
+          </div>
+        </div>
+
+        ${attendeesList ? `
+        <div style="margin-bottom: 14px;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">함께한 사람들</div>
+          <div style="font-family: 'Gowun Batang', serif; font-size: 13px; color: #4a423a;">${escapeHtml(attendeesList)}</div>
+        </div>` : ''}
+
+        ${s.reading_note ? `
+        <div style="margin-bottom: 14px;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">낭독 구간</div>
+          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; padding: 10px 14px; background: rgba(235,226,209,0.3); border-radius: 2px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.reading_note)}</div>
+        </div>` : ''}
+
+        ${s.quote_text ? `
+        <div style="margin-bottom: 14px; padding: 14px 18px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #b08a4a;">
+          <div style="font-family: 'Nanum Myeongjo', serif; font-size: 14.5px; line-height: 1.9; color: #2a2520; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.quote_text)}</div>
+          ${s.quote_meta ? `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11.5px; color: #6b6258; margin-top: 6px; padding-left: 12px;">— ${escapeHtml(s.quote_meta)}</div>` : ''}
+        </div>` : ''}
+
+        ${s.sharing ? `
+        <div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">나눔에서 오간 이야기</div>
+          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.9; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.sharing)}</div>
+        </div>` : ''}
+      </div>
+
+      <!-- 멤버 기록 모음 -->
+      ${reflections.length > 0 ? `
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase;">Reflections · 모두의 기록</div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #6b6258;">${reflections.length}개</div>
+        </div>
+        ${refsHtml}
+      </div>` : `
+      <div style="text-align: center; padding: 30px; color: #9a9085; font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 13px;">이 새벽엔 아직 남겨진 기록이 없어.</div>
+      `}
+
+      ${watermarkHtml()}
+    </div>
+  `;
+}
+
+async function downloadSessionPdf(day) {
+  const session = sessions.find(s => Number(s.day) === Number(day));
+  if (!session) return;
+
+  const btn = document.querySelector(`#session-${day} .session-download-btn`);
+  if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const imgWidthMm = 210;
+    const pageHeightMm = 297;
+
+    const html = buildPrintableSessionDay(session);
+    const canvas = await captureElement(html, 720);
+
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const imgHeightMm = (canvas.height * imgWidthMm) / canvas.width;
+
+    if (imgHeightMm <= pageHeightMm) {
+      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidthMm, imgHeightMm);
+    } else {
+      let yOffset = 0;
+      while (yOffset < imgHeightMm) {
+        if (yOffset > 0) pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, -yOffset, imgWidthMm, imgHeightMm);
+        yOffset += pageHeightMm;
+      }
+    }
+
+    pdf.save(`마음의시간_Day${String(day).padStart(2,'0')}_${session.date || getTodayStr()}.pdf`);
+  } catch (err) {
+    console.error(err);
+    alert('PDF 저장 실패: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '⬇'; }
+  }
+}
+
 
 // ════════════════════════════════════════════════════════
 loadAll();
