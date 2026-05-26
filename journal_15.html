@@ -662,9 +662,9 @@
   /* 회차 빠른 이동 알약들 */
   .sessions-nav {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
     margin: 48px 0 0;
     padding: 22px 20px;
     background: rgba(255, 252, 245, 0.4);
@@ -717,18 +717,71 @@
     font-size: 11px;
     color: var(--ink-light);
   }
-  /* 오늘 회차 강조 */
-  .nav-pill.today {
+  /* 오늘 회차 강조 (현재 보고 있을 때) */
+  .nav-pill.active {
     background: var(--accent);
     border-color: var(--accent);
   }
-  .nav-pill.today,
-  .nav-pill.today .nav-pill-num,
-  .nav-pill.today .nav-pill-date {
+  .nav-pill.active,
+  .nav-pill.active .nav-pill-num,
+  .nav-pill.active .nav-pill-date {
     color: #fff;
   }
-  .nav-pill.today:hover {
+  .nav-pill.active:hover {
     background: #6b3527;
+  }
+
+  /* 오늘 회차 (활성 상태가 아니어도) — 옅은 강조 */
+  .nav-pill.is-today:not(.active) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .nav-pill.is-today:not(.active) .nav-pill-num {
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* "오늘로 돌아오기" 버튼 wrap */
+  .today-btn-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px dotted var(--line);
+  }
+  .nav-pill.today-btn {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    padding: 7px 18px;
+    font-size: 13px;
+  }
+  .nav-pill.today-btn:hover {
+    background: #6b3527;
+    border-color: #6b3527;
+  }
+  .nav-pill.today-btn,
+  .nav-pill.today-btn .nav-pill-num,
+  .nav-pill.today-btn .nav-pill-date {
+    color: #fff;
+  }
+  .nav-pill.today-btn .today-btn-icon {
+    font-size: 14px;
+    margin-right: 2px;
+  }
+  .nav-pill.today-btn .nav-pill-num {
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-size: 13px;
+  }
+
+  /* 회차 알약들 그리드 */
+  .nav-pills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
   }
 
   /* 미래 회차 — 비활성 (옅은 회색, 클릭 불가) */
@@ -1774,15 +1827,17 @@ function isSessionFinished(session) {
 // 대시보드
 // ════════════════════════════════════════════════════════
 function renderDashboard() {
-  // Day: 실제 낭독을 마친 회차 수만 카운트
-  const finishedSessions = sessions.filter(isSessionFinished);
-  const cumulativeDays = finishedSessions.length;
-
   // 가장 최근 회차 (단, 미래 회차는 제외 — 오늘 이전이거나 오늘인 것만)
   const visibleSessions = sessions.filter(isSessionVisible);
   const latestSession = visibleSessions.length > 0
     ? visibleSessions.reduce((a, b) => (Number(b.day) || 0) > (Number(a.day) || 0) ? b : a)
     : null;
+
+  // Day: 오늘까지 진행된 회차 수 (마쳤든 오늘 진행중이든 모두 포함)
+  const cumulativeDays = visibleSessions.length;
+
+  // 실제 낭독을 마친 회차 (다른 통계용)
+  const finishedSessions = sessions.filter(isSessionFinished);
 
   // Today's Pages: 가장 최근 회차의 페이지 구간 (상태에 따라 다른 라벨)
   let pagesDisplay = '—';
@@ -1927,6 +1982,44 @@ function renderSessions() {
     `<div class="ornament">· · ·</div>`
   );
   el.innerHTML = html;
+
+  // 기본 표시: 오늘 회차 (가장 최신 visible)
+  const latestDay = Math.max(...visibleSessions.map(s => Number(s.day) || 0));
+  showOnlySessionDay(latestDay);
+}
+
+// 특정 회차만 보이게 (다른 회차와 ornament는 숨김)
+function showOnlySessionDay(day) {
+  window._currentSessionDay = day;
+
+  const list = document.getElementById('sessionsList');
+  if (!list) return;
+
+  // 모든 회차 카드 처리
+  list.querySelectorAll('article.session').forEach(card => {
+    const cardDay = Number(card.id.replace('session-', ''));
+    card.style.display = (cardDay === Number(day)) ? '' : 'none';
+  });
+
+  // ornament 구분선은 모두 숨김 (어차피 한 회차만 보이니까)
+  list.querySelectorAll('.ornament').forEach(o => {
+    o.style.display = 'none';
+  });
+
+  // 알약 네비의 활성 상태 갱신
+  updateNavActiveState(day);
+}
+
+// 알약 활성 표시 (현재 보고 있는 회차)
+function updateNavActiveState(day) {
+  const nav = document.getElementById('sessionsNav');
+  if (!nav) return;
+  nav.querySelectorAll('.nav-pill').forEach(pill => {
+    pill.classList.remove('active');
+    if (Number(pill.dataset.day) === Number(day)) {
+      pill.classList.add('active');
+    }
+  });
 }
 
 // 회차 빠른 이동 알약 네비게이션 렌더링
@@ -1951,30 +2044,48 @@ function renderSessionsNav(allSessions, visibleSessions) {
   // 노출 가능한 회차의 day 집합 (빠른 조회용)
   const visibleDays = new Set((visibleSessions || []).map(s => Number(s.day)));
 
-  // 오늘 회차 찾기 (날짜로 매칭)
-  const todayIdx = sorted.findIndex(s => {
+  // 오늘 회차 찾기 (날짜 매칭 → 없으면 가장 최신 visible)
+  let todaySession = sorted.find(s => {
     const ymd = extractKSTDate(s.date);
     return ymd && ymd.y === today.y && ymd.m === today.m && ymd.d === today.d;
   });
+  if (!todaySession && visibleSessions && visibleSessions.length > 0) {
+    // 오늘 날짜와 정확히 매칭 안 되면 가장 최근 visible 회차를 "오늘"로 취급
+    todaySession = [...visibleSessions].sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0))[0];
+  }
+  const todayDay = todaySession ? Number(todaySession.day) : null;
 
-  const pills = sorted.map((s, i) => {
+  // "오늘로 돌아오기" 버튼 (오늘 회차가 있을 때만)
+  let todayBtn = '';
+  if (todayDay !== null) {
+    const todayDayLabel = String(todayDay).padStart(2, '0');
+    const todayDateInfo = formatSessionDate(todaySession.date);
+    const todayCompact = (todayDateInfo.date || '').replace(/\s+/g, ' ').trim().replace(/(\d+)월\s*(\d+)일/, '$1/$2');
+    todayBtn = `
+      <a class="nav-pill today-btn" href="#" data-day="${todayDay}">
+        <span class="today-btn-icon">↩</span>
+        <span class="nav-pill-num">오늘로</span>
+        <span class="nav-pill-date">· Day ${todayDayLabel} · ${todayCompact}</span>
+      </a>
+    `;
+  }
+
+  // 모든 회차 알약
+  const pills = sorted.map(s => {
     const day = String(s.day || '?').padStart(2, '0');
     const dateInfo = formatSessionDate(s.date);
-    const isToday = i === todayIdx;
+    const isToday = Number(s.day) === todayDay;
     const isVisible = visibleDays.has(Number(s.day));
-    // 날짜 축약: "5월 26일" → "5/26"
     const dateShort = `${(dateInfo.date || '').replace(/\s+/g, ' ').trim()}`;
     const compact = dateShort.replace(/(\d+)월\s*(\d+)일/, '$1/$2');
 
-    // 상태별 클래스
     let cls = 'nav-pill';
-    if (isToday) cls += ' today';
-    else if (!isVisible) cls += ' upcoming'; // 미래 회차
+    if (isToday) cls += ' is-today';
+    if (!isVisible) cls += ' upcoming';
 
-    // 미래 회차는 링크 비활성 (점프 불가)
     if (isVisible) {
       return `
-        <a class="${cls}" href="#session-${s.day}" data-day="${s.day}">
+        <a class="${cls}" href="#" data-day="${s.day}">
           <span class="nav-pill-num">Day ${day}</span>
           <span class="nav-pill-date">· ${compact}</span>
         </a>
@@ -1991,19 +2102,19 @@ function renderSessionsNav(allSessions, visibleSessions) {
 
   nav.innerHTML = `
     <div class="sessions-nav-label">지난 기록 다시 보기</div>
-    ${pills}
+    ${todayBtn ? `<div class="today-btn-wrap">${todayBtn}</div>` : ''}
+    <div class="nav-pills-grid">${pills}</div>
   `;
 
-  // 부드러운 스크롤 (활성 알약에만)
+  // 클릭 시 그 회차만 표시 (스크롤 X, 전환만)
   nav.querySelectorAll('a.nav-pill').forEach(a => {
     a.addEventListener('click', (e) => {
       e.preventDefault();
-      const day = a.dataset.day;
-      const target = document.getElementById(`session-${day}`);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        history.replaceState(null, '', `#session-${day}`);
-      }
+      const day = Number(a.dataset.day);
+      showOnlySessionDay(day);
+      // 알약 영역이 아래에 있으니 위로 스크롤 (전환한 카드가 보이게)
+      const list = document.getElementById('sessionsList');
+      if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 }
