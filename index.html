@@ -4,9 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>모두의 새벽 + 낭만북클럽</title>
+<meta name="description" content="함께 소리내어 책을 읽는 여기, 그리고 지금.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="모두의 새벽 + 낭만북클럽">
+<meta property="og:description" content="함께 소리내어 책을 읽는 여기, 그리고 지금.">
+<meta property="og:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
+<meta property="og:url" content="https://bookclub.questionschool.net/">
+<meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
+<meta property="og:locale" content="ko_KR">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
 <style>
   :root {
     --ink: #2a2520;
@@ -29,9 +41,11 @@
     background: var(--paper);
     line-height: 1.85;
     font-size: 16px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* 미세한 종이 질감 */
   body::before {
     content: '';
     position: fixed;
@@ -43,92 +57,45 @@
     z-index: 0;
   }
 
-  main { position: relative; z-index: 1; }
-
-  /* ============================================
-     공통 — 섹션 / 컨테이너
-  ============================================ */
-  .wrap {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
+  main {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1.5rem 3rem;
   }
 
-  section {
-    padding: 5rem 0;
+  .hero {
+    max-width: 560px;
+    text-align: center;
   }
 
-  .label {
+  .eyebrow {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 0.85rem;
     letter-spacing: 0.35em;
     color: var(--rose);
     text-transform: uppercase;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-  }
-  .label::before {
-    content: '';
-    width: 32px;
-    height: 1px;
-    background: var(--rose);
-  }
-
-  h2 {
-    font-family: 'Nanum Myeongjo', serif;
-    font-weight: 800;
-    font-size: 1.75rem;
-    line-height: 1.4;
-    color: var(--ink);
     margin-bottom: 2rem;
-    letter-spacing: -0.01em;
-  }
-
-  p {
-    color: var(--ink-soft);
-    font-size: 1.02rem;
-  }
-
-  /* ============================================
-     1. HERO
-  ============================================ */
-  .hero {
-    padding: 5rem 1.5rem 4rem;
-    text-align: center;
-  }
-
-  .hero-meta {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1rem;
-    letter-spacing: 0.2em;
-    color: var(--rose);
-    margin-bottom: 1.8rem;
-    line-height: 1.8;
     opacity: 0;
     animation: fadeUp 1s ease 0.2s forwards;
   }
-  .hero-meta .hero-time {
-    font-size: 0.78rem;
-    letter-spacing: 0.35em;
-    color: var(--ink-light);
-    display: inline-block;
-    margin-top: 0.3rem;
-  }
 
-  .hero h1 {
+  h1 {
     font-family: 'Nanum Myeongjo', serif;
     font-weight: 800;
     font-size: clamp(2rem, 6vw, 3rem);
     line-height: 1.3;
+    color: var(--ink);
     margin-bottom: 1.2rem;
+    letter-spacing: -0.01em;
     opacity: 0;
     animation: fadeUp 1s ease 0.5s forwards;
   }
-  .hero h1 .amp {
+  h1 .amp {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 400;
     font-style: italic;
@@ -136,229 +103,44 @@
     margin: 0 0.2em;
   }
 
-  .hero-sub {
-    color: var(--ink-light);
-    font-size: 1rem;
-    max-width: 480px;
-    margin: 0 auto 3rem;
+  .tagline {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.3rem;
     opacity: 0;
     animation: fadeUp 1s ease 0.8s forwards;
   }
 
-  .hero-poster {
-    max-width: 380px;
-    margin: 0 auto;
-    opacity: 0;
-    animation: fadeUp 1.2s ease 1.1s forwards;
-  }
-  .hero-poster img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 4px;
-    box-shadow: 0 16px 40px rgba(74, 63, 53, 0.18);
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* ============================================
-     2. ABOUT — 모임 소개
-  ============================================ */
-  .about p {
-    margin-bottom: 1.2rem;
-  }
-  .about p:first-of-type::first-letter {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 3.2rem;
-    font-weight: 800;
-    float: left;
-    line-height: 0.9;
-    margin: 0.2rem 0.4rem -0.1rem 0;
-    color: var(--rose);
-  }
-  .about-quote {
-    margin-top: 2.5rem;
-    padding: 1.5rem 0 0;
-    border-top: 1px solid var(--line);
-    font-family: 'Nanum Myeongjo', serif;
-    font-style: italic;
-    font-size: 1.05rem;
-    color: var(--ink);
-    text-align: center;
-    line-height: 1.9;
-  }
-
-  /* ============================================
-     3. HOW — 진행 방식
-  ============================================ */
-  .how {
-    background: var(--paper-warm);
-  }
-
-  .info-table {
-    display: grid;
-    gap: 0;
-    margin-top: 2rem;
-    border-top: 1px solid var(--line);
-  }
-
-  .info-row {
-    display: grid;
-    grid-template-columns: 130px 1fr;
-    padding: 1.1rem 0;
-    border-bottom: 1px solid var(--line);
-    align-items: baseline;
-  }
-
-  .info-key {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.95rem;
-    color: var(--rose);
-    letter-spacing: 0.05em;
-  }
-  .info-key-kr {
-    display: block;
-    font-family: 'Nanum Myeongjo', serif;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 0.95rem;
-    color: var(--ink);
-    margin-top: 0.2rem;
-    letter-spacing: 0;
-  }
-
-  .info-val {
-    font-size: 1rem;
-    color: var(--ink);
-    line-height: 1.7;
-  }
-  .info-val small {
-    display: block;
-    color: var(--ink-light);
-    font-size: 0.88rem;
-    margin-top: 0.2rem;
-  }
-
-  /* ============================================
-     4. BOOK — 이번 책
-  ============================================ */
-  .book-block {
-    margin-top: 2rem;
-    text-align: center;
-  }
-
-  .book-img {
-    max-width: 420px;
-    margin: 0 auto 2.5rem;
-  }
-  .book-img img {
-    width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 4px;
-    box-shadow: 0 16px 40px rgba(74, 63, 53, 0.2);
-    transition: transform 0.5s ease;
-  }
-  .book-img img:hover {
-    transform: scale(1.02);
-  }
-
-  .book-text {
-    max-width: 480px;
-    margin: 0 auto;
-  }
-  .book-text h3 {
-    font-family: 'Nanum Myeongjo', serif;
-    font-weight: 800;
-    font-size: 1.6rem;
-    color: var(--ink);
-    margin-bottom: 0.4rem;
-  }
-  .book-text .author {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    color: var(--rose);
-    margin-bottom: 1.2rem;
-    font-size: 1rem;
-  }
-  .book-text p {
-    font-size: 0.97rem;
-    margin-bottom: 0.8rem;
-  }
-
-  /* ============================================
-     5. HOSTS — 호스트
-  ============================================ */
-  .hosts {
-    background: var(--paper-warm);
-  }
-
-  .host {
-    padding: 1.5rem 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .host:last-child {
-    border-bottom: none;
-  }
-
-  .host-name {
-    font-family: 'Nanum Myeongjo', serif;
-    font-weight: 800;
-    font-size: 1.2rem;
-    color: var(--ink);
-    margin-bottom: 0.2rem;
-  }
-  .host-role {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
+  .ornament {
+    color: var(--gold);
+    letter-spacing: 0.5em;
     font-size: 0.9rem;
-    color: var(--rose);
-    letter-spacing: 0.05em;
-    margin-bottom: 0.8rem;
-  }
-  .host-desc {
-    color: var(--ink-soft);
-    font-size: 0.97rem;
-    line-height: 1.8;
+    margin: 2.5rem 0 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.1s forwards;
   }
 
-  /* ============================================
-     6. JOIN — 참여
-  ============================================ */
-  .join {
-    text-align: center;
-    padding-bottom: 6rem;
-  }
-
-  .join h2 {
-    margin-bottom: 1.2rem;
-  }
-
-  .join p {
-    margin-bottom: 2.5rem;
-    color: var(--ink-light);
-  }
-
-  .cta {
-    display: inline-block;
-    padding: 1rem 2.5rem;
+  .journal-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 2.4rem;
     background: var(--ink);
     color: var(--paper);
     text-decoration: none;
     font-family: 'Nanum Myeongjo', serif;
     font-weight: 700;
     font-size: 1rem;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
     border: 1px solid var(--ink);
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.7s forwards;
   }
-  .cta::before {
+  .journal-btn::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -367,72 +149,95 @@
     transition: transform 0.3s ease;
     z-index: -1;
   }
-  .cta:hover {
+  .journal-btn:hover {
     border-color: var(--rose);
   }
-  .cta:hover::before {
+  .journal-btn:hover::before {
     transform: translateY(0);
   }
+  .journal-btn .arrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    transition: transform 0.3s ease;
+  }
+  .journal-btn:hover .arrow {
+    transform: translateX(4px);
+  }
 
-  .payment {
-    margin-top: 3rem;
-    padding: 1.5rem;
-    border: 1px solid var(--line);
-    background: var(--paper);
-    text-align: left;
-    max-width: 460px;
+  .now-reading {
+    margin-top: 2rem;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    letter-spacing: 0.15em;
+    opacity: 0;
+    animation: fadeUp 1s ease 2s forwards;
+  }
+  .now-reading .season-no {
+    color: var(--rose);
+    letter-spacing: 0.25em;
+  }
+
+  /* 시즌 이미지 */
+  .season-image {
+    margin-top: 0.5rem;
+    margin-bottom: 2.5rem;
+    max-width: 320px;
     margin-left: auto;
     margin-right: auto;
+    opacity: 0;
+    animation: fadeUp 1.2s ease 1.4s forwards;
   }
-  .payment-label {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.8rem;
-    color: var(--rose);
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    margin-bottom: 0.8rem;
-    text-align: center;
+  .season-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+    box-shadow: 0 14px 36px rgba(74, 63, 53, 0.16);
   }
-  .payment-account {
+  .season-image-caption {
+    margin-top: 1.2rem;
     font-family: 'Nanum Myeongjo', serif;
-    font-weight: 700;
-    color: var(--ink);
-    text-align: center;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
     line-height: 1.7;
   }
-  .payment-account small {
-    display: block;
-    font-weight: 400;
-    color: var(--ink-light);
-    font-size: 0.85rem;
-    margin-top: 0.3rem;
-  }
 
-  .archive-link {
-    display: block;
-    margin-top: 3rem;
+  .sub-links {
+    margin-top: 3.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 1s ease 2.3s forwards;
+  }
+  .sub-links a {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     color: var(--ink-light);
     text-decoration: none;
     letter-spacing: 0.05em;
     transition: color 0.3s ease;
-  }
-  .archive-link:hover {
-    color: var(--rose);
-  }
-  .archive-link span {
-    border-bottom: 1px solid currentColor;
     padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+  }
+  .sub-links a:hover {
+    color: var(--rose);
+    border-bottom-color: var(--rose);
   }
 
-  /* ============================================
-     FOOTER
-  ============================================ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   footer {
-    padding: 3rem 1.5rem 2.5rem;
+    position: relative;
+    z-index: 1;
+    padding: 2rem 1.5rem 2.5rem;
     text-align: center;
     border-top: 1px solid var(--line);
     background: var(--paper-warm);
@@ -441,18 +246,17 @@
   .footer-motto {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--rose);
     letter-spacing: 0.3em;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   .footer-contact {
     font-family: 'Nanum Myeongjo', serif;
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     color: var(--ink-soft);
-    line-height: 2;
-    margin-bottom: 1.5rem;
+    line-height: 1.9;
   }
   .footer-contact a {
     color: var(--ink-soft);
@@ -466,212 +270,58 @@
   }
   .footer-contact .divider {
     color: var(--ink-light);
-    margin: 0 0.6rem;
+    margin: 0 0.5rem;
     opacity: 0.5;
   }
 
-  .footer-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 0.78rem;
-    color: var(--ink-light);
-    letter-spacing: 0.2em;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--line);
-    max-width: 280px;
-    margin: 0 auto;
-  }
-
-  /* ============================================
-     RESPONSIVE — 모바일
-  ============================================ */
   @media (max-width: 600px) {
-    section {
-      padding: 3.5rem 0;
+    main {
+      padding: 3rem 1.5rem 2rem;
     }
-
-    .hero {
-      padding: 3rem 1.5rem 3rem;
-    }
-
-    .hero-poster {
-      max-width: 100%;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-    }
-
-    .book-img {
-      max-width: 100%;
-    }
-
-    .info-row {
-      grid-template-columns: 100px 1fr;
-      padding: 1rem 0;
-    }
-    .info-key {
-      font-size: 0.85rem;
-    }
-    .info-key-kr {
-      font-size: 0.88rem;
-    }
-    .info-val {
-      font-size: 0.95rem;
-    }
-
-    .footer-contact {
-      font-size: 0.88rem;
-      line-height: 2.2;
-    }
-    .footer-contact .divider {
-      display: none;
-    }
-    .footer-contact a {
-      display: block;
-    }
+    h1 { font-size: 1.9rem; }
+    .tagline { font-size: 0.98rem; }
+    .journal-btn { padding: 0.9rem 2rem; font-size: 0.95rem; }
+    .season-image { max-width: 100%; margin-top: 2.5rem; }
+    .season-image-caption { font-size: 0.9rem; }
+    .sub-links { gap: 1.2rem; }
+    .sub-links a { font-size: 0.88rem; }
+    .footer-contact .divider { display: none; }
+    .footer-contact a { display: block; }
   }
 </style>
 </head>
 <body>
 
 <main>
+  <div class="hero">
+    <div class="eyebrow">Hour of the Heart</div>
 
-  <!-- 1. HERO -->
-  <section class="hero">
-    <div class="hero-meta">
-      Modoo's Book Club<br>
-      <span class="hero-time">AM 06:00 ~ 07:00</span>
+    <h1>모두의 새벽<span class="amp">,</span>낭만북클럽</h1>
+
+    <p class="tagline">함께 소리내어 책을 읽는</p>
+    <p class="tagline">여기, 그리고 지금</p>
+
+    <div class="ornament">· · ·</div>
+
+    <div class="season-image">
+      <img src="images/hosts_together.png" alt="얄롬의 책으로 15번째 낭독 모임이 진행 중입니다">
+      <p class="season-image-caption">얄롬의 책으로 15번째 낭독 모임이 진행 중입니다.</p>
     </div>
-    <h1>
-      모두의 새벽<br>
-      <span class="amp">&</span> 낭만북클럽
-    </h1>
-    <p class="hero-sub">
-      평일 매일 새벽 여섯 시,<br>
-      함께 책을 낭독하고 이야기를 나누는 한 시간.
-    </p>
-    <div class="hero-poster">
-      <img src="images/poster_main.png" alt="모두의 새벽 + 낭만북클럽 - 마음의 시간">
+
+    <a href="journal_15.html" class="journal-btn">
+      📖 오늘의 독서노트 바로가기
+      <span class="arrow">→</span>
+    </a>
+
+    <div class="now-reading">
+      <span class="season-no">Season 15</span> · 어빈 얄롬 『마음의 시간』
     </div>
-  </section>
 
-  <!-- 2. ABOUT -->
-  <section class="about">
-    <div class="wrap">
-      <div class="label">About</div>
-      <h2>우리는 왜 새벽에 모일까요?</h2>
-      <p>새벽은 누구의 것도 아닌 모두의 시간입니다. 세상이 깨어나기 전, 우리는 책을 펼치고 서로의 목소리에 귀를 기울입니다. 실존주의와 게슈탈트 심리치료 관련 서적을 함께 낭독하며, 하루의 첫 호흡을 길어 올립니다.</p>
-      <p>혼자 읽을 때는 스쳐 지나갔던 문장들이, 함께 소리 내어 읽을 때 비로소 우리 안으로 스며듭니다. 낭독은 단순히 글자를 읽는 것이 아니라, 한 권의 책과 서로의 존재를 향해 현존(Presence)하는 일입니다.</p>
-      <div class="about-quote">
-        함께 소리 내어 읽는 동안<br>
-        우리는 서로의 새벽을 밝혀주는 빛이 됩니다.
-      </div>
+    <div class="sub-links">
+      <a href="apply_15.html">하단의 15기 모집 안내문 보기 →</a>
+      <a href="history.html">그동안 함께 읽어온 책 →</a>
     </div>
-  </section>
-
-  <!-- 3. HOW -->
-  <section class="how">
-    <div class="wrap">
-      <div class="label">How It Works</div>
-      <h2>모임은 이렇게 진행됩니다</h2>
-
-      <div class="info-table">
-        <div class="info-row">
-          <div class="info-key">Time<span class="info-key-kr">시간</span></div>
-          <div class="info-val">새벽 6:00 – 7:00<small>30분 낭독 + 30분 대화</small></div>
-        </div>
-        <div class="info-row">
-          <div class="info-key">Days<span class="info-key-kr">요일</span></div>
-          <div class="info-val">월요일 – 금요일<small>주말과 공휴일 제외</small></div>
-        </div>
-        <div class="info-row">
-          <div class="info-key">Where<span class="info-key-kr">장소</span></div>
-          <div class="info-val">온라인 (Zoom)</div>
-        </div>
-        <div class="info-row">
-          <div class="info-key">Reading<span class="info-key-kr">낭독</span></div>
-          <div class="info-val">돌아가며 소리 내어 한 문단씩</div>
-        </div>
-        <div class="info-row">
-          <div class="info-key">Dialogue<span class="info-key-kr">대화</span></div>
-          <div class="info-val">별칭과 수평어로 서로의 생각을 나눕니다</div>
-        </div>
-        <div class="info-row">
-          <div class="info-key">Fee<span class="info-key-kr">참가비</span></div>
-          <div class="info-val">10만원<small>선정도서는 각자 구입</small></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. BOOK -->
-  <section class="book">
-    <div class="wrap">
-      <div class="label">Current Book</div>
-      <h2>이번에 함께 읽을 책</h2>
-
-      <div class="book-block">
-        <div class="book-img">
-          <img src="images/hosts_together.png" alt="마음의 시간 - 어빈 D. 얄롬 (호스트 농담 & 지평과 함께)">
-        </div>
-        <div class="book-text">
-          <h3>마음의 시간</h3>
-          <p class="author">Hour of the Heart · Irvin D. Yalom</p>
-          <p>실존주의 심리치료의 거장 어빈 얄롬이 시간과 마음에 대해 건네는 다정한 사유. 농담과 지평이 여러분과 함께 한 문장씩 천천히 읽어 갑니다.</p>
-          <p style="color: var(--rose); font-family: 'Nanum Myeongjo', serif; font-weight: 700; margin-top: 1.2rem;">
-            낭독 시작 · 2026년 5월 26일(화)
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. HOSTS -->
-  <section class="hosts">
-    <div class="wrap">
-      <div class="label">Hosts</div>
-      <h2>함께 이끄는 사람들</h2>
-
-      <div class="host">
-        <div class="host-name">지평 (박영준)</div>
-        <div class="host-role">Question Artist · Coach</div>
-        <p class="host-desc">질문술사. 경영·리더십 분야 20년 경력의 코치이자 작가. 『혁신가의 질문』, 『다시, 묻다』(시집), 『내일, 전환』(공저)의 저자. 인커리G 대표.</p>
-      </div>
-
-      <div class="host">
-        <div class="host-name">농담 (김이영)</div>
-        <div class="host-role">Psychological Counselor</div>
-        <p class="host-desc">모두의 심리상담사. 대구모두심리상담센터장. 실존주의·게슈탈트·내면가족체계(IFS)·감각운동 기반 심리치료를 실천합니다.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6. JOIN -->
-  <section class="join">
-    <div class="wrap">
-      <div class="label" style="justify-content: center;">Join Us</div>
-      <h2>새벽의 문을 두드려 주세요</h2>
-      <p>책과 벗을 아끼는 마음이면 충분합니다.</p>
-
-      <a href="https://pf.kakao.com/_XGbin/chat" target="_blank" rel="noopener noreferrer" class="cta">
-        15기는 신청 마감 되었습니다 <br> (다음 시즌 안내는 <br> 카카오채널을 통해 공지됩니다)
-      </a>
-
-      <div class="payment">
-        <div class="payment-label">— Payment —</div>
-        <div class="payment-account">
-          카카오뱅크 3333-35-0705695<br>
-          <small>모임통장 · 박영준 (낭만북클럽)</small>
-        </div>
-      </div>
-
-      <a href="https://bookclub.questionschool.net/history" target="_blank" rel="noopener noreferrer" class="archive-link">
-        <span>그동안 함께 읽어온 책 보기 →</span>
-      </a>
-    </div>
-  </section>
-
+  </div>
 </main>
 
 <footer>
@@ -681,7 +331,6 @@
     <span class="divider">·</span>
     <a href="https://questionschool.net" target="_blank" rel="noopener noreferrer">questionschool.net</a>
   </div>
-  <div class="footer-name">모두의 새벽 + 낭만북클럽</div>
 </footer>
 
 </body>
