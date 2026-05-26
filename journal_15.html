@@ -2050,7 +2050,6 @@ function renderSessionCard(s) {
           <div class="pages-label">Pages</div>
           ${sectionInfo}
           <div class="pages-range">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '<span style="font-size: 13px; color: var(--ink-muted); font-style: italic; font-family: \'Cormorant Garamond\', serif;">~ 진행 중</span>'}</div>
-          <div class="pages-count">${pageCount}${s.leader ? ' · 진행 ' + escapeHtml(s.leader) : ''}</div>
         </div>
       </div>
 
