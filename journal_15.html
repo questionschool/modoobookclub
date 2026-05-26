@@ -958,6 +958,23 @@
     margin-right: 4px;
   }
 
+  /* 새 챕터 표기: "Chapter 1" + 챕터 제목 */
+  .pages-chapter {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    color: var(--gold-deep);
+    margin-bottom: 4px;
+  }
+  .pages-chapter-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
   .pages-range {
     font-family: 'Nanum Myeongjo', serif;
     font-size: 22px;
@@ -1588,7 +1605,7 @@
     <div class="stat">
       <div class="stat-label">Records</div>
       <div class="stat-value" id="statRecords">—</div>
-      <div class="stat-sub">남겨진 기록</div>
+      <div class="stat-sub">오늘의 기록</div>
     </div>
   </div>
 
@@ -1858,21 +1875,20 @@ function renderDashboard() {
         pagesSubDisplay = `${dateInfo.date} 낭독`;
       }
     } else if (latestSession.start_page) {
-      pagesDisplay = `p.${latestSession.start_page}<span class="small"> ~ </span>?`;
+      pagesDisplay = `p.${latestSession.start_page}<span class="small"> ~ </span>`;
       pagesSubDisplay = !started ? `${dateInfo.date} 예정` : '진행 중';
     }
   }
 
   // Members: 시즌 동안 한 번이라도 참석/기록한 사람들 (visible 회차 기준)
   const uniqueMembers = new Set();
-  let recordCount = 0;
   visibleSessions.forEach(s => {
     (s.attendees || []).forEach(a => uniqueMembers.add(a.alias));
-    (s.reflections || []).forEach(r => {
-      uniqueMembers.add(r.alias);
-      recordCount++;
-    });
+    (s.reflections || []).forEach(r => uniqueMembers.add(r.alias));
   });
+
+  // Records: 오늘(최신) 회차의 기록만 카운트
+  const recordCount = latestSession ? (latestSession.reflections || []).length : 0;
 
   // 대시보드 채우기
   document.getElementById('statDay').innerHTML = cumulativeDays > 0
@@ -2158,9 +2174,8 @@ function renderSessionCard(s) {
           <div class="session-date">${dateInfo.date} <span class="weekday">${dateInfo.weekday}</span></div>
         </div>
         <div class="session-pages">
-          <div class="pages-label">Pages</div>
           ${sectionInfo}
-          <div class="pages-range">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '<span style="font-size: 13px; color: var(--ink-muted); font-style: italic; font-family: \'Cormorant Garamond\', serif;">~ 진행 중</span>'}</div>
+          <div class="pages-range">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '~'}</div>
         </div>
       </div>
 
@@ -2408,7 +2423,7 @@ function renderSectionInfo(s) {
   const sectionLabel = SECTION_LABELS[s.section] || s.section || '';
   if (!sectionLabel) return '';
 
-  let chapterText = '';
+  // 본문 회차: Chapter N + 챕터 제목
   if (s.section === 'main') {
     const startNum = parseInt(s.start_page, 10);
     const endNum = parseInt(s.end_page, 10) || startNum;
@@ -2419,14 +2434,24 @@ function renderSectionInfo(s) {
         Number(c.page_end) >= startNum
       );
       if (matches.length === 1) {
-        chapterText = `Ch. ${matches[0].num}`;
+        const ch = matches[0];
+        return `
+          <div class="pages-chapter">Chapter ${escapeHtml(ch.num)}</div>
+          ${ch.title ? `<div class="pages-chapter-title">${escapeHtml(ch.title)}</div>` : ''}
+        `;
       } else if (matches.length > 1) {
-        chapterText = `Ch. ${matches[0].num} → Ch. ${matches[matches.length-1].num}`;
+        const first = matches[0];
+        const last = matches[matches.length - 1];
+        return `
+          <div class="pages-chapter">Chapter ${escapeHtml(first.num)} → ${escapeHtml(last.num)}</div>
+        `;
       }
     }
+    return ''; // 본문이지만 챕터 매칭 안 되면 빈 자리
   }
 
-  return `<div class="pages-section"><span class="badge">${escapeHtml(sectionLabel)}</span>${chapterText ? escapeHtml(chapterText) : ''}</div>`;
+  // 서론/후기 등은 라벨만
+  return `<div class="pages-chapter">${escapeHtml(sectionLabel)}</div>`;
 }
 
 function computePageCount(s) {
