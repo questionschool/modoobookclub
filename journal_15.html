@@ -2187,19 +2187,13 @@ function renderSessionCard(s) {
 
       ${s.reading_note ? `
       <div>
-        <span class="field-label">Reading · 낭독 구간</span>
+        <span class="field-label">Reading Note · 읽은 이야기</span>
         <div class="reading-note">${escapeHtml(cleanText(s.reading_note))}</div>
-      </div>` : ''}
-
-      ${s.quote_text ? `
-      <div class="quote-block">
-        <div class="quote-text">${escapeHtml(cleanText(s.quote_text))}</div>
-        ${s.quote_meta ? `<div class="quote-meta">— ${escapeHtml(s.quote_meta)}</div>` : ''}
       </div>` : ''}
 
       ${s.sharing ? `
       <div class="sharing">
-        <span class="field-label">Sharing · 나눔에서 오간 이야기</span>
+        <span class="field-label">Sharing Note · 나눈 이야기</span>
         <div class="sharing-content">${escapeHtml(cleanText(s.sharing))}</div>
       </div>` : ''}
 
@@ -2795,19 +2789,13 @@ function buildSessionHeaderBlock(s) {
 
         ${s.reading_note ? `
         <div style="margin-bottom: 14px;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">낭독 구간</div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">Reading Note · 읽은 이야기</div>
           <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; padding: 10px 14px; background: #f5efe4; border-radius: 2px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(s.reading_note))}</div>
-        </div>` : ''}
-
-        ${s.quote_text ? `
-        <div style="margin-bottom: 14px; padding: 14px 18px; background: #fafaf8; border-left: 2px solid #b08a4a;">
-          <div style="font-family: 'Nanum Myeongjo', serif; font-size: 14.5px; line-height: 1.9; color: #2a2520; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(s.quote_text))}</div>
-          ${s.quote_meta ? `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11.5px; color: #6b6258; margin-top: 6px; padding-left: 12px;">— ${escapeHtml(s.quote_meta)}</div>` : ''}
         </div>` : ''}
 
         ${s.sharing ? `
         <div>
-          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">나눔에서 오간 이야기</div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">Sharing Note · 나눈 이야기</div>
           <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.9; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(s.sharing))}</div>
         </div>` : ''}
       </div>
