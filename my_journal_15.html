@@ -914,7 +914,8 @@ async function downloadMemberPdf() {
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pageWidthMm = 210;
     const pageHeightMm = 297;
-    const usableHeightMm = pageHeightMm - 12;
+    const continuedPageTopMm = 14;        // 새 페이지 시작 시 위쪽 여유
+    const usableHeightMm = pageHeightMm - 14;
 
     // 블록 목록
     const blocks = [];
@@ -947,7 +948,7 @@ async function downloadMemberPdf() {
       if (block.kind === 'watermark') {
         if (currentY + block.heightMm > usableHeightMm) {
           pdf.addPage();
-          currentY = 0;
+          currentY = continuedPageTopMm;
         }
         const watermarkY = pageHeightMm - block.heightMm - 4;
         pdf.addImage(block.imgData, 'JPEG', 0, Math.max(currentY, watermarkY), pageWidthMm, block.heightMm);
@@ -957,7 +958,7 @@ async function downloadMemberPdf() {
 
       if (!isFirstPage && currentY + block.heightMm > usableHeightMm) {
         pdf.addPage();
-        currentY = 0;
+        currentY = continuedPageTopMm;
       }
       isFirstPage = false;
 
@@ -965,12 +966,12 @@ async function downloadMemberPdf() {
       if (block.heightMm > usableHeightMm) {
         if (currentY > 0) {
           pdf.addPage();
-          currentY = 0;
+          currentY = continuedPageTopMm;
         }
         let yOffset = 0;
         while (yOffset < block.heightMm) {
           if (yOffset > 0) pdf.addPage();
-          pdf.addImage(block.imgData, 'JPEG', 0, -yOffset, pageWidthMm, block.heightMm);
+          pdf.addImage(block.imgData, 'JPEG', 0, currentY - yOffset, pageWidthMm, block.heightMm);
           yOffset += pageHeightMm;
         }
         currentY = pageHeightMm;

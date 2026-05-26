@@ -663,48 +663,44 @@
     background: rgba(255, 252, 245, 0.55);
     border: 1px solid var(--line-soft);
     border-left: 3px solid var(--gold);
-    padding: 28px 32px 56px;
+    padding: 28px 32px;
     position: relative;
     animation: fadeUp 0.7s ease-out backwards;
     scroll-margin-top: 20px;
   }
 
-  /* 회차 카드 다운로드 버튼 — 우측 하단 */
+  /* 회차 카드 다운로드 버튼 — 카드 하단 우측의 큰 알약 */
   .session-download-btn {
-    position: absolute;
-    bottom: 14px;
-    right: 14px;
-    width: 30px;
-    height: 30px;
-    background: rgba(255, 252, 245, 0.7);
+    margin-top: 24px;
+    padding: 8px 20px;
+    background: rgba(255, 252, 245, 0.6);
     border: 1px solid var(--line);
-    border-radius: 50%;
+    border-radius: 100px;
     cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
     font-size: 13px;
-    color: var(--ink-muted);
+    color: var(--ink-soft);
+    transition: all 0.2s;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    padding: 0;
-    line-height: 1;
-    opacity: 0.6;
+    gap: 8px;
   }
 
-  .session:hover .session-download-btn {
-    opacity: 1;
-  }
-
-  .session-download-btn:hover {
+  .session-download-btn:hover:not(:disabled) {
     border-color: var(--accent);
     color: var(--accent);
-    background: #fff;
-    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.8);
   }
 
   .session-download-btn:disabled {
-    opacity: 0.3;
+    opacity: 0.4;
     cursor: not-allowed;
+  }
+
+  .session-download-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
   }
 
   /* 시즌 다운로드 영역 (Sessions 섹션 상단) */
@@ -1778,7 +1774,6 @@ function renderSessionCard(s) {
 
   return `
     <article class="session" id="session-${s.day}">
-      <button class="session-download-btn" title="이 하루 전체를 PDF로 저장" onclick="downloadSessionPdf(${s.day})">⬇</button>
       <div class="session-head">
         <div>
           <div class="session-day">${escapeHtml(dayLabel)}</div>
@@ -1822,6 +1817,13 @@ function renderSessionCard(s) {
           <span class="reflection-count">${reflections.length}개 남김</span>
         </div>
         <div class="reflection-list">${reflectionsHtml}</div>
+      </div>
+
+      <div class="session-download-row">
+        <button class="session-download-btn" onclick="downloadSessionPdf(${s.day})" title="이 하루 전체를 PDF로 저장">
+          <span style="font-size: 13px;">📄</span>
+          <span>오늘의 기록 PDF로 저장</span>
+        </button>
       </div>
     </article>
   `;
@@ -2442,21 +2444,26 @@ async function downloadSessionPdf(day) {
   if (!session) return;
 
   const btn = document.querySelector(`#session-${day} .session-download-btn`);
-  if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
+  const originalBtnHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span><span>PDF 만드는 중…</span>';
+  }
 
   try {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const pageWidthMm = 210;
     const pageHeightMm = 297;
-    const sideMarginMm = 0;        // HTML 자체에 좌우 padding 있음
-    const topMarginMm = 0;
-    const usableHeightMm = pageHeightMm - 12; // 페이지 하단 약간 여유
+    const sideMarginMm = 0;          // HTML 자체에 좌우 padding 있음
+    const firstPageTopMm = 0;        // 첫 페이지는 HTML padding이 있어 그대로
+    const continuedPageTopMm = 14;   // 새 페이지 시작 시 위쪽 여유 (인쇄 안전 마진)
+    const usableHeightMm = pageHeightMm - 14; // 페이지 하단 여유
 
-    // 정렬된 reflection 목록
+    // PDF에서는 먼저 기록된 순으로 정렬 (오름차순 — 화면과 반대)
     const reflections = (session.reflections || []).slice().sort((a, b) => {
       const ta = a.timestamp || '', tb = b.timestamp || '';
-      if (tb < ta) return -1; if (tb > ta) return 1; return 0;
+      if (ta < tb) return -1; if (ta > tb) return 1; return 0;
     });
 
     // 블록 목록 만들기
@@ -2476,7 +2483,7 @@ async function downloadSessionPdf(day) {
     const captured = [];
     for (let i = 0; i < blocks.length; i++) {
       const b = blocks[i];
-      if (btn) btn.textContent = `${i+1}/${blocks.length}`;
+      if (btn) btn.innerHTML = `<span>⏳</span><span>${i+1}/${blocks.length} 처리 중…</span>`;
       const canvas = await captureElement(b.html, 720);
       const heightMm = (canvas.height * pageWidthMm) / canvas.width;
       captured.push({
@@ -2488,7 +2495,7 @@ async function downloadSessionPdf(day) {
     }
 
     // 페이지에 배치
-    let currentY = topMarginMm;
+    let currentY = firstPageTopMm;
     let isFirstPage = true;
 
     for (const block of captured) {
@@ -2497,7 +2504,7 @@ async function downloadSessionPdf(day) {
         // 남은 공간이 충분하면 같은 페이지에, 아니면 새 페이지
         if (currentY + block.heightMm > usableHeightMm) {
           pdf.addPage();
-          currentY = topMarginMm;
+          currentY = continuedPageTopMm;
         }
         // 워터마크는 페이지 하단으로 밀어붙임
         const watermarkY = pageHeightMm - block.heightMm - 4;
@@ -2508,26 +2515,25 @@ async function downloadSessionPdf(day) {
 
       // 일반 블록: 남은 공간에 들어가는지 확인
       if (!isFirstPage && currentY + block.heightMm > usableHeightMm) {
-        // 새 페이지로
+        // 새 페이지로 — 위쪽 여백 확보
         pdf.addPage();
-        currentY = topMarginMm;
+        currentY = continuedPageTopMm;
       }
       isFirstPage = false;
 
       // 페이지보다 큰 단일 블록 (드물지만 대비)
       if (block.heightMm > usableHeightMm) {
-        // 그냥 다음 페이지부터 시작해서 통째로 슬라이스
-        if (currentY > topMarginMm) {
+        if (currentY > firstPageTopMm) {
           pdf.addPage();
-          currentY = topMarginMm;
+          currentY = continuedPageTopMm;
         }
         let yOffset = 0;
         while (yOffset < block.heightMm) {
           if (yOffset > 0) pdf.addPage();
-          pdf.addImage(block.imgData, 'JPEG', sideMarginMm, topMarginMm - yOffset, pageWidthMm, block.heightMm);
+          pdf.addImage(block.imgData, 'JPEG', sideMarginMm, currentY - yOffset, pageWidthMm, block.heightMm);
           yOffset += pageHeightMm;
         }
-        currentY = pageHeightMm; // 다음 블록은 강제 새 페이지
+        currentY = pageHeightMm;
         continue;
       }
 
@@ -2535,12 +2541,15 @@ async function downloadSessionPdf(day) {
       currentY += block.heightMm;
     }
 
-    pdf.save(`마음의시간_Day${String(day).padStart(2,'0')}_${session.date || getTodayStr()}.pdf`);
+    // 깔끔한 날짜 문자열 만들기 (ISO timestamp 잘라내기)
+    const ymd = extractKSTDate(session.date);
+    const dateStr = ymd ? `${ymd.y}-${String(ymd.m).padStart(2,'0')}-${String(ymd.d).padStart(2,'0')}` : getTodayStr();
+    pdf.save(`마음의시간_Day${String(day).padStart(2,'0')}_${dateStr}.pdf`);
   } catch (err) {
     console.error(err);
     alert('PDF 저장 실패: ' + err.message);
   } finally {
-    if (btn) { btn.disabled = false; btn.textContent = '⬇'; }
+    if (btn) { btn.disabled = false; btn.innerHTML = originalBtnHtml; }
   }
 }
 
