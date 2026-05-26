@@ -663,16 +663,16 @@
     background: rgba(255, 252, 245, 0.55);
     border: 1px solid var(--line-soft);
     border-left: 3px solid var(--gold);
-    padding: 28px 32px;
+    padding: 28px 32px 56px;
     position: relative;
     animation: fadeUp 0.7s ease-out backwards;
     scroll-margin-top: 20px;
   }
 
-  /* 회차 카드 다운로드 버튼 */
+  /* 회차 카드 다운로드 버튼 — 우측 하단 */
   .session-download-btn {
     position: absolute;
-    top: 14px;
+    bottom: 14px;
     right: 14px;
     width: 30px;
     height: 30px;
@@ -2195,7 +2195,7 @@ async function captureElement(html, widthPx) {
 
   const canvas = await html2canvas(wrapper.firstElementChild, {
     scale: 2,
-    backgroundColor: '#f5efe4',
+    backgroundColor: '#ffffff',
     logging: false,
     useCORS: true
   });
@@ -2241,7 +2241,7 @@ function buildPrintableReflection(r, s) {
 
   if (r.quote_text) {
     inner += `
-      <div style="margin-bottom: 16px; padding: 16px 20px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #d4b97e;">
+      <div style="margin-bottom: 16px; padding: 16px 20px; background: #fafaf8; border-left: 2px solid #d4b97e;">
         <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; line-height: 1.95; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.quote_text)}</div>
         <div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>
       </div>
@@ -2250,7 +2250,7 @@ function buildPrintableReflection(r, s) {
 
   if (r.my_mind) {
     inner += `
-      <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #2a2520; padding: 14px 18px; background: rgba(255,255,255,0.5); border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>
+      <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #2a2520; padding: 14px 18px; background: #fafaf8; border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>
     `;
   }
 
@@ -2267,7 +2267,7 @@ function buildPrintableReflection(r, s) {
   const pageInfo = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
 
   return `
-    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
       ${pageHeaderHtml('HOUR OF THE HEART', '오늘의 기록')}
 
       <!-- 회차 정보 -->
@@ -2277,7 +2277,7 @@ function buildPrintableReflection(r, s) {
       </div>
 
       <!-- 메인 카드 -->
-      <div style="background: rgba(255,252,245,0.6); border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 26px 30px; border-radius: 2px;">
+      <div style="background: #fafaf8; border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 26px 30px; border-radius: 2px;">
         ${inner}
       </div>
 
@@ -2324,44 +2324,21 @@ async function downloadReflectionImage(refId) {
 
 // ─────────────── 2. 하루 회차 전체 PDF ───────────────
 
-function buildPrintableSessionDay(s) {
+// ─────────────── 2. 하루 회차 전체 PDF — 블록 단위 페이지 분할 ───────────────
+
+// 회차 헤더 블록 (대제목 + 회차 정보 카드)
+function buildSessionHeaderBlock(s) {
   const dateInfo = formatSessionDate(s.date);
   const sectionInfo = (s.section ? `${SECTION_LABELS[s.section] || s.section}` : '');
   const pageRange = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
   const attendeesList = (s.attendees || []).map(a => a.alias).join(' · ');
-  const reflections = (s.reflections || []).slice().sort((a, b) => {
-    const ta = a.timestamp || '', tb = b.timestamp || '';
-    if (tb < ta) return -1; if (tb > ta) return 1; return 0;
-  });
-
-  // 각 멤버 기록을 카드로
-  const refsHtml = reflections.map(r => {
-    const time = formatTimeShort(r.timestamp);
-    let html = '<div style="margin-bottom: 16px; padding: 14px 18px; background: rgba(255,255,255,0.55); border-left: 2px solid #b08a4a; border-radius: 2px; page-break-inside: avoid;">';
-    html += `<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">`;
-    html += `<div style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 15px; color: #7a3f2e;">${escapeHtml(r.alias)}</div>`;
-    html += `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; color: #9a9085;">${escapeHtml(time)}</div>`;
-    html += `</div>`;
-
-    if (r.quote_text) {
-      html += `<div style="margin-bottom: 10px; padding: 12px 16px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #d4b97e;">`;
-      html += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 14px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.quote_text)}</div>`;
-      html += `<div style="margin-top: 8px; padding-top: 6px; padding-left: 12px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>`;
-      html += `</div>`;
-    }
-    if (r.my_mind) {
-      html += `<div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>`;
-    }
-    html += '</div>';
-    return html;
-  }).join('');
 
   return `
-    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 46px 52px; max-width: 720px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 46px 52px 24px; max-width: 720px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
       ${pageHeaderHtml('HOUR OF THE HEART', '모두의 기록')}
 
       <!-- 회차 큰 정보 -->
-      <div style="background: rgba(255,252,245,0.6); border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 24px 28px; border-radius: 2px; margin-bottom: 26px;">
+      <div style="background: #fafaf8; border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 24px 28px; border-radius: 2px;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px dashed #d4c8b3; flex-wrap: wrap;">
           <div>
             <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(s.day).padStart(2,'0')}${Number(s.day) === 1 ? ' · 첫 새벽' : ''}</div>
@@ -2384,11 +2361,11 @@ function buildPrintableSessionDay(s) {
         ${s.reading_note ? `
         <div style="margin-bottom: 14px;">
           <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">낭독 구간</div>
-          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; padding: 10px 14px; background: rgba(235,226,209,0.3); border-radius: 2px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.reading_note)}</div>
+          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; padding: 10px 14px; background: #f5efe4; border-radius: 2px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.reading_note)}</div>
         </div>` : ''}
 
         ${s.quote_text ? `
-        <div style="margin-bottom: 14px; padding: 14px 18px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #b08a4a;">
+        <div style="margin-bottom: 14px; padding: 14px 18px; background: #fafaf8; border-left: 2px solid #b08a4a;">
           <div style="font-family: 'Nanum Myeongjo', serif; font-size: 14.5px; line-height: 1.9; color: #2a2520; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.quote_text)}</div>
           ${s.quote_meta ? `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11.5px; color: #6b6258; margin-top: 6px; padding-left: 12px;">— ${escapeHtml(s.quote_meta)}</div>` : ''}
         </div>` : ''}
@@ -2399,19 +2376,62 @@ function buildPrintableSessionDay(s) {
           <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.9; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.sharing)}</div>
         </div>` : ''}
       </div>
+    </div>
+  `;
+}
 
-      <!-- 멤버 기록 모음 -->
-      ${reflections.length > 0 ? `
-      <div>
-        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase;">Reflections · 모두의 기록</div>
-          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #6b6258;">${reflections.length}개</div>
-        </div>
-        ${refsHtml}
-      </div>` : `
+// Reflections 섹션 제목 블록 (작음)
+function buildReflectionsTitleBlock(count) {
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 16px 52px 8px; max-width: 720px; box-sizing: border-box;">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 10px;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase;">Reflections · 모두의 기록</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #6b6258;">${count}개</div>
+      </div>
+    </div>
+  `;
+}
+
+// 단일 reflection 카드 블록
+function buildReflectionCardBlock(r) {
+  const time = formatTimeShort(r.timestamp);
+  let card = '<div style="margin-bottom: 12px; padding: 14px 18px; background: #fafaf8; border: 1px solid #e5dcc8; border-left: 2px solid #b08a4a; border-radius: 2px;">';
+  card += `<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">`;
+  card += `<div style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 15px; color: #7a3f2e;">${escapeHtml(r.alias)}</div>`;
+  card += `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; color: #9a9085;">${escapeHtml(time)}</div>`;
+  card += `</div>`;
+
+  if (r.quote_text) {
+    card += `<div style="margin-bottom: 10px; padding: 12px 16px; background: #ffffff; border: 1px solid #e5dcc8; border-left: 2px solid #d4b97e;">`;
+    card += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 14px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.quote_text)}</div>`;
+    card += `<div style="margin-top: 8px; padding-top: 6px; padding-left: 12px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>`;
+    card += `</div>`;
+  }
+  if (r.my_mind) {
+    card += `<div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>`;
+  }
+  card += '</div>';
+
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 4px 52px; max-width: 720px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+      ${card}
+    </div>
+  `;
+}
+
+// "기록 없음" 블록
+function buildNoReflectionsBlock() {
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 20px 52px; max-width: 720px; box-sizing: border-box;">
       <div style="text-align: center; padding: 30px; color: #9a9085; font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 13px;">이 새벽엔 아직 남겨진 기록이 없어.</div>
-      `}
+    </div>
+  `;
+}
 
+// 워터마크 블록
+function buildWatermarkBlock() {
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 20px 52px 32px; max-width: 720px; box-sizing: border-box;">
       ${watermarkHtml()}
     </div>
   `;
@@ -2427,24 +2447,92 @@ async function downloadSessionPdf(day) {
   try {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const imgWidthMm = 210;
+    const pageWidthMm = 210;
     const pageHeightMm = 297;
+    const sideMarginMm = 0;        // HTML 자체에 좌우 padding 있음
+    const topMarginMm = 0;
+    const usableHeightMm = pageHeightMm - 12; // 페이지 하단 약간 여유
 
-    const html = buildPrintableSessionDay(session);
-    const canvas = await captureElement(html, 720);
+    // 정렬된 reflection 목록
+    const reflections = (session.reflections || []).slice().sort((a, b) => {
+      const ta = a.timestamp || '', tb = b.timestamp || '';
+      if (tb < ta) return -1; if (tb > ta) return 1; return 0;
+    });
 
-    const imgData = canvas.toDataURL('image/jpeg', 0.92);
-    const imgHeightMm = (canvas.height * imgWidthMm) / canvas.width;
-
-    if (imgHeightMm <= pageHeightMm) {
-      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidthMm, imgHeightMm);
+    // 블록 목록 만들기
+    const blocks = [];
+    blocks.push({ kind: 'header', html: buildSessionHeaderBlock(session) });
+    if (reflections.length > 0) {
+      blocks.push({ kind: 'reflTitle', html: buildReflectionsTitleBlock(reflections.length) });
+      reflections.forEach(r => {
+        blocks.push({ kind: 'reflection', html: buildReflectionCardBlock(r) });
+      });
     } else {
-      let yOffset = 0;
-      while (yOffset < imgHeightMm) {
-        if (yOffset > 0) pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', 0, -yOffset, imgWidthMm, imgHeightMm);
-        yOffset += pageHeightMm;
+      blocks.push({ kind: 'noRef', html: buildNoReflectionsBlock() });
+    }
+    blocks.push({ kind: 'watermark', html: buildWatermarkBlock() });
+
+    // 각 블록을 캡쳐
+    const captured = [];
+    for (let i = 0; i < blocks.length; i++) {
+      const b = blocks[i];
+      if (btn) btn.textContent = `${i+1}/${blocks.length}`;
+      const canvas = await captureElement(b.html, 720);
+      const heightMm = (canvas.height * pageWidthMm) / canvas.width;
+      captured.push({
+        kind: b.kind,
+        canvas,
+        heightMm,
+        imgData: canvas.toDataURL('image/jpeg', 0.92)
+      });
+    }
+
+    // 페이지에 배치
+    let currentY = topMarginMm;
+    let isFirstPage = true;
+
+    for (const block of captured) {
+      // 워터마크는 마지막 페이지 하단에 강제로
+      if (block.kind === 'watermark') {
+        // 남은 공간이 충분하면 같은 페이지에, 아니면 새 페이지
+        if (currentY + block.heightMm > usableHeightMm) {
+          pdf.addPage();
+          currentY = topMarginMm;
+        }
+        // 워터마크는 페이지 하단으로 밀어붙임
+        const watermarkY = pageHeightMm - block.heightMm - 4;
+        pdf.addImage(block.imgData, 'JPEG', sideMarginMm, Math.max(currentY, watermarkY), pageWidthMm, block.heightMm);
+        currentY = pageHeightMm;
+        continue;
       }
+
+      // 일반 블록: 남은 공간에 들어가는지 확인
+      if (!isFirstPage && currentY + block.heightMm > usableHeightMm) {
+        // 새 페이지로
+        pdf.addPage();
+        currentY = topMarginMm;
+      }
+      isFirstPage = false;
+
+      // 페이지보다 큰 단일 블록 (드물지만 대비)
+      if (block.heightMm > usableHeightMm) {
+        // 그냥 다음 페이지부터 시작해서 통째로 슬라이스
+        if (currentY > topMarginMm) {
+          pdf.addPage();
+          currentY = topMarginMm;
+        }
+        let yOffset = 0;
+        while (yOffset < block.heightMm) {
+          if (yOffset > 0) pdf.addPage();
+          pdf.addImage(block.imgData, 'JPEG', sideMarginMm, topMarginMm - yOffset, pageWidthMm, block.heightMm);
+          yOffset += pageHeightMm;
+        }
+        currentY = pageHeightMm; // 다음 블록은 강제 새 페이지
+        continue;
+      }
+
+      pdf.addImage(block.imgData, 'JPEG', sideMarginMm, currentY, pageWidthMm, block.heightMm);
+      currentY += block.heightMm;
     }
 
     pdf.save(`마음의시간_Day${String(day).padStart(2,'0')}_${session.date || getTodayStr()}.pdf`);
@@ -2455,6 +2543,7 @@ async function downloadSessionPdf(day) {
     if (btn) { btn.disabled = false; btn.textContent = '⬇'; }
   }
 }
+
 
 
 // ════════════════════════════════════════════════════════
