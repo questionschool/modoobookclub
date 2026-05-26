@@ -806,11 +806,23 @@ function renderSelected() {
     });
   });
 
-  // 정렬 방향에 따라
+  // 정렬 방향에 따라 (1차: day, 2차: timestamp)
   if (currentSort === 'oldest') {
-    entries.sort((a, b) => (Number(a.day) || 0) - (Number(b.day) || 0));
+    entries.sort((a, b) => {
+      const dayDiff = (Number(a.day) || 0) - (Number(b.day) || 0);
+      if (dayDiff !== 0) return dayDiff;
+      // 같은 day면 timestamp 오름차순
+      const ta = a.timestamp || '', tb = b.timestamp || '';
+      return ta < tb ? -1 : ta > tb ? 1 : 0;
+    });
   } else {
-    entries.sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0));
+    entries.sort((a, b) => {
+      const dayDiff = (Number(b.day) || 0) - (Number(a.day) || 0);
+      if (dayDiff !== 0) return dayDiff;
+      // 같은 day면 timestamp 내림차순
+      const ta = a.timestamp || '', tb = b.timestamp || '';
+      return tb < ta ? -1 : tb > ta ? 1 : 0;
+    });
   }
 
   // 메타
