@@ -659,6 +659,79 @@
   /* ============ SESSION CARDS ============ */
   .sessions { display: flex; flex-direction: column; gap: 36px; }
 
+  /* 회차 빠른 이동 알약들 */
+  .sessions-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin: -4px 0 36px;
+    padding: 18px 20px;
+    background: rgba(255, 252, 245, 0.4);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+  }
+  .sessions-nav:empty { display: none; }
+
+  .sessions-nav-label {
+    width: 100%;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+  }
+  .nav-pill:hover {
+    border-color: var(--gold);
+    color: var(--ink);
+    background: rgba(176, 138, 74, 0.06);
+  }
+  .nav-pill .nav-pill-num {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 12px;
+    color: var(--gold-deep);
+  }
+  .nav-pill .nav-pill-date {
+    font-size: 11px;
+    color: var(--ink-light);
+  }
+  /* 오늘 회차 강조 */
+  .nav-pill.today {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .nav-pill.today,
+  .nav-pill.today .nav-pill-num,
+  .nav-pill.today .nav-pill-date {
+    color: #fff;
+  }
+  .nav-pill.today:hover {
+    background: #6b3527;
+  }
+
   .session {
     background: rgba(255, 252, 245, 0.55);
     border: 1px solid var(--line-soft);
@@ -1365,7 +1438,7 @@
       <a href="https://us02web.zoom.us/j/86324239516?pwd=IIPBgvoepGMyGRptvKLfkRunc4e3pL.1" target="_blank" rel="noopener">
         <span class="zoom-icon">📹</span>
         <span class="zoom-label">JOIN</span>
-        <span class="zoom-text">Online Meeting 참가하기</span>
+        <span class="zoom-text">Zoom Meeting 참가하기</span>
         <span class="zoom-arrow">→</span>
       </a>
     </div>
@@ -1465,6 +1538,9 @@
   <section>
     <span class="section-num">HOUR OF THE HEART · 여기 그리고 지금과 연결되기</span>
     <h2>우리가 함께 남겨둔 기록</h2>
+
+    <!-- 회차 빠른 이동 -->
+    <nav id="sessionsNav" class="sessions-nav" aria-label="회차 빠른 이동"></nav>
 
     <div id="sessionsList">
       <div class="loading-skeleton"></div>
@@ -1808,6 +1884,9 @@ function renderSessions() {
   // 미래 회차는 일지에 노출 안 함 (관리자가 미리 입력해둔 다음 날 회차 등)
   const visibleSessions = sessions.filter(isSessionVisible);
 
+  // 회차 알약 네비게이션 렌더링 (회차 2개 이상일 때만)
+  renderSessionsNav(visibleSessions);
+
   if (visibleSessions.length === 0) {
     if (sessions.length > 0) {
       // 입력은 있는데 다 미래
@@ -1832,6 +1911,66 @@ function renderSessions() {
     `<div class="ornament">· · ·</div>`
   );
   el.innerHTML = html;
+}
+
+// 회차 빠른 이동 알약 네비게이션 렌더링
+function renderSessionsNav(visibleSessions) {
+  const nav = document.getElementById('sessionsNav');
+  if (!nav) return;
+
+  // 회차 2개 미만이면 굳이 보일 필요 없음
+  if (!visibleSessions || visibleSessions.length < 2) {
+    nav.innerHTML = '';
+    return;
+  }
+
+  // 오늘 KST 날짜
+  const today = getTodayKST();
+
+  // Day 오름차순 정렬
+  const sorted = [...visibleSessions].sort((a, b) => (Number(a.day) || 0) - (Number(b.day) || 0));
+
+  // 오늘 날짜와 정확히 매칭되는 회차 우선, 없으면 가장 최근 회차
+  const todayIdx = sorted.findIndex(s => {
+    const ymd = extractKSTDate(s.date);
+    return ymd && ymd.y === today.y && ymd.m === today.m && ymd.d === today.d;
+  });
+  const latestIdx = sorted.length - 1;
+  const highlightIdx = todayIdx >= 0 ? todayIdx : latestIdx;
+
+  const pills = sorted.map((s, i) => {
+    const day = String(s.day || '?').padStart(2, '0');
+    const dateInfo = formatSessionDate(s.date);
+    const isToday = i === highlightIdx;
+    const dateShort = `${(dateInfo.date || '').replace(/\s+/g, ' ').trim()}`;
+    // dateShort 형식: "5월 26일" — 너무 길면 "5/26"으로 축약
+    const compact = dateShort.replace(/(\d+)월\s*(\d+)일/, '$1/$2');
+    return `
+      <a class="nav-pill${isToday ? ' today' : ''}" href="#session-${s.day}" data-day="${s.day}">
+        <span class="nav-pill-num">Day ${day}</span>
+        <span class="nav-pill-date">· ${compact}</span>
+      </a>
+    `;
+  }).join('');
+
+  nav.innerHTML = `
+    <div class="sessions-nav-label">Quick Jump · 회차 빠른 이동</div>
+    ${pills}
+  `;
+
+  // 부드러운 스크롤 보장 (브라우저 기본 #앵커는 instant일 때가 있음)
+  nav.querySelectorAll('a.nav-pill').forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const day = a.dataset.day;
+      const target = document.getElementById(`session-${day}`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // URL hash도 살짝 업데이트 (뒤로가기로 돌아올 수 있게)
+        history.replaceState(null, '', `#session-${day}`);
+      }
+    });
+  });
 }
 
 function renderSessionCard(s) {
