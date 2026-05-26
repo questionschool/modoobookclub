@@ -1640,20 +1640,19 @@ function restoreInputState() {
 function extractKSTDate(dateValue) {
   if (!dateValue) return null;
 
-  // 이미 YYYY-MM-DD 형태이면 그대로 사용
-  if (typeof dateValue === 'string') {
+  // "YYYY-MM-DD" 단순 형태 (T가 없음) — 그대로 사용
+  if (typeof dateValue === 'string' && !dateValue.includes('T')) {
     const m = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
     if (m) {
       return { y: Number(m[1]), m: Number(m[2]), d: Number(m[3]) };
     }
   }
 
-  // Date 객체로 파싱 시도
+  // ISO 문자열이거나 Date 객체이거나 — KST 변환 거침
   const d = new Date(dateValue);
   if (isNaN(d.getTime())) return null;
 
   // KST(UTC+9) 기준 년/월/일 계산
-  // d의 UTC 시각에 9시간 더한 것이 KST 시각
   const kstMs = d.getTime() + 9 * 60 * 60 * 1000;
   const kst = new Date(kstMs);
   return {
@@ -1800,10 +1799,7 @@ function isSessionVisible(session) {
   const sessionYmd = extractKSTDate(session.date);
   if (!sessionYmd) return false;
   const today = getTodayKST();
-  const visible = ymdLessOrEqual(sessionYmd, today);
-  // 디버그: 콘솔에서 확인 가능
-  console.log(`[isSessionVisible] day=${session.day}, date=${session.date}, sessionYmd=${sessionYmd.y}-${sessionYmd.m}-${sessionYmd.d}, today=${today.y}-${today.m}-${today.d}, visible=${visible}`);
-  return visible;
+  return ymdLessOrEqual(sessionYmd, today);
 }
 
 function renderSessions() {
