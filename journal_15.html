@@ -926,7 +926,7 @@
   }
 
   .session-pages {
-    text-align: right;
+    text-align: center;
     font-family: 'Gowun Batang', serif;
   }
 
@@ -962,17 +962,19 @@
   .pages-chapter {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 14px;
-    letter-spacing: 0.08em;
+    font-size: 13px;
+    letter-spacing: 0.1em;
     color: var(--gold-deep);
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
   .pages-chapter-title {
     font-family: 'Nanum Myeongjo', serif;
-    font-size: 14px;
-    color: var(--ink-soft);
-    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--ink);
+    margin-top: 8px;
     line-height: 1.4;
+    word-break: keep-all;
   }
 
   .pages-range {
@@ -2174,8 +2176,9 @@ function renderSessionCard(s) {
           <div class="session-date">${dateInfo.date} <span class="weekday">${dateInfo.weekday}</span></div>
         </div>
         <div class="session-pages">
-          ${sectionInfo}
+          ${sectionInfo.num ? `<div class="pages-chapter">${escapeHtml(sectionInfo.num)}</div>` : ''}
           <div class="pages-range">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '~'}</div>
+          ${sectionInfo.title ? `<div class="pages-chapter-title">${escapeHtml(sectionInfo.title)}</div>` : ''}
         </div>
       </div>
 
@@ -2415,7 +2418,7 @@ function isSameDayLocal(iso, d2) {
 
 function renderSectionInfo(s) {
   const sectionLabel = SECTION_LABELS[s.section] || s.section || '';
-  if (!sectionLabel) return '';
+  if (!sectionLabel) return { num: '', title: '' };
 
   // 본문 회차: Chapter N + 챕터 제목
   if (s.section === 'main') {
@@ -2429,23 +2432,18 @@ function renderSectionInfo(s) {
       );
       if (matches.length === 1) {
         const ch = matches[0];
-        return `
-          <div class="pages-chapter">Chapter ${escapeHtml(ch.num)}</div>
-          ${ch.title ? `<div class="pages-chapter-title">${escapeHtml(ch.title)}</div>` : ''}
-        `;
+        return { num: `Chapter ${ch.num}`, title: ch.title || '' };
       } else if (matches.length > 1) {
         const first = matches[0];
         const last = matches[matches.length - 1];
-        return `
-          <div class="pages-chapter">Chapter ${escapeHtml(first.num)} → ${escapeHtml(last.num)}</div>
-        `;
+        return { num: `Chapter ${first.num} → ${last.num}`, title: '' };
       }
     }
-    return ''; // 본문이지만 챕터 매칭 안 되면 빈 자리
+    return { num: '', title: '' };
   }
 
   // 서론/후기 등은 라벨만
-  return `<div class="pages-chapter">${escapeHtml(sectionLabel)}</div>`;
+  return { num: sectionLabel, title: '' };
 }
 
 function computePageCount(s) {
