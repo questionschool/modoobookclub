@@ -759,8 +759,13 @@ function selectMember(alias) {
 
 // 정렬 토글
 function changeSort(direction) {
-  if (currentSort === direction) return;
+  console.log('[changeSort] 호출됨:', direction, '현재:', currentSort);
+  if (currentSort === direction) {
+    console.log('[changeSort] 같은 방향이라 무시');
+    return;
+  }
   currentSort = direction;
+  console.log('[changeSort] 변경됨:', currentSort);
   renderSelected();
 }
 
