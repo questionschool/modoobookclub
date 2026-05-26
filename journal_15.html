@@ -1545,19 +1545,26 @@ function populateDayDisplay() {
   const today = `${now.getMonth() + 1}월 ${now.getDate()}일 (${WEEKDAYS[now.getDay()].charAt(0)})`;
   todayEl.textContent = today;
 
-  // 입력에 연결될 회차: 가장 최근 회차
+  // 입력에 연결될 회차: 미래 회차 제외하고 가장 최근 회차
   const dayDisplay = document.getElementById('inputDayDisplay');
   const dayInput = document.getElementById('inputDay');
 
-  if (sessions.length === 0) {
-    dayDisplay.textContent = '— 회차가 아직 시작되지 않았어 —';
+  const visibleSessions = sessions.filter(isSessionVisible);
+  if (visibleSessions.length === 0) {
+    if (sessions.length > 0) {
+      dayDisplay.textContent = '— 오늘의 회차는 아직 시작 전 —';
+    } else {
+      dayDisplay.textContent = '— 회차가 아직 시작되지 않았어 —';
+    }
     dayDisplay.classList.remove('has-day');
     dayInput.value = '';
     return;
   }
 
-  // sessions는 day 내림차순으로 정렬되어 있음
-  const latest = sessions[0];
+  // visible 회차 중 day 값이 가장 큰 것 (= 오늘 회차)
+  const latest = visibleSessions.reduce((a, b) =>
+    (Number(b.day) || 0) > (Number(a.day) || 0) ? b : a
+  );
   const date = formatSessionDate(latest.date);
   const dayLabel = `낭독 ${latest.day}일차 · ${date.date} ${date.weekday}`;
   dayDisplay.textContent = dayLabel;
@@ -1640,9 +1647,10 @@ function renderDashboard() {
   const finishedSessions = sessions.filter(isSessionFinished);
   const cumulativeDays = finishedSessions.length;
 
-  // 가장 최근 회차 (시간 무관 — 진행 중인 회차도 보여주려고)
-  const latestSession = sessions.length > 0
-    ? sessions.reduce((a, b) => (Number(b.day) || 0) > (Number(a.day) || 0) ? b : a)
+  // 가장 최근 회차 (단, 미래 회차는 제외 — 오늘 이전이거나 오늘인 것만)
+  const visibleSessions = sessions.filter(isSessionVisible);
+  const latestSession = visibleSessions.length > 0
+    ? visibleSessions.reduce((a, b) => (Number(b.day) || 0) > (Number(a.day) || 0) ? b : a)
     : null;
 
   // Today's Pages: 가장 최근 회차의 페이지 구간 (상태에 따라 다른 라벨)
@@ -1669,10 +1677,10 @@ function renderDashboard() {
     }
   }
 
-  // Members: 시즌 동안 한 번이라도 참석/기록한 사람들
+  // Members: 시즌 동안 한 번이라도 참석/기록한 사람들 (visible 회차 기준)
   const uniqueMembers = new Set();
   let recordCount = 0;
-  sessions.forEach(s => {
+  visibleSessions.forEach(s => {
     (s.attendees || []).forEach(a => uniqueMembers.add(a.alias));
     (s.reflections || []).forEach(r => {
       uniqueMembers.add(r.alias);
@@ -1729,19 +1737,40 @@ function renderDashboard() {
 // ════════════════════════════════════════════════════════
 // 회차 카드
 // ════════════════════════════════════════════════════════
+// 회차의 모임 날짜가 "오늘(KST) 이전이거나 오늘"인지 — 즉 일지에 노출 가능한 회차인지
+function isSessionVisible(session) {
+  const ymd = extractKSTDate(session.date);
+  if (!ymd) return false;
+  // 모임 날짜 00:00 KST = (전날) 15:00 UTC
+  const meetingDayStartUtcMs = Date.UTC(ymd.y, ymd.m - 1, ymd.d, 0 - 9, 0, 0);
+  return Date.now() >= meetingDayStartUtcMs;
+}
+
 function renderSessions() {
   const el = document.getElementById('sessionsList');
 
-  if (sessions.length === 0) {
-    el.innerHTML = `
-      <div class="empty-state">
-        아직 기록된 새벽이 없어.<br>
-        첫 회차가 입력되면 이곳에 천천히 쌓일 거야.
-      </div>`;
+  // 미래 회차는 일지에 노출 안 함 (관리자가 미리 입력해둔 다음 날 회차 등)
+  const visibleSessions = sessions.filter(isSessionVisible);
+
+  if (visibleSessions.length === 0) {
+    if (sessions.length > 0) {
+      // 입력은 있는데 다 미래
+      el.innerHTML = `
+        <div class="empty-state">
+          오늘의 회차는 아직 시작 전이야.<br>
+          새벽이 가까워지면 이곳에 천천히 쌓일 거야.
+        </div>`;
+    } else {
+      el.innerHTML = `
+        <div class="empty-state">
+          아직 기록된 새벽이 없어.<br>
+          첫 회차가 입력되면 이곳에 천천히 쌓일 거야.
+        </div>`;
+    }
     return;
   }
 
-  const sorted = [...sessions].sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0));
+  const sorted = [...visibleSessions].sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0));
 
   const html = sorted.map(s => renderSessionCard(s)).join(
     `<div class="ornament">· · ·</div>`
