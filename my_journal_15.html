@@ -224,8 +224,52 @@
   .selected-header {
     text-align: center;
     padding: 30px 0 24px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     border-bottom: 1px dashed var(--line);
+  }
+
+  /* 정렬 토글 */
+  .sort-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .sort-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .sort-btn {
+    padding: 5px 14px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    transition: all 0.2s;
+  }
+
+  .sort-btn:hover {
+    border-color: var(--gold);
+    color: var(--ink-soft);
+  }
+
+  .sort-btn.current {
+    background: rgba(122, 63, 46, 0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 700;
   }
 
   .selected-name {
@@ -286,6 +330,46 @@
     padding: 24px 28px;
     border-radius: 2px;
     animation: fadeUp 0.6s ease-out backwards;
+    position: relative;
+  }
+
+  .entry-download-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  .entry-download-btn {
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 252, 245, 0.7);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--ink-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0;
+    line-height: 1;
+    opacity: 0.5;
+  }
+
+  .entry:hover .entry-download-btn {
+    opacity: 1;
+  }
+
+  .entry-download-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: #fff;
+    transform: scale(1.05);
+  }
+
+  .entry-download-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
   }
 
   @keyframes fadeUp {
@@ -527,6 +611,12 @@
       </button>
     </div>
 
+    <div class="sort-toggle" id="sortToggle" style="display: none;">
+      <span class="sort-label">정렬</span>
+      <button class="sort-btn current" data-sort="newest" onclick="changeSort('newest')">최근 기록부터</button>
+      <button class="sort-btn" data-sort="oldest" onclick="changeSort('oldest')">오래된 기록부터</button>
+    </div>
+
     <div id="entriesList">
       <div class="loading-skeleton"></div>
       <div class="loading-skeleton"></div>
@@ -569,6 +659,7 @@ const DEFAULT_MEMBERS = [
 let allSessions = [];
 let memberCounts = {};   // alias → 기록 수
 let selectedAlias = null;
+let currentSort = 'newest';  // 'newest' (최근부터, 기본) | 'oldest' (오래된 것부터)
 
 // ════════════════════════════════════════════════════════
 // 진입점
@@ -666,6 +757,13 @@ function selectMember(alias) {
   renderSelected();
 }
 
+// 정렬 토글
+function changeSort(direction) {
+  if (currentSort === direction) return;
+  currentSort = direction;
+  renderSelected();
+}
+
 // ════════════════════════════════════════════════════════
 // 선택된 멤버의 기록
 // ════════════════════════════════════════════════════════
@@ -703,8 +801,12 @@ function renderSelected() {
     });
   });
 
-  // 최근 회차가 위로
-  entries.sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0));
+  // 정렬 방향에 따라
+  if (currentSort === 'oldest') {
+    entries.sort((a, b) => (Number(a.day) || 0) - (Number(b.day) || 0));
+  } else {
+    entries.sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0));
+  }
 
   // 메타
   const metaParts = [];
@@ -717,6 +819,16 @@ function renderSelected() {
   if (dlBtn) {
     dlBtn.style.display = entries.length > 0 ? 'inline-flex' : 'none';
   }
+
+  // 정렬 토글: 기록이 2개 이상일 때만 표시 (1개면 정렬할 게 없음)
+  const sortToggle = document.getElementById('sortToggle');
+  if (sortToggle) {
+    sortToggle.style.display = entries.length >= 2 ? 'flex' : 'none';
+    sortToggle.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.classList.toggle('current', btn.dataset.sort === currentSort);
+    });
+  }
+
   // entries를 함수 밖에서 접근 가능하게 전역에 저장
   window._currentMemberEntries = entries;
 
@@ -738,9 +850,10 @@ function renderSelected() {
 function renderEntry(e) {
   const dateInfo = formatSessionDate(e.date);
   const section = SECTION_LABELS[e.section] || '';
+  const entryId = `entry-${e.day}-${encodeURIComponent(e.timestamp || '')}`;
 
   return `
-    <article class="entry">
+    <article class="entry" id="${entryId}" data-day="${e.day}" data-timestamp="${escapeAttr(e.timestamp || '')}">
       <div class="entry-head">
         <div>
           <div class="entry-day">
@@ -749,7 +862,7 @@ function renderEntry(e) {
           <div class="entry-date">${dateInfo.date} ${dateInfo.weekday}</div>
         </div>
         <div class="entry-pages">
-          ${section ? `${section} · ` : ''}p. ${escapeHtml(e.start_page)} → ${escapeHtml(e.end_page || '?')}
+          ${section ? `${section} · ` : ''}p. ${escapeHtml(e.start_page)} ~ ${escapeHtml(e.end_page || '?')}
         </div>
       </div>
 
@@ -757,7 +870,7 @@ function renderEntry(e) {
         <div>
           <span class="entry-quote-label">📜 마음에 남은 문장</span>
           <div class="entry-quote">
-            <div class="entry-quote-text">${escapeHtml(e.quote_text)}</div>
+            <div class="entry-quote-text">${escapeHtml(cleanText(e.quote_text))}</div>
             <div class="entry-quote-source">
               — ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ` · p. ${escapeHtml(e.quote_page)}` : ''}
             </div>
@@ -767,8 +880,14 @@ function renderEntry(e) {
       ${e.my_mind ? `
         <div>
           <span class="entry-mind-label">✿ 남기고 싶은 나의 마음</span>
-          <div class="entry-mind">${escapeHtml(e.my_mind)}</div>
+          <div class="entry-mind">${escapeHtml(cleanText(e.my_mind))}</div>
         </div>` : ''}
+
+      <div class="entry-download-row">
+        <button class="entry-download-btn" onclick="downloadEntryImage('${entryId}')" title="이 기록을 이미지로 저장">
+          <span style="font-size: 12px;">⬇</span>
+        </button>
+      </div>
     </article>
   `;
 }
@@ -798,6 +917,17 @@ function escapeHtml(s) {
 
 function escapeAttr(s) {
   return escapeHtml(s).replace(/'/g, '\\\'');
+}
+
+// 사용자 텍스트의 앞뒤 공백·빈 줄을 정리하고
+// 가운데에 3줄 이상 연속된 빈 줄은 1줄(=빈 줄 1개)로 정리
+function cleanText(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .replace(/\r\n/g, '\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 // ════════════════════════════════════════════════════════
@@ -838,7 +968,7 @@ function buildMemberEntryBlock(e) {
     card += '<div style="margin-bottom: 14px;">';
     card += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">📜 마음에 남은 문장</div>';
     card += '<div style="padding: 14px 18px; background: #ffffff; border: 1px solid #e5dcc8; border-left: 2px solid #d4b97e;">';
-    card += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 15px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(e.quote_text)}</div>`;
+    card += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 15px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.quote_text))}</div>`;
     card += `<div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ' · p. ' + escapeHtml(e.quote_page) : ''}</div>`;
     card += '</div></div>';
   }
@@ -846,7 +976,7 @@ function buildMemberEntryBlock(e) {
   if (e.my_mind) {
     card += '<div>';
     card += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">✿ 남기고 싶은 나의 마음</div>';
-    card += `<div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.9; color: #4a423a; padding: 12px 16px; background: #ffffff; border: 1px solid #e5dcc8; border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(e.my_mind)}</div>`;
+    card += `<div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.9; color: #4a423a; padding: 12px 16px; background: #ffffff; border: 1px solid #e5dcc8; border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.my_mind))}</div>`;
     card += '</div>';
   }
 
@@ -897,12 +1027,137 @@ async function captureElement(html) {
   return canvas;
 }
 
+// ─────────────── Entry 카드 PNG 다운로드 (한 사람의 한 기록) ───────────────
+
+function buildPrintableEntry(e, alias) {
+  const dateInfo = formatSessionDate(e.date);
+  const sectionLabel = SECTION_LABELS[e.section] || '';
+  const pageInfo = e.end_page ? `p. ${e.start_page} ~ p. ${e.end_page}` : `p. ${e.start_page}`;
+
+  let inner = '';
+
+  if (e.quote_text) {
+    inner += `
+      <div style="margin-bottom: 16px;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">📜 마음에 남은 문장</div>
+        <div style="padding: 14px 18px; background: #fafaf8; border-left: 2px solid #d4b97e;">
+          <div style="font-family: 'Nanum Myeongjo', serif; font-size: 15px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.quote_text))}</div>
+          <div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ' · p. ' + escapeHtml(e.quote_page) : ''}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (e.my_mind) {
+    inner += `
+      <div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">✿ 남기고 싶은 나의 마음</div>
+        <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #2a2520; padding: 14px 18px; background: #ffffff; border: 1px solid #e5dcc8; border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.my_mind))}</div>
+      </div>
+    `;
+  }
+
+  // 우측 하단 서명: 별칭 · 시간
+  const time = e.timestamp ? formatTimeShort(e.timestamp) : '';
+  inner += `
+    <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dotted rgba(176,138,74,0.25); text-align: right;">
+      <span style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 14px; color: #7a3f2e;">${escapeHtml(alias)}</span>
+      ${time ? `<span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #9a9085; margin-left: 10px;">${escapeHtml(time)}</span>` : ''}
+    </div>
+  `;
+
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+      <!-- 헤더 -->
+      <div style="text-align: center; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid #d4c8b3;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #8a6b35; text-transform: uppercase; margin-bottom: 10px;">HOUR OF THE HEART</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 22px; color: #2a2520;"><span style="color: #7a3f2e;">마음의 시간</span> — 오늘의 기록</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #6b6258; margin-top: 6px;">Connection in the Here and Now</div>
+      </div>
+
+      <!-- 회차 정보 -->
+      <div style="text-align: center; margin-bottom: 22px;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(e.day).padStart(2,'0')}</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #4a423a;">${dateInfo.date} ${dateInfo.weekday}${sectionLabel ? ' · ' + sectionLabel : ''} · ${escapeHtml(pageInfo)}</div>
+      </div>
+
+      <!-- 메인 카드 -->
+      <div style="background: #fafaf8; border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 26px 30px; border-radius: 2px;">
+        ${inner}
+      </div>
+
+      <!-- 워터마크 -->
+      <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid #d4c8b3; text-align: center;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 0.25em; color: #8a6b35; font-size: 11px; margin-bottom: 6px;">READING · ALOUD · TOGETHER</div>
+        <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #6b6258;">모두의 새벽 + 낭만북클럽 · 시즌 15 『마음의 시간』</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10px; color: #9a9085; margin-top: 4px;">bookclub.questionschool.net</div>
+      </div>
+    </div>
+  `;
+}
+
+function formatTimeShort(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  const mo = d.getMonth() + 1;
+  const da = d.getDate();
+  const h = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  return `${mo}/${da} ${h}:${mi}`;
+}
+
+async function downloadEntryImage(entryId) {
+  const el = document.getElementById(entryId);
+  if (!el) return;
+  const day = Number(el.dataset.day);
+  const timestamp = el.dataset.timestamp;
+
+  // 해당 entry 찾기
+  const entry = (window._currentMemberEntries || []).find(e =>
+    Number(e.day) === day && e.timestamp === timestamp
+  );
+  if (!entry) return;
+
+  const btn = el.querySelector('.entry-download-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+
+  try {
+    const html = buildPrintableEntry(entry, selectedAlias);
+    const canvas = await captureElement(html);
+
+    canvas.toBlob((blob) => {
+      if (!blob) throw new Error('이미지 생성 실패');
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `마음의시간_Day${String(day).padStart(2,'0')}_${selectedAlias}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  } catch (err) {
+    console.error(err);
+    alert('이미지 저장 실패: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '⬇'; }
+  }
+}
+
+// ─────────────── 멤버 PDF 다운로드 (시즌 전체) ───────────────
+
 async function downloadMemberPdf() {
-  const entries = window._currentMemberEntries || [];
-  if (entries.length === 0 || !selectedAlias) {
+  const rawEntries = window._currentMemberEntries || [];
+  if (rawEntries.length === 0 || !selectedAlias) {
     alert('아직 기록이 없어.');
     return;
   }
+
+  // PDF는 항상 오래된 기록부터 정렬 (시간 흐름대로 읽기 좋게)
+  const entries = [...rawEntries].sort((a, b) =>
+    (Number(a.day) || 0) - (Number(b.day) || 0)
+  );
 
   const btn = document.getElementById('memberDownloadBtn');
   const originalHtml = btn.innerHTML;
