@@ -2683,9 +2683,19 @@ function buildPrintableReflection(r, s) {
     </div>
   `;
 
-  // 회차 정보 (작은 라벨)
+  // 회차 정보 — Chapter 1. 늙은 치료사의 하루. p. 1 ~ p. 14
   const sectionLabel = SECTION_LABELS[s.section] || '';
   const pageInfo = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
+  const sectionInfoObj = renderSectionInfo(s);
+
+  // 헤더 본문 구성
+  // 본문 회차: "Chapter N. 챕터 제목. p. X ~ p. Y"
+  // 서론/후기: "서론. p. X ~ p. Y"
+  let headerParts = [];
+  if (sectionInfoObj.num) headerParts.push(sectionInfoObj.num);
+  if (sectionInfoObj.title) headerParts.push(sectionInfoObj.title);
+  headerParts.push(pageInfo);
+  const headerText = headerParts.join('. ');
 
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
@@ -2694,7 +2704,7 @@ function buildPrintableReflection(r, s) {
       <!-- 회차 정보 -->
       <div style="text-align: center; margin-bottom: 22px;">
         <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(s.day).padStart(2,'0')}</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #4a423a;">${dateInfo.date} ${dateInfo.weekday}${sectionLabel ? ' · ' + sectionLabel : ''} · ${escapeHtml(pageInfo)}</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #4a423a;">${escapeHtml(headerText)}</div>
       </div>
 
       <!-- 메인 카드 -->
