@@ -665,8 +665,8 @@
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
-    margin: -4px 0 36px;
-    padding: 18px 20px;
+    margin: 48px 0 0;
+    padding: 22px 20px;
     background: rgba(255, 252, 245, 0.4);
     border: 1px solid var(--line-soft);
     border-radius: 2px;
@@ -676,13 +676,12 @@
   .sessions-nav-label {
     width: 100%;
     text-align: center;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 11px;
-    letter-spacing: 0.25em;
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
     color: var(--gold-deep);
-    text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .nav-pill {
@@ -1556,13 +1555,13 @@
     <span class="section-num">HOUR OF THE HEART · 여기 그리고 지금과 연결되기</span>
     <h2>우리가 함께 남겨둔 기록</h2>
 
-    <!-- 회차 빠른 이동 -->
-    <nav id="sessionsNav" class="sessions-nav" aria-label="회차 빠른 이동"></nav>
-
     <div id="sessionsList">
       <div class="loading-skeleton"></div>
       <div class="loading-skeleton"></div>
     </div>
+
+    <!-- 회차 빠른 이동 (전체 시즌 한눈에) -->
+    <nav id="sessionsNav" class="sessions-nav" aria-label="지난 기록 다시 보기"></nav>
   </section>
 
   <!-- FOOTER -->
@@ -1991,7 +1990,7 @@ function renderSessionsNav(allSessions, visibleSessions) {
   }).join('');
 
   nav.innerHTML = `
-    <div class="sessions-nav-label">Quick Jump · 회차 빠른 이동</div>
+    <div class="sessions-nav-label">지난 기록 다시 보기</div>
     ${pills}
   `;
 
