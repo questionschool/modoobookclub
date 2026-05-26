@@ -2283,8 +2283,9 @@ function cleanText(s) {
 
 // ─────────────── 공용 헬퍼 ───────────────
 
-async function captureElement(html, widthPx) {
+async function captureElement(html, widthPx, bgColor) {
   widthPx = widthPx || 760;
+  bgColor = bgColor || '#ffffff';
   const wrapper = document.createElement('div');
   wrapper.style.position = 'fixed';
   wrapper.style.left = '-9999px';
@@ -2300,7 +2301,7 @@ async function captureElement(html, widthPx) {
 
   const canvas = await html2canvas(wrapper.firstElementChild, {
     scale: 2,
-    backgroundColor: '#ffffff',
+    backgroundColor: bgColor,
     logging: false,
     useCORS: true
   });
@@ -2346,20 +2347,26 @@ function buildPrintableReflection(r, s) {
 
   if (r.quote_text) {
     inner += `
-      <div style="margin-bottom: 16px; padding: 16px 20px; background: #fafaf8; border-left: 2px solid #d4b97e;">
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; line-height: 1.95; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(r.quote_text))}</div>
-        <div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>
+      <div style="margin-bottom: 18px;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">📜 마음에 남은 문장</div>
+        <div style="padding: 16px 20px; background: linear-gradient(to right, rgba(176, 138, 74, 0.06), transparent); border-left: 2px solid #d4b97e;">
+          <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; line-height: 1.95; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(r.quote_text))}</div>
+          <div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>
+        </div>
       </div>
     `;
   }
 
   if (r.my_mind) {
     inner += `
-      <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #2a2520; padding: 14px 18px; background: #fafaf8; border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(r.my_mind))}</div>
+      <div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">✿ 남기고 싶은 나의 마음</div>
+        <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #2a2520; padding: 14px 18px; background: rgba(255, 255, 255, 0.5); border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(r.my_mind))}</div>
+      </div>
     `;
   }
 
-  // 우측 하단 서명: 별칭 · 시간 (본문 글자체 크기, 색은 그대로)
+  // 우측 하단 서명: 별칭 · 시간
   inner += `
     <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dotted rgba(176,138,74,0.25); text-align: right;">
       <span style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 14px; color: #7a3f2e;">${escapeHtml(r.alias)}</span>
@@ -2372,7 +2379,7 @@ function buildPrintableReflection(r, s) {
   const pageInfo = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
 
   return `
-    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
       ${pageHeaderHtml('HOUR OF THE HEART', '오늘의 기록')}
 
       <!-- 회차 정보 -->
@@ -2382,7 +2389,7 @@ function buildPrintableReflection(r, s) {
       </div>
 
       <!-- 메인 카드 -->
-      <div style="background: #fafaf8; border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 26px 30px; border-radius: 2px;">
+      <div style="background: rgba(255, 252, 245, 0.55); border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 26px 30px; border-radius: 2px;">
         ${inner}
       </div>
 
@@ -2406,7 +2413,7 @@ async function downloadReflectionImage(refId) {
 
   try {
     const html = buildPrintableReflection(ref, session);
-    const canvas = await captureElement(html, 680);
+    const canvas = await captureElement(html, 680, '#f5efe4');
 
     canvas.toBlob((blob) => {
       if (!blob) throw new Error('이미지 생성 실패');
