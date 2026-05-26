@@ -652,15 +652,15 @@
     </p>
     <div class="hero-stats">
       <div class="stat">
-        <div class="stat-num">15</div>
+        <div class="stat-num" id="statBooks">15</div>
         <div class="stat-label">권</div>
       </div>
       <div class="stat">
-        <div class="stat-num">483</div>
+        <div class="stat-num" id="statHours">483</div>
         <div class="stat-label">시간</div>
       </div>
       <div class="stat">
-        <div class="stat-num">27</div>
+        <div class="stat-num" id="statMonths">27</div>
         <div class="stat-label">개월</div>
       </div>
     </div>
@@ -1066,11 +1066,107 @@
   <div class="footer-motto">READING · ALOUD · TOGETHER</div>
   <div class="footer-links">
     <a href="https://bookclub.questionschool.net/welcome_15.html" target="_blank" rel="noopener noreferrer">『마음의 시간』 낭독 참가자 안내문 <span class="arrow">→</span></a>
-    <a href="https://bookclub.questionschool.net/" target="_blank" rel="noopener noreferrer">15번째 시즌 참가자 모집글 <span class="arrow">→</span></a>
+    <a href="https://bookclub.questionschool.net/apply_15.html" target="_blank" rel="noopener noreferrer">15번째 시즌 참가자 모집글 <span class="arrow">→</span></a>
     <a href="https://questionschool.net/" target="_blank" rel="noopener noreferrer">질문예술학교 <span class="arrow">→</span></a>
   </div>
   <div class="footer-name">모두의 새벽 + 낭만북클럽</div>
 </footer>
+
+<script>
+// ─────────────────────────────────────────
+// 시즌 데이터 기반 시간/개월/권수 자동 계산
+// ─────────────────────────────────────────
+// 시간: 종료된 시즌은 .meta-days의 "N일" 사용 (사람이 정확히 카운트)
+//      진행 중인 시즌은 시작일~오늘까지 평일 수
+// 개월: 첫 시즌 시작일부터 오늘까지 만 개월
+// 권:   .season-book 요소 + "/"로 합본된 책은 +1 (미래 시즌 제외)
+
+(function() {
+  function parseDateOnly(s) {
+    return new Date(s + 'T00:00:00');
+  }
+  function parsePeriod(text) {
+    const matches = text.match(/(\d{4})-(\d{2})-(\d{2})/g);
+    if (!matches || matches.length < 2) return null;
+    return { start: parseDateOnly(matches[0]), end: parseDateOnly(matches[1]) };
+  }
+  function countWeekdays(start, end) {
+    if (end < start) return 0;
+    let count = 0;
+    const cur = new Date(start);
+    while (cur <= end) {
+      const day = cur.getDay();
+      if (day !== 0 && day !== 6) count++;
+      cur.setDate(cur.getDate() + 1);
+    }
+    return count;
+  }
+  function parseDays(text) {
+    // "23일", "37일 (18+19)", "약 25일 예정" 모두 첫 숫자만
+    const m = text.match(/(\d+)\s*일/);
+    return m ? parseInt(m[1], 10) : 0;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const seasons = document.querySelectorAll('article.season');
+  if (seasons.length === 0) return;
+
+  let totalHours = 0;
+  let earliestStart = null;
+  let books = 0;
+
+  seasons.forEach(article => {
+    const periodEl = article.querySelector('.meta-period');
+    const daysEl = article.querySelector('.meta-days');
+    const bookEl = article.querySelector('.season-book');
+    if (!periodEl) return;
+    const period = parsePeriod(periodEl.textContent);
+    if (!period) return;
+
+    // 첫 시즌 시작일 추적 (미래 시즌 제외)
+    if (period.start <= today) {
+      if (!earliestStart || period.start < earliestStart) earliestStart = period.start;
+    }
+
+    // 미래 시즌은 시간/권 카운트 X
+    if (period.start > today) return;
+
+    // 시간 합산
+    if (period.end <= today) {
+      // 종료된 시즌: meta-days 사용
+      const days = daysEl ? parseDays(daysEl.textContent) : 0;
+      totalHours += days;
+    } else {
+      // 진행 중: 시작일부터 오늘까지 평일 수
+      totalHours += countWeekdays(period.start, today);
+    }
+
+    // 권 수: "/"로 묶인 합본 처리
+    if (bookEl) {
+      const slashCount = (bookEl.textContent.match(/\//g) || []).length;
+      books += 1 + slashCount;
+    }
+  });
+
+  // 개월 수: 만 개월 (예: 5/13에 시작했으면 5/13~6/12는 27개월차로 표시)
+  let months = 0;
+  if (earliestStart) {
+    months = (today.getFullYear() - earliestStart.getFullYear()) * 12
+           + (today.getMonth() - earliestStart.getMonth());
+    if (today.getDate() < earliestStart.getDate()) months -= 1;
+  }
+
+  // 업데이트
+  const booksEl = document.getElementById('statBooks');
+  const hoursEl = document.getElementById('statHours');
+  const monthsEl = document.getElementById('statMonths');
+  if (booksEl) booksEl.textContent = books;
+  if (hoursEl) hoursEl.textContent = totalHours;
+  if (monthsEl) monthsEl.textContent = months;
+})();
+</script>
 
 </body>
 </html>
