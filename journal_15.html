@@ -1180,9 +1180,9 @@
     font-size: 14.5px;
     line-height: 1.85;
     color: var(--ink);
-    padding: 6px 0 6px 14px;
+    padding: 4px 0 4px 14px;
     border-left: 2px solid var(--gold-soft);
-    margin-bottom: 8px;
+    margin-bottom: 0;
     font-style: italic;
     word-break: keep-all;
     white-space: pre-wrap;
@@ -1198,16 +1198,21 @@
 
   .reflection-quote-source {
     display: block;
-    margin-top: 8px;
-    padding-top: 6px;
+    margin-top: 4px;
+    padding-top: 4px;
     border-top: 1px dotted rgba(176, 138, 74, 0.25);
     font-family: 'Gowun Batang', serif;
     font-size: 11.5px;
     color: var(--ink-muted);
     text-align: right;
     font-style: normal;
-    line-height: 1.5;
+    line-height: 1.4;
     word-break: keep-all;
+  }
+
+  /* 인용과 마음 사이 간격: 한 줄 분량 */
+  .reflection-quote + .reflection-mind {
+    margin-top: 12px;
   }
 
   .reflection-mind {
