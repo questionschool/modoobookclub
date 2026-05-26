@@ -926,7 +926,7 @@
   }
 
   .session-pages {
-    text-align: center;
+    text-align: right;
     font-family: 'Gowun Batang', serif;
   }
 
@@ -970,8 +970,8 @@
   .pages-chapter-title {
     font-family: 'Nanum Myeongjo', serif;
     font-weight: 700;
-    font-size: 18px;
-    color: var(--ink);
+    font-size: 22px;
+    color: var(--accent);
     margin-top: 8px;
     line-height: 1.4;
     word-break: keep-all;
@@ -979,9 +979,9 @@
 
   .pages-range {
     font-family: 'Nanum Myeongjo', serif;
-    font-size: 22px;
-    color: var(--accent);
-    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-weight: 400;
   }
 
   .pages-count {
@@ -2177,8 +2177,8 @@ function renderSessionCard(s) {
         </div>
         <div class="session-pages">
           ${sectionInfo.num ? `<div class="pages-chapter">${escapeHtml(sectionInfo.num)}</div>` : ''}
-          <div class="pages-range">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '~'}</div>
           ${sectionInfo.title ? `<div class="pages-chapter-title">${escapeHtml(sectionInfo.title)}</div>` : ''}
+          <div class="pages-range">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '~'}</div>
         </div>
       </div>
 
