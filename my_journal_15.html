@@ -810,7 +810,7 @@ function buildPrintableMemberPage(alias, entries) {
     const section = SECTION_LABELS[e.section] || '';
     const pageRange = e.end_page ? `p. ${e.start_page} ~ p. ${e.end_page}` : `p. ${e.start_page}`;
 
-    let html = '<div style="background: rgba(255,252,245,0.55); border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 22px 26px; border-radius: 2px; margin-bottom: 24px; page-break-inside: avoid;">';
+    let html = '<div style="background: #fafaf8; border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 22px 26px; border-radius: 2px; margin-bottom: 24px; page-break-inside: avoid;">';
 
     // 헤더
     html += '<div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px dashed #d4c8b3; flex-wrap: wrap;">';
@@ -823,7 +823,7 @@ function buildPrintableMemberPage(alias, entries) {
     if (e.quote_text) {
       html += '<div style="margin-bottom: 14px;">';
       html += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">📜 마음에 남은 문장</div>';
-      html += '<div style="padding: 14px 18px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #d4b97e;">';
+      html += '<div style="padding: 14px 18px; background: #fafaf8; border-left: 2px solid #d4b97e;">';
       html += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 15px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(e.quote_text)}</div>`;
       html += `<div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ' · p. ' + escapeHtml(e.quote_page) : ''}</div>`;
       html += '</div></div>';
@@ -833,7 +833,7 @@ function buildPrintableMemberPage(alias, entries) {
     if (e.my_mind) {
       html += '<div>';
       html += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">✿ 남기고 싶은 나의 마음</div>';
-      html += `<div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.9; color: #4a423a; padding: 12px 16px; background: rgba(255,255,255,0.4); border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(e.my_mind)}</div>`;
+      html += `<div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.9; color: #4a423a; padding: 12px 16px; background: #fafaf8; border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(e.my_mind)}</div>`;
       html += '</div>';
     }
 
@@ -842,7 +842,7 @@ function buildPrintableMemberPage(alias, entries) {
   }).join('');
 
   return `
-    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 50px 56px; max-width: 700px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 50px 56px; max-width: 700px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
       <!-- 헤더 -->
       <div style="text-align: center; padding-bottom: 24px; margin-bottom: 32px; border-bottom: 1px solid #d4c8b3;">
         <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #8a6b35; text-transform: uppercase; margin-bottom: 12px;">HOUR OF THE HEART</div>
@@ -882,7 +882,7 @@ async function captureElement(html) {
 
   const canvas = await html2canvas(wrapper.firstElementChild, {
     scale: 2,
-    backgroundColor: '#f5efe4',
+    backgroundColor: '#ffffff',
     logging: false,
     useCORS: true
   });
