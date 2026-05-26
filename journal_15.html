@@ -3,27 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>나의 기록 — 마음의 시간</title>
-<meta name="description" content="시즌 15 『마음의 시간』 낭독 모임에서 한 사람이 남긴 모든 기록.">
+<title>마음의 시간 — 모두의 기록</title>
+<meta name="description" content="오늘의 독서와 마음 기록을 남겨주세요.">
 
-<!-- Open Graph -->
+<!-- Open Graph (카톡, 페북 등 공유 미리보기) -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="나의 기록 — 마음의 시간">
-<meta property="og:description" content="시즌 15 『마음의 시간』 낭독 모임 — 나의 모든 기록을 한 곳에서.">
+<meta property="og:title" content="마음의 시간 — 모두의 기록">
+<meta property="og:description" content="오늘의 독서와 마음 기록을 남겨주세요.">
 <meta property="og:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://bookclub.questionschool.net/my_journal_15.html">
+<meta property="og:url" content="https://bookclub.questionschool.net/journal_15.html">
 <meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="마음의 시간 — 모두의 기록">
+<meta name="twitter:description" content="오늘의 독서와 마음 기록을 남겨주세요.">
 <meta name="twitter:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
 
-<!-- PDF 다운로드 라이브러리 -->
+<!-- 다운로드 라이브러리 (이미지/PDF) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -52,6 +54,7 @@
     background: var(--cream);
     color: var(--ink);
     font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    font-weight: 400;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
     background-image:
@@ -71,14 +74,14 @@
   }
 
   .wrap {
-    max-width: 760px;
+    max-width: 820px;
     margin: 0 auto;
     padding: 60px 28px 100px;
     position: relative;
     z-index: 1;
   }
 
-  /* NAV */
+  /* ============ NAV ============ */
   .nav {
     display: flex;
     justify-content: center;
@@ -98,322 +101,1138 @@
     text-decoration: none;
     text-transform: uppercase;
     padding-bottom: 6px;
+    transition: color 0.2s;
   }
 
   .nav a:hover { color: var(--accent); }
   .nav a.current { color: var(--accent); border-bottom: 1px solid var(--accent); }
 
-  /* HEADER */
+  /* ============ HEADER ============ */
   header {
     text-align: center;
-    padding: 20px 0 40px;
+    padding: 30px 0 50px;
     border-bottom: 1px solid var(--line);
-    margin-bottom: 40px;
+    margin-bottom: 36px;
   }
 
   .eyebrow {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
+    font-weight: 400;
     font-size: 14px;
     letter-spacing: 0.25em;
     color: var(--gold-deep);
     text-transform: uppercase;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
   }
 
-  h1 {
+  h1.title {
     font-family: 'Nanum Myeongjo', serif;
     font-weight: 800;
-    font-size: clamp(26px, 4.5vw, 32px);
+    font-size: clamp(26px, 4.5vw, 34px);
+    letter-spacing: -0.01em;
+    line-height: 1.35;
     color: var(--ink);
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
 
-  h1 .accent { color: var(--accent); }
+  h1.title .accent { color: var(--accent); }
 
   .subtitle {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
-    font-size: 16px;
+    font-size: 17px;
     color: var(--ink-muted);
+    margin-bottom: 24px;
   }
 
-  /* MEMBER PICKER */
-  .picker {
-    background: rgba(255, 252, 245, 0.6);
+  .season-meta {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-family: 'Gowun Batang', serif;
+  }
+
+  .season-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .season-meta .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: inline-block;
+  }
+
+  /* ============ ZOOM JOIN BUTTON ============ */
+  .zoom-join {
+    margin-top: 22px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .zoom-join a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 22px;
+    background: linear-gradient(180deg, rgba(255, 252, 245, 0.9), rgba(245, 239, 228, 0.7));
+    border: 1px solid var(--gold);
+    border-radius: 100px;
+    text-decoration: none;
+    color: var(--accent);
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(176, 138, 74, 0.1);
+  }
+
+  .zoom-join a:hover {
+    background: linear-gradient(180deg, rgba(255, 252, 245, 1), rgba(245, 239, 228, 0.9));
+    border-color: var(--accent);
+    box-shadow: 0 2px 8px rgba(122, 63, 46, 0.15);
+    transform: translateY(-1px);
+  }
+
+  .zoom-join .zoom-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .zoom-join .zoom-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--gold-deep);
+    font-weight: 400;
+  }
+
+  .zoom-join .zoom-text {
+    font-size: 14px;
+  }
+
+  .zoom-join .zoom-arrow {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold-deep);
+  }
+
+  /* ============ JOURNAL INPUT (위로 올라온 입력 영역) ============ */
+  .journal-input {
+    background: linear-gradient(180deg, rgba(255, 252, 245, 0.85), rgba(245, 239, 228, 0.6));
     border: 1px solid var(--line);
-    padding: 26px 28px;
-    margin-bottom: 40px;
     border-radius: 2px;
+    padding: 28px 30px;
+    margin-bottom: 50px;
     position: relative;
   }
 
-  .picker::before {
+  .journal-input::before {
     content: '';
     position: absolute;
     top: -1px;
-    left: 28px;
+    left: 30px;
     width: 50px;
     height: 2px;
     background: var(--gold);
   }
 
-  .picker-label {
+  .journal-input-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .journal-input-eyebrow {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 13px;
     letter-spacing: 0.2em;
     color: var(--gold-deep);
     text-transform: uppercase;
-    margin-bottom: 14px;
   }
 
-  .picker h2 {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 18px;
-  }
-
-  .member-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .member-pill {
-    padding: 7px 18px;
-    background: transparent;
-    border: 1px solid var(--line);
-    border-radius: 100px;
+  .journal-input-today {
     font-family: 'Nanum Myeongjo', serif;
     font-size: 14px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .input-day-display {
+    background: rgba(255, 252, 245, 0.5);
+    border: 1px solid var(--line-soft);
+    padding: 9px 12px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px;
+    color: var(--ink);
+    border-radius: 2px;
+    border-left: 2px solid var(--gold-soft);
+  }
+
+  .input-day-display.has-day {
+    background: rgba(176, 138, 74, 0.08);
+    border-left-color: var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .journal-input h3 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .journal-input-sub {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-bottom: 22px;
+  }
+
+  /* 이름·회차 라인 */
+  .input-row-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .input-field label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+  }
+
+  .input-field label .ko {
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-size: 12px;
     color: var(--ink-soft);
+    letter-spacing: 0;
+    margin-left: 4px;
+  }
+
+  .input-field select,
+  .input-field input[type="text"],
+  .input-field input[type="number"],
+  .input-field textarea {
+    background: rgba(255, 252, 245, 0.9);
+    border: 1px solid var(--line);
+    padding: 9px 12px;
+    font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    font-size: 14px;
+    color: var(--ink);
+    border-radius: 2px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .input-field select:focus,
+  .input-field input:focus,
+  .input-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+  }
+
+  .input-field textarea {
+    min-height: 70px;
+    resize: vertical;
+    font-family: 'Gowun Batang', serif;
+    line-height: 1.75;
+  }
+
+  .input-field textarea.tall { min-height: 100px; }
+
+  /* 두 입력 박스: quote, my_mind */
+  .input-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .input-card {
+    background: rgba(255, 252, 245, 0.5);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+    padding: 16px 16px 14px;
+    position: relative;
+  }
+
+  .input-card.quote {
+    border-left: 2px solid var(--gold-soft);
+  }
+
+  .input-card.mind {
+    border-left: 2px solid var(--accent-soft);
+  }
+
+  .input-card-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 13.5px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .input-card-title .hint {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--ink-faint);
+    font-weight: 400;
+  }
+
+  .input-card-sub {
+    font-family: 'Gowun Batang', serif;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    margin-bottom: 10px;
+  }
+
+  .input-card textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 13.5px;
+    color: var(--ink);
+    border-radius: 2px;
+    line-height: 1.7;
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  .input-card textarea::placeholder {
+    color: var(--ink-faint);
+    opacity: 0.55;
+    font-style: italic;
+  }
+
+  .input-card textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+  }
+
+  .input-card-page {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .input-card-page label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+  }
+
+  .input-card-page input {
+    flex: 1;
+    min-width: 0;
+    padding: 5px 9px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.7);
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    color: var(--ink);
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .input-card-page input::placeholder {
+    color: var(--ink-faint);
+    opacity: 0.55;
+    font-style: italic;
+    font-family: 'Gowun Batang', serif;
+    font-size: 12px;
+  }
+
+  .input-submit-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .input-status {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--accent);
+    flex: 1;
+  }
+  .input-status.error { color: #b54c3e; }
+  .input-status.success { color: #6b8e5a; }
+
+  .input-submit-btn {
+    padding: 11px 28px;
+    background: var(--accent);
+    color: var(--cream-soft);
+    border: none;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     cursor: pointer;
-    text-decoration: none;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+
+  .input-submit-btn:hover:not(:disabled) { background: var(--accent-soft); }
+  .input-submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ============ DASHBOARD ============ */
+  .dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .stat {
+    background: rgba(255, 252, 245, 0.5);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+    padding: 18px 14px;
+    text-align: center;
+    position: relative;
+  }
+
+  .stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .stat-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .stat-value .small {
+    font-size: 14px;
+    color: var(--ink-muted);
+    font-weight: 400;
+    margin-left: 2px;
+  }
+
+  .stat-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    margin-top: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ============ PROGRESS ============ */
+  .progress-section { margin-bottom: 56px; }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 14px;
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-family: 'Gowun Batang', serif;
+  }
+
+  .progress-label .label-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--gold-deep);
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--line-soft);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold));
+    width: 0%;
+    position: relative;
+    transition: width 0.6s ease;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* ============ SECTION HEADING ============ */
+  .section-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold-deep);
+    letter-spacing: 0.2em;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3vw, 26px);
+    color: var(--ink);
+    margin-bottom: 30px;
+    letter-spacing: -0.005em;
+    position: relative;
+    padding-bottom: 14px;
+  }
+
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 36px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  /* ============ SESSION CARDS ============ */
+  .sessions { display: flex; flex-direction: column; gap: 36px; }
+
+  .session {
+    background: rgba(255, 252, 245, 0.55);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--gold);
+    padding: 28px 32px;
+    position: relative;
+    animation: fadeUp 0.7s ease-out backwards;
+    scroll-margin-top: 20px;
+  }
+
+  /* 회차 카드 다운로드 버튼 */
+  .session-download-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 30px;
+    height: 30px;
+    background: rgba(255, 252, 245, 0.7);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--ink-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0;
+    line-height: 1;
+    opacity: 0.6;
+  }
+
+  .session:hover .session-download-btn {
+    opacity: 1;
+  }
+
+  .session-download-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: #fff;
+    transform: scale(1.05);
+  }
+
+  .session-download-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* 시즌 다운로드 영역 (Sessions 섹션 상단) */
+  .season-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .season-action-btn {
+    padding: 7px 16px;
+    background: rgba(255, 252, 245, 0.6);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 12.5px;
+    color: var(--ink-soft);
     transition: all 0.2s;
     display: inline-flex;
     align-items: center;
     gap: 6px;
   }
 
-  .member-pill:hover {
-    border-color: var(--gold);
-    color: var(--ink);
-    background: rgba(176, 138, 74, 0.05);
-  }
-
-  .member-pill.current {
-    background: rgba(122, 63, 46, 0.1);
-    border-color: var(--accent);
-    color: var(--accent);
-    font-weight: 700;
-  }
-
-  .member-pill .count {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 12px;
-    color: var(--ink-muted);
-  }
-
-  .member-pill.current .count { color: var(--accent); }
-
-  /* SELECTED VIEW */
-  .selected-header {
-    text-align: center;
-    padding: 30px 0 24px;
-    margin-bottom: 30px;
-    border-bottom: 1px dashed var(--line);
-  }
-
-  .selected-name {
-    font-family: 'Nanum Myeongjo', serif;
-    font-weight: 800;
-    font-size: clamp(28px, 5vw, 36px);
-    color: var(--accent);
-    margin-bottom: 6px;
-    letter-spacing: -0.01em;
-  }
-
-  .selected-meta {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: var(--ink-muted);
-    letter-spacing: 0.05em;
-  }
-
-  .member-download-btn {
-    margin-top: 16px;
-    padding: 8px 20px;
-    background: rgba(255, 252, 245, 0.6);
-    border: 1px solid var(--line);
-    border-radius: 100px;
-    cursor: pointer;
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 13px;
-    color: var(--ink-soft);
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .member-download-btn:hover:not(:disabled) {
+  .season-action-btn:hover:not(:disabled) {
     border-color: var(--accent);
     color: var(--accent);
     background: rgba(255, 255, 255, 0.8);
   }
 
-  .member-download-btn:disabled {
+  .season-action-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
   }
 
-  /* ENTRY (한 회차에 남긴 기록) */
-  .entries {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-  }
-
-  .entry {
-    background: rgba(255, 252, 245, 0.55);
-    border: 1px solid var(--line-soft);
-    border-left: 3px solid var(--gold);
-    padding: 24px 28px;
-    border-radius: 2px;
-    animation: fadeUp 0.6s ease-out backwards;
+  .season-action-btn .icon {
+    font-size: 13px;
   }
 
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(8px); }
+    from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .entry-head {
+  .session-head {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    padding-bottom: 14px;
-    margin-bottom: 18px;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 18px;
+    margin-bottom: 22px;
     border-bottom: 1px dashed var(--line);
     flex-wrap: wrap;
-    gap: 8px;
   }
 
-  .entry-day {
+  .session-day {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 13px;
     letter-spacing: 0.2em;
     color: var(--gold-deep);
     text-transform: uppercase;
+    margin-bottom: 4px;
   }
 
-  .entry-day a {
-    color: inherit;
-    text-decoration: none;
-    border-bottom: 1px dotted transparent;
+  .session-date {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.3;
   }
 
-  .entry-day a:hover { border-bottom-color: var(--gold-deep); }
+  .session-date .weekday {
+    color: var(--ink-muted);
+    font-weight: 400;
+    font-size: 16px;
+    margin-left: 4px;
+  }
 
-  .entry-date {
+  .session-pages {
+    text-align: right;
     font-family: 'Gowun Batang', serif;
-    font-size: 14px;
+  }
+
+  .pages-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .pages-section {
+    font-family: 'Gowun Batang', serif;
+    font-size: 12px;
+    color: var(--ink-muted);
+    margin-bottom: 2px;
+  }
+
+  .pages-section .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: rgba(176, 138, 74, 0.12);
+    border: 1px solid rgba(176, 138, 74, 0.25);
+    border-radius: 100px;
+    font-size: 11px;
+    color: var(--gold-deep);
+    margin-right: 4px;
+  }
+
+  .pages-range {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 22px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .pages-count {
+    font-size: 12px;
+    color: var(--ink-muted);
+    font-style: italic;
+    margin-top: 2px;
+    font-family: 'Cormorant Garamond', serif;
+  }
+
+  .field-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .attendance { margin-bottom: 22px; }
+
+  .attendees {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .attendee {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    padding: 4px 12px;
+    background: rgba(176, 138, 74, 0.1);
+    border: 1px solid rgba(176, 138, 74, 0.25);
+    border-radius: 100px;
     color: var(--ink-soft);
   }
 
-  .entry-pages {
+  .attendee.lead {
+    background: rgba(122, 63, 46, 0.08);
+    border-color: rgba(122, 63, 46, 0.3);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .reading-note {
+    margin-bottom: 22px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    padding: 14px 18px;
+    background: rgba(235, 226, 209, 0.3);
+    border-radius: 2px;
+    word-break: keep-all;
+    white-space: pre-wrap;
+  }
+
+  .quote-block {
+    margin-bottom: 22px;
+    padding: 22px 26px;
+    background: linear-gradient(to right, rgba(176, 138, 74, 0.06), transparent);
+    border-left: 2px solid var(--gold);
+    position: relative;
+  }
+
+  .quote-block::before {
+    content: '"';
+    position: absolute;
+    top: 4px;
+    left: 12px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    color: var(--gold-soft);
+    line-height: 1;
+    opacity: 0.6;
+  }
+
+  .quote-text {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 16px;
+    line-height: 1.95;
+    color: var(--ink);
+    padding-left: 18px;
+    word-break: keep-all;
+    white-space: pre-wrap;
+  }
+
+  .quote-meta {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 13px;
     color: var(--ink-muted);
+    margin-top: 10px;
+    padding-left: 18px;
   }
 
-  .entry-quote {
-    margin-bottom: 16px;
-    padding: 16px 20px;
-    background: linear-gradient(to right, rgba(176, 138, 74, 0.06), transparent);
-    border-left: 2px solid var(--gold-soft);
+  .sharing { margin-bottom: 20px; }
+
+  .sharing-content {
+    font-family: 'Gowun Batang', serif;
+    font-size: 15px;
+    line-height: 1.95;
+    color: var(--ink-soft);
+    white-space: pre-wrap;
+    word-break: keep-all;
+  }
+
+  /* ============ REFLECTIONS (멤버 기록) ============ */
+  .reflections {
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px dashed var(--line);
+  }
+
+  .reflections-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 14px;
+  }
+
+  .reflections .field-label { margin-bottom: 0; }
+
+  .reflection-count {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  .reflection-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .reflection {
+    padding: 12px 16px 36px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 2px;
+    animation: fadeIn 0.5s ease-out;
+    border-left: 2px solid var(--line);
     position: relative;
   }
 
-  .entry-quote::before {
-    content: '"';
+  .reflection.has-quote { border-left-color: var(--gold-soft); }
+  .reflection.has-mind { border-left-color: var(--accent-soft); }
+  .reflection.has-both { border-left-color: var(--gold); }
+
+  /* 액션 버튼: 다운로드는 항상, 수정·삭제는 본인+당일에만 */
+  .reflection-actions {
     position: absolute;
-    top: 0;
-    left: 8px;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 40px;
-    color: var(--gold-soft);
-    line-height: 1;
+    bottom: 8px;
+    right: 10px;
+    display: flex;
+    gap: 4px;
     opacity: 0.5;
+    transition: opacity 0.2s;
   }
 
-  .entry-quote-text {
-    font-family: 'Nanum Myeongjo', serif;
-    font-size: 15.5px;
-    line-height: 1.9;
+  .reflection:hover .reflection-actions {
+    opacity: 1;
+  }
+
+  .reflection.editable .reflection-actions {
+    opacity: 1;
+  }
+
+  .reflection-action-btn {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--line);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--ink-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    padding: 0;
+    line-height: 1;
+  }
+
+  .reflection-action-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: #fff;
+  }
+
+  .reflection-action-btn.danger:hover {
+    border-color: #b54c3e;
+    color: #b54c3e;
+  }
+
+  .reflection-edited-mark {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    margin-left: 6px;
+  }
+
+  /* 인라인 편집 모드 */
+  .reflection.editing {
+    background: rgba(245, 239, 228, 0.7);
+    border-left-color: var(--accent);
+    padding: 16px 18px;
+  }
+
+  .reflection-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .reflection-edit-quote,
+  .reflection-edit-mind {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--line);
+    padding: 8px 12px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 13.5px;
     color: var(--ink);
-    padding-left: 16px;
+    border-radius: 2px;
+    line-height: 1.7;
+    width: 100%;
+    resize: vertical;
+    min-height: 60px;
+  }
+
+  .reflection-edit-quote { font-family: 'Nanum Myeongjo', serif; font-style: italic; }
+  .reflection-edit-mind { font-family: 'Gowun Batang', serif; }
+
+  .reflection-edit-quote:focus,
+  .reflection-edit-mind:focus,
+  .reflection-edit-page:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: #fff;
+  }
+
+  .reflection-edit-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .reflection-edit-page-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .reflection-edit-page-row label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    color: var(--gold-deep);
+  }
+
+  .reflection-edit-page {
+    width: 70px;
+    padding: 5px 8px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.7);
+    font-family: 'Noto Serif KR', serif;
+    font-size: 12.5px;
+    color: var(--ink);
+    border-radius: 2px;
+    text-align: center;
+  }
+
+  .reflection-edit-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 4px;
+  }
+
+  .reflection-edit-actions button {
+    padding: 6px 14px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 12.5px;
+    border-radius: 2px;
+    cursor: pointer;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-soft);
+  }
+
+  .reflection-edit-actions button.save {
+    background: var(--accent);
+    color: var(--cream-soft);
+    border-color: var(--accent);
+  }
+
+  .reflection-edit-actions button.save:hover { background: var(--accent-soft); }
+  .reflection-edit-actions button.cancel:hover { border-color: var(--ink-muted); color: var(--ink); }
+  .reflection-edit-actions button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .reflection-edit-status {
+    font-family: 'Gowun Batang', serif;
+    font-size: 12px;
+    color: #b54c3e;
+    flex: 1;
+    align-self: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-6px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .reflection-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .reflection-alias {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--accent);
+  }
+
+  .reflection-alias a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+    transition: border-color 0.2s;
+  }
+
+  .reflection-alias a:hover { border-bottom-color: var(--accent); }
+
+  .reflection-time {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+  }
+
+  .reflection-quote {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14.5px;
+    line-height: 1.85;
+    color: var(--ink);
+    padding: 6px 0 6px 14px;
+    border-left: 2px solid var(--gold-soft);
+    margin-bottom: 8px;
     font-style: italic;
     word-break: keep-all;
     white-space: pre-wrap;
   }
 
-  .entry-quote-page {
-    display: block;
-    margin-top: 6px;
-    padding-left: 16px;
+  .reflection-quote-page {
     font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 12.5px;
+    font-size: 11.5px;
     color: var(--gold-deep);
+    margin-left: 8px;
+    font-style: italic;
   }
 
-  .entry-quote-source {
-    margin-top: 10px;
-    padding-top: 8px;
-    padding-left: 16px;
+  .reflection-quote-source {
+    display: block;
+    margin-top: 8px;
+    padding-top: 6px;
     border-top: 1px dotted rgba(176, 138, 74, 0.25);
     font-family: 'Gowun Batang', serif;
     font-size: 11.5px;
     color: var(--ink-muted);
     text-align: right;
+    font-style: normal;
     line-height: 1.5;
     word-break: keep-all;
   }
 
-  .entry-mind {
+  .reflection-mind {
     font-family: 'Gowun Batang', serif;
-    font-size: 15px;
-    line-height: 1.9;
+    font-size: 14px;
+    line-height: 1.85;
     color: var(--ink-soft);
-    padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 2px;
-    border-left: 2px solid var(--accent-soft);
     word-break: keep-all;
     white-space: pre-wrap;
   }
 
-  .entry-mind-label,
-  .entry-quote-label {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 11.5px;
-    letter-spacing: 0.18em;
-    color: var(--gold-deep);
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 8px;
+  /* ============ MISC ============ */
+  .ornament {
+    text-align: center;
+    color: var(--gold-soft);
+    letter-spacing: 0.5em;
+    font-size: 14px;
+    margin: 4px 0 -4px;
+    user-select: none;
   }
 
-  /* EMPTY / LOADING */
   .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -426,23 +1245,13 @@
     background: rgba(255, 252, 245, 0.4);
   }
 
-  .empty-state strong {
-    display: block;
-    font-family: 'Nanum Myeongjo', serif;
-    font-style: normal;
-    color: var(--accent);
-    font-size: 18px;
-    margin-bottom: 8px;
-    font-weight: 700;
-  }
-
   .loading-skeleton {
     background: linear-gradient(90deg, rgba(255,252,245,0.3) 0%, rgba(255,252,245,0.8) 50%, rgba(255,252,245,0.3) 100%);
     background-size: 200% 100%;
     animation: shimmer 1.8s infinite;
-    height: 140px;
+    height: 180px;
     border-radius: 2px;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
   }
 
   @keyframes shimmer {
@@ -450,10 +1259,9 @@
     100% { background-position: -200% 0; }
   }
 
-  /* FOOTER */
   footer {
     text-align: center;
-    padding-top: 50px;
+    padding-top: 56px;
     margin-top: 60px;
     border-top: 1px solid var(--line);
   }
@@ -477,14 +1285,21 @@
     color: var(--accent);
     text-decoration: none;
     border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
   }
 
   footer a:hover { border-bottom-color: var(--accent); }
 
   @media (max-width: 640px) {
-    .wrap { padding: 40px 18px 60px; }
-    .picker { padding: 20px 18px; }
-    .entry { padding: 18px 18px; }
+    .wrap { padding: 40px 18px 80px; }
+    .dashboard { grid-template-columns: repeat(2, 1fr); }
+    .session { padding: 22px 20px; }
+    .session-head { flex-direction: column; gap: 12px; }
+    .session-pages { text-align: left; }
+    .journal-input { padding: 22px 20px; }
+    .input-row-meta { grid-template-columns: 1fr; gap: 14px; }
+    .input-cards { grid-template-columns: 1fr; }
+    .nav { gap: 16px; }
   }
 </style>
 </head>
@@ -494,44 +1309,132 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <a href="journal_15.html">📖 일지</a>
-    <a href="my_journal_15.html" class="current">✿ 나의 기록</a>
+    <a href="journal_15.html" class="current">📖 일지</a>
+    <a href="my_journal_15.html">✿ 나의 기록</a>
     <a href="contents_15.html">📋 목차</a>
     <a href="welcome_15.html">✦ 환영</a>
   </nav>
 
   <!-- HEADER -->
   <header>
-    <div class="eyebrow">Season 15 · My Journal</div>
-    <h1>나의 기록 — <span class="accent">마음의 시간</span></h1>
-    <p class="subtitle">A collection of one heart, day by day.</p>
+    <div class="eyebrow">Season 15 · Reading Journal</div>
+    <h1 class="title"><span class="accent">마음의 시간</span> — 모두의 기록</h1>
+    <p class="subtitle">Connection in the Here and Now</p>
+    <div class="season-meta">
+      <span><span class="dot"></span>어빈 D. 얄롬 · 벤저민 얄롬</span>
+      <span><span class="dot"></span>2026. 5. 26 — 6. 30 (예상)</span>
+      <span><span class="dot"></span>평일 새벽 6:00 – 7:00</span>
+    </div>
+    <div class="zoom-join">
+      <a href="https://us02web.zoom.us/j/86324239516?pwd=IIPBgvoepGMyGRptvKLfkRunc4e3pL.1" target="_blank" rel="noopener">
+        <span class="zoom-icon">📹</span>
+        <span class="zoom-label">JOIN</span>
+        <span class="zoom-text">Zoom Meeting 참가하기</span>
+        <span class="zoom-arrow">→</span>
+      </a>
+    </div>
   </header>
 
-  <!-- MEMBER PICKER -->
-  <div class="picker">
-    <div class="picker-label">Choose Your Voice</div>
-    <h2>누구의 기록을 모아 볼까?</h2>
-    <div class="member-grid" id="memberGrid">
-      <span class="empty-state" style="padding: 16px;">불러오는 중…</span>
+  <!-- ============ JOURNAL INPUT (위로) ============ -->
+  <div class="journal-input">
+    <div class="journal-input-head">
+      <span class="journal-input-eyebrow">Leave Your Mark</span>
+      <span class="journal-input-today" id="journalInputToday">오늘</span>
+    </div>
+    <h3>오늘의 기록을 남겨 줘</h3>
+    <p class="journal-input-sub">마음이 머문 문장과 나의 마음 — 둘 중 하나만 남겨도 좋고, 둘 다 남겨도 좋아. <span style="opacity: 0.7;">남긴 기록은 당일 안에 본인이 수정·삭제할 수 있어.</span></p>
+
+    <div class="input-row-meta">
+      <div class="input-field">
+        <label>Reader <span class="ko">· 나의 별칭</span></label>
+        <select id="inputAlias">
+          <option value="">— 선택 —</option>
+        </select>
+      </div>
+      <div class="input-field">
+        <label>Day <span class="ko">· 오늘의 새벽</span></label>
+        <div class="input-day-display" id="inputDayDisplay">— 회차가 아직 없어 —</div>
+        <input type="hidden" id="inputDay" value="">
+      </div>
+    </div>
+
+    <div class="input-cards">
+      <!-- 마음이 머문 문장 -->
+      <div class="input-card quote">
+        <div class="input-card-title">
+          📜 마음이 머문 문장
+          <span class="hint">선택</span>
+        </div>
+        <div class="input-card-sub">책에서 가져온 문장을 그대로</div>
+        <textarea id="inputQuote" placeholder="문장을 옮겨 적어 주세요"></textarea>
+        <div class="input-card-page">
+          <label>p.</label>
+          <input type="text" id="inputQuotePage" placeholder="페이지 번호">
+        </div>
+      </div>
+
+      <!-- 기록해두고 싶은 나의 마음 -->
+      <div class="input-card mind">
+        <div class="input-card-title">
+          ✿ 기록해두고 싶은 나의 마음
+          <span class="hint">선택</span>
+        </div>
+        <div class="input-card-sub">책을 읽으며 떠오른 마음도 좋고, 이야기 나누고 나서 기록하고 싶은 마음을 남겨도 좋아.</div>
+        <textarea id="inputMind" placeholder="떠오른 마음을 적어 주세요"></textarea>
+      </div>
+    </div>
+
+    <div class="input-submit-row">
+      <div class="input-status" id="inputStatus"></div>
+      <button class="input-submit-btn" id="inputSubmitBtn" onclick="submitReflection()">남기기 →</button>
     </div>
   </div>
 
-  <!-- SELECTED CONTENT -->
-  <div id="selectedView" style="display: none;">
-    <div class="selected-header">
-      <div class="selected-name" id="selectedName">—</div>
-      <div class="selected-meta" id="selectedMeta">—</div>
-      <button class="member-download-btn" id="memberDownloadBtn" onclick="downloadMemberPdf()" style="display:none;">
-        <span style="font-size: 13px;">📄</span>
-        <span>내 기록 PDF로 저장</span>
-      </button>
+  <!-- DASHBOARD -->
+  <div class="dashboard">
+    <div class="stat">
+      <div class="stat-label">Day</div>
+      <div class="stat-value" id="statDay">—</div>
+      <div class="stat-sub" id="statDaySub">아직 시작 전</div>
     </div>
-
-    <div id="entriesList">
-      <div class="loading-skeleton"></div>
-      <div class="loading-skeleton"></div>
+    <div class="stat">
+      <div class="stat-label">Today's Pages</div>
+      <div class="stat-value" id="statPages">—</div>
+      <div class="stat-sub" id="statPagesSub">오늘의 낭독 구간</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Members</div>
+      <div class="stat-value" id="statMembers">—</div>
+      <div class="stat-sub">함께한 사람</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Records</div>
+      <div class="stat-value" id="statRecords">—</div>
+      <div class="stat-sub">남겨진 기록</div>
     </div>
   </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="progress-label">
+      <span class="label-en">PROGRESS</span>
+      <span id="progressText">불러오는 중…</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- SESSIONS -->
+  <section>
+    <span class="section-num">HOUR OF THE HEART · 여기 그리고 지금과 연결되기</span>
+    <h2>우리가 함께 남겨둔 기록</h2>
+
+    <div id="sessionsList">
+      <div class="loading-skeleton"></div>
+      <div class="loading-skeleton"></div>
+    </div>
+  </section>
 
   <!-- FOOTER -->
   <footer>
@@ -539,7 +1442,7 @@
     <p>
       모두의 새벽 + 낭만북클럽 · 시즌 15 『마음의 시간』<br>
       <a href="welcome_15.html">환영 페이지 →</a> &nbsp;·&nbsp;
-      <a href="journal_15.html">전체 일지 →</a> &nbsp;·&nbsp;
+      <a href="my_journal_15.html">나의 기록 모아보기 →</a> &nbsp;·&nbsp;
       <a href="contents_15.html">책의 지도 →</a> &nbsp;·&nbsp;
       <a href="journal_edit_15.html" style="opacity: 0.6;">관리자 →</a>
     </p>
@@ -549,15 +1452,20 @@
 
 <script>
 // ════════════════════════════════════════════════════════
-// 설정
+// 설정 — GAS 배포 후 여기에 URL 붙여넣기
 // ════════════════════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
-const WEEKDAYS = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
-const SECTION_LABELS = { front: '서론', main: '본문', back: '후기' };
+const TOTAL_PAGES = 342;
+const TOTAL_DAYS = 25;
 
+// 책 정보 (인용 표시에 사용)
 const BOOK_AUTHOR = '얄롬';
 const BOOK_TITLE = '마음의 시간 : 여기 그리고 지금과 연결되기';
 
+const WEEKDAYS = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+const SECTION_LABELS = { front: '서론', main: '본문', back: '후기' };
+
+// 시즌 15 기본 멤버 (가나다 순)
 const DEFAULT_MEMBERS = [
   '농담', '마성', '목마가렛', '밝은열정', '보나',
   '여운', '연경', '자연', '자유', '지평', '프란체스코'
@@ -566,216 +1474,584 @@ const DEFAULT_MEMBERS = [
 // ════════════════════════════════════════════════════════
 // 상태
 // ════════════════════════════════════════════════════════
-let allSessions = [];
-let memberCounts = {};   // alias → 기록 수
-let selectedAlias = null;
+let sessions = [];
+let contents = [];
+let members = [];
 
 // ════════════════════════════════════════════════════════
-// 진입점
+// 초기 로딩
 // ════════════════════════════════════════════════════════
-async function init() {
+async function loadAll() {
   if (!GAS_URL || GAS_URL.startsWith('PASTE_')) {
-    document.getElementById('memberGrid').innerHTML = `
-      <span class="empty-state" style="padding: 16px;">
-        ⚙️ Google Apps Script 연동이 필요해.
-      </span>`;
-    renderMembers(DEFAULT_MEMBERS, {});
+    document.getElementById('sessionsList').innerHTML = `
+      <div class="empty-state">
+        ⚙️ Google Apps Script 연동이 아직 설정되지 않았어.<br>
+        <span style="font-size:12px; opacity: 0.7;">관리자에게 문의해 줘.</span>
+      </div>`;
+    populateMemberSelect(DEFAULT_MEMBERS);
     return;
   }
-
   try {
     const res = await fetch(`${GAS_URL}?action=list_all`);
     const data = await res.json();
-    allSessions = data.sessions || [];
-    const members = (data.members && data.members.length) ? data.members : DEFAULT_MEMBERS;
+    sessions = data.sessions || [];
+    contents = data.contents || [];
+    members = (data.members && data.members.length) ? data.members : DEFAULT_MEMBERS;
 
-    // 멤버별 기록 수 계산 (시즌 멤버 외 사람도 포함)
-    const counts = {};
-    const allAliases = new Set(members);
-    allSessions.forEach(s => {
-      (s.reflections || []).forEach(r => {
-        if (r.alias) {
-          counts[r.alias] = (counts[r.alias] || 0) + 1;
-          allAliases.add(r.alias);
-        }
-      });
-    });
-    memberCounts = counts;
-
-    // 멤버는 시즌 멤버 먼저(가나다 순), 그 외 사람은 뒤에
-    const seasonSet = new Set(members);
-    const extras = [...allAliases].filter(a => !seasonSet.has(a)).sort();
-    renderMembers([...members, ...extras], counts);
-
-    // URL로 들어왔으면 선택
-    const params = new URLSearchParams(location.search);
-    const aliasParam = params.get('alias');
-    if (aliasParam) {
-      selectMember(aliasParam);
-    } else {
-      // localStorage에 저장된 본인 별칭 있으면 자동
-      const saved = localStorage.getItem('journal15_alias');
-      if (saved && allAliases.has(saved)) {
-        selectMember(saved);
-      }
-    }
+    populateMemberSelect(members);
+    populateDayDisplay();
+    renderDashboard();
+    renderSessions();
+    restoreInputState();
   } catch (err) {
     console.error(err);
-    document.getElementById('memberGrid').innerHTML = `
-      <span class="empty-state" style="padding: 16px;">불러오기 실패.</span>`;
-    renderMembers(DEFAULT_MEMBERS, {});
+    document.getElementById('sessionsList').innerHTML = `
+      <div class="empty-state">불러오기 실패. 잠시 후 새로고침해 줘.</div>`;
+    populateMemberSelect(DEFAULT_MEMBERS);
   }
 }
 
 // ════════════════════════════════════════════════════════
-// 멤버 그리드
+// 입력 드롭다운
 // ════════════════════════════════════════════════════════
-function renderMembers(list, counts) {
-  const el = document.getElementById('memberGrid');
-  el.innerHTML = list.map(alias => {
-    const count = counts[alias] || 0;
-    return `
-      <a class="member-pill ${alias === selectedAlias ? 'current' : ''}"
-         href="?alias=${encodeURIComponent(alias)}"
-         onclick="selectMember('${escapeAttr(alias)}'); return false;">
-        ${escapeHtml(alias)}
-        ${count > 0 ? `<span class="count">${count}</span>` : ''}
-      </a>
-    `;
-  }).join('');
-}
+function populateMemberSelect(list) {
+  const sel = document.getElementById('inputAlias');
+  sel.innerHTML = '<option value="">— 너의 별칭을 골라줘 —</option>' +
+    list.map(m => `<option value="${escapeAttr(m)}">${escapeHtml(m)}</option>`).join('') +
+    '<option value="__other__">+ 추가 (직접 입력)</option>';
 
-// ════════════════════════════════════════════════════════
-// 멤버 선택
-// ════════════════════════════════════════════════════════
-function selectMember(alias) {
-  selectedAlias = alias;
-
-  // URL 업데이트 (브라우저 히스토리)
-  const newUrl = `${location.pathname}?alias=${encodeURIComponent(alias)}`;
-  history.replaceState(null, '', newUrl);
-
-  // 멤버 그리드 강조 갱신
-  document.querySelectorAll('.member-pill').forEach(p => {
-    p.classList.remove('current');
-    if (decodeURIComponent(p.getAttribute('href').replace('?alias=', '')) === alias) {
-      p.classList.add('current');
+  sel.addEventListener('change', function() {
+    if (this.value === '__other__') {
+      const custom = prompt('새 별칭을 적어 줘');
+      if (custom && custom.trim()) {
+        const v = custom.trim();
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        sel.insertBefore(opt, sel.querySelector('option[value="__other__"]'));
+        sel.value = v;
+        localStorage.setItem('journal15_alias', v);
+      } else {
+        sel.value = '';
+      }
+    } else if (this.value) {
+      localStorage.setItem('journal15_alias', this.value);
     }
+    // 별칭 바뀌면 회차 다시 렌더 (본인 기록에 액션 버튼 보이도록)
+    if (sessions.length > 0) renderSessions();
   });
+}
 
-  renderSelected();
+function populateDayDisplay() {
+  // 오늘 날짜 표시 (헤더 우측 작은 영역)
+  const todayEl = document.getElementById('journalInputToday');
+  const now = new Date();
+  const today = `${now.getMonth() + 1}월 ${now.getDate()}일 (${WEEKDAYS[now.getDay()].charAt(0)})`;
+  todayEl.textContent = today;
+
+  // 입력에 연결될 회차: 가장 최근 회차
+  const dayDisplay = document.getElementById('inputDayDisplay');
+  const dayInput = document.getElementById('inputDay');
+
+  if (sessions.length === 0) {
+    dayDisplay.textContent = '— 회차가 아직 시작되지 않았어 —';
+    dayDisplay.classList.remove('has-day');
+    dayInput.value = '';
+    return;
+  }
+
+  // sessions는 day 내림차순으로 정렬되어 있음
+  const latest = sessions[0];
+  const date = formatSessionDate(latest.date);
+  const dayLabel = `낭독 ${latest.day}일차 · ${date.date} ${date.weekday}`;
+  dayDisplay.textContent = dayLabel;
+  dayDisplay.classList.add('has-day');
+  dayInput.value = latest.day;
+}
+
+function restoreInputState() {
+  const savedAlias = localStorage.getItem('journal15_alias');
+  if (savedAlias) {
+    const sel = document.getElementById('inputAlias');
+    // 기본 멤버에 있으면 선택, 없으면 옵션 추가
+    if (![...sel.options].find(o => o.value === savedAlias)) {
+      const opt = document.createElement('option');
+      opt.value = savedAlias;
+      opt.textContent = savedAlias;
+      const otherOpt = sel.querySelector('option[value="__other__"]');
+      if (otherOpt) sel.insertBefore(opt, otherOpt);
+    }
+    sel.value = savedAlias;
+  }
 }
 
 // ════════════════════════════════════════════════════════
-// 선택된 멤버의 기록
+// 시간 헬퍼: 한국 시간 기준 모임 시작/종료 판단
 // ════════════════════════════════════════════════════════
-function renderSelected() {
-  const view = document.getElementById('selectedView');
-  view.style.display = 'block';
-  document.getElementById('selectedName').textContent = selectedAlias;
+// session.date는 시트에 따라 여러 형태로 올 수 있음:
+//   - "2026-05-26"               (사용자 입력 그대로)
+//   - "2026-05-26T00:00:00.000Z" (Sheets가 자동 변환한 ISO)
+//   - "Tue May 26 2026..."       (Date 객체의 문자열)
+// → 어떤 형태든 KST 기준 년/월/일을 뽑아냄
 
-  // allSessions에서 해당 별칭이 남긴 모든 기록 추출
-  const entries = [];
-  let attendanceCount = 0;
-  let firstDate = null;
+function extractKSTDate(dateValue) {
+  if (!dateValue) return null;
 
-  allSessions.forEach(s => {
-    // 참석 카운트
-    if ((s.attendees || []).some(a => a.alias === selectedAlias)) {
-      attendanceCount++;
-      if (!firstDate || (s.date && new Date(s.date) < new Date(firstDate))) {
-        firstDate = s.date;
-      }
+  // 이미 YYYY-MM-DD 형태이면 그대로 사용
+  if (typeof dateValue === 'string') {
+    const m = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) {
+      return { y: Number(m[1]), m: Number(m[2]), d: Number(m[3]) };
     }
+  }
 
-    // 기록
-    (s.reflections || []).forEach(r => {
-      if (r.alias === selectedAlias) {
-        entries.push({
-          ...r,
-          day: s.day,
-          date: s.date,
-          section: s.section,
-          start_page: s.start_page,
-          end_page: s.end_page
-        });
+  // Date 객체로 파싱 시도
+  const d = new Date(dateValue);
+  if (isNaN(d.getTime())) return null;
+
+  // KST(UTC+9) 기준 년/월/일 계산
+  // d의 UTC 시각에 9시간 더한 것이 KST 시각
+  const kstMs = d.getTime() + 9 * 60 * 60 * 1000;
+  const kst = new Date(kstMs);
+  return {
+    y: kst.getUTCFullYear(),
+    m: kst.getUTCMonth() + 1,
+    d: kst.getUTCDate()
+  };
+}
+
+function isSessionStarted(session) {
+  const ymd = extractKSTDate(session.date);
+  if (!ymd) return false;
+  // 모임 시작: 모임 날짜 06:00 KST = (전날) 21:00 UTC
+  const startUtcMs = Date.UTC(ymd.y, ymd.m - 1, ymd.d, 6 - 9, 0, 0);
+  return Date.now() >= startUtcMs;
+}
+
+function isSessionFinished(session) {
+  const ymd = extractKSTDate(session.date);
+  if (!ymd) return false;
+  // 모임 종료: 모임 날짜 07:00 KST = (전날) 22:00 UTC
+  const endUtcMs = Date.UTC(ymd.y, ymd.m - 1, ymd.d, 7 - 9, 0, 0);
+  return Date.now() >= endUtcMs;
+}
+
+// ════════════════════════════════════════════════════════
+// 대시보드
+// ════════════════════════════════════════════════════════
+function renderDashboard() {
+  // Day: 실제 낭독을 마친 회차 수만 카운트
+  const finishedSessions = sessions.filter(isSessionFinished);
+  const cumulativeDays = finishedSessions.length;
+
+  // 가장 최근 회차 (시간 무관 — 진행 중인 회차도 보여주려고)
+  const latestSession = sessions.length > 0
+    ? sessions.reduce((a, b) => (Number(b.day) || 0) > (Number(a.day) || 0) ? b : a)
+    : null;
+
+  // Today's Pages: 가장 최근 회차의 페이지 구간 (상태에 따라 다른 라벨)
+  let pagesDisplay = '—';
+  let pagesSubDisplay = '오늘의 낭독 구간';
+
+  if (latestSession) {
+    const dateInfo = formatSessionDate(latestSession.date);
+    const started = isSessionStarted(latestSession);
+    const finished = isSessionFinished(latestSession);
+
+    if (latestSession.start_page && latestSession.end_page) {
+      pagesDisplay = `p.${latestSession.start_page}<span class="small"> ~ </span>p.${latestSession.end_page}`;
+      if (!started) {
+        pagesSubDisplay = `${dateInfo.date} 낭독 예정`;
+      } else if (!finished) {
+        pagesSubDisplay = `${dateInfo.date} 진행 중`;
+      } else {
+        pagesSubDisplay = `${dateInfo.date} 낭독`;
       }
+    } else if (latestSession.start_page) {
+      pagesDisplay = `p.${latestSession.start_page}<span class="small"> ~ </span>?`;
+      pagesSubDisplay = !started ? `${dateInfo.date} 예정` : '진행 중';
+    }
+  }
+
+  // Members: 시즌 동안 한 번이라도 참석/기록한 사람들
+  const uniqueMembers = new Set();
+  let recordCount = 0;
+  sessions.forEach(s => {
+    (s.attendees || []).forEach(a => uniqueMembers.add(a.alias));
+    (s.reflections || []).forEach(r => {
+      uniqueMembers.add(r.alias);
+      recordCount++;
     });
   });
 
-  // 최근 회차가 위로
-  entries.sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0));
+  // 대시보드 채우기
+  document.getElementById('statDay').innerHTML = cumulativeDays > 0
+    ? `+${cumulativeDays}<span class="small">일차</span>`
+    : '—';
+  document.getElementById('statDaySub').textContent = cumulativeDays > 0
+    ? `누적 ${cumulativeDays}회 낭독`
+    : (sessions.length > 0 ? '곧 첫 새벽' : '아직 시작 전');
 
-  // 메타
-  const metaParts = [];
-  metaParts.push(`기록 ${entries.length}개`);
-  if (attendanceCount > 0) metaParts.push(`참석 ${attendanceCount}회`);
-  document.getElementById('selectedMeta').textContent = metaParts.join(' · ');
+  document.getElementById('statPages').innerHTML = pagesDisplay;
+  document.getElementById('statPagesSub').textContent = pagesSubDisplay;
 
-  // 다운로드 버튼: 기록이 1개 이상일 때만 표시
-  const dlBtn = document.getElementById('memberDownloadBtn');
-  if (dlBtn) {
-    dlBtn.style.display = entries.length > 0 ? 'inline-flex' : 'none';
+  document.getElementById('statMembers').textContent = uniqueMembers.size || '—';
+  document.getElementById('statRecords').textContent = recordCount;
+
+  // Progress bar — 시간상 끝난 회차만 반영
+  const finishedMainSessions = finishedSessions.filter(s => s.section === 'main');
+  const maxMainPage = finishedMainSessions.length > 0
+    ? Math.max(...finishedMainSessions.map(s => Number(s.end_page) || Number(s.start_page) || 0))
+    : 0;
+  const hasFinishedFront = finishedSessions.some(s => s.section === 'front');
+  let pagesRead = maxMainPage + (hasFinishedFront ? 17 : 0);
+  const hasFinishedBack = finishedSessions.some(s => s.section === 'back');
+  if (hasFinishedBack) {
+    const backEnds = finishedSessions.filter(s => s.section === 'back').map(s => Number(s.end_page) || 0);
+    pagesRead = Math.max(pagesRead, Math.max(...backEnds) + 17);
   }
-  // entries를 함수 밖에서 접근 가능하게 전역에 저장
-  window._currentMemberEntries = entries;
 
-  // 엔트리 렌더
-  const listEl = document.getElementById('entriesList');
-  if (entries.length === 0) {
-    listEl.innerHTML = `
+  const pct = Math.min(100, Math.round((pagesRead / TOTAL_PAGES) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+
+  let currentChapter = '';
+  if (maxMainPage > 0) {
+    const ch = contents.find(c =>
+      c.section_type === 'main' &&
+      Number(c.page_start) <= maxMainPage &&
+      Number(c.page_end) >= maxMainPage
+    );
+    if (ch) currentChapter = ` · Ch. ${ch.num} 진행 중`;
+  }
+
+  document.getElementById('progressText').textContent =
+    cumulativeDays > 0
+      ? `${pct}% · 누적 ${pagesRead}쪽${currentChapter}`
+      : (sessions.length > 0 ? '곧 첫 새벽' : '아직 시작 전');
+}
+
+// ════════════════════════════════════════════════════════
+// 회차 카드
+// ════════════════════════════════════════════════════════
+function renderSessions() {
+  const el = document.getElementById('sessionsList');
+
+  if (sessions.length === 0) {
+    el.innerHTML = `
       <div class="empty-state">
-        <strong>${escapeHtml(selectedAlias)}</strong>
-        아직 ${escapeHtml(selectedAlias)}이(가) 남긴 기록이 없어.<br>
-        <a href="journal_15.html" style="color: var(--accent); border-bottom: 1px solid var(--accent);">일지 페이지로 가서 첫 한 줄 남기기 →</a>
+        아직 기록된 새벽이 없어.<br>
+        첫 회차가 입력되면 이곳에 천천히 쌓일 거야.
       </div>`;
     return;
   }
 
-  listEl.innerHTML = entries.map(e => renderEntry(e)).join('');
+  const sorted = [...sessions].sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0));
+
+  const html = sorted.map(s => renderSessionCard(s)).join(
+    `<div class="ornament">· · ·</div>`
+  );
+  el.innerHTML = html;
 }
 
-function renderEntry(e) {
-  const dateInfo = formatSessionDate(e.date);
-  const section = SECTION_LABELS[e.section] || '';
+function renderSessionCard(s) {
+  const day = String(s.day || '?').padStart(2, '0');
+  const dayLabel = Number(s.day) === 1 ? `Day ${day} · 첫 새벽` : `Day ${day}`;
+  const dateInfo = formatSessionDate(s.date);
+  const sectionInfo = renderSectionInfo(s);
+  const pageCount = computePageCount(s);
+
+  const attendeesHtml = (s.attendees || []).map(a => `
+    <span class="attendee${a.lead ? ' lead' : ''}">${escapeHtml(a.alias)}</span>
+  `).join('');
+
+  const reflections = (s.reflections || []).slice().sort((a, b) => {
+    // 최신이 위로 (timestamp 내림차순)
+    const ta = a.timestamp || '';
+    const tb = b.timestamp || '';
+    if (tb < ta) return -1;
+    if (tb > ta) return 1;
+    return 0;
+  });
+  const reflectionsHtml = reflections.length === 0
+    ? `<div style="font-style: italic; color: var(--ink-faint); font-family: 'Cormorant Garamond', serif; padding: 8px 14px;">아직 기록이 없어. 위에서 한 줄을 남겨 줘.</div>`
+    : reflections.map(r => renderReflection(r, s.day)).join('');
 
   return `
-    <article class="entry">
-      <div class="entry-head">
+    <article class="session" id="session-${s.day}">
+      <button class="session-download-btn" title="이 하루 전체를 PDF로 저장" onclick="downloadSessionPdf(${s.day})">⬇</button>
+      <div class="session-head">
         <div>
-          <div class="entry-day">
-            <a href="journal_15.html#session-${e.day}">Day ${escapeHtml(e.day)}</a>
-          </div>
-          <div class="entry-date">${dateInfo.date} ${dateInfo.weekday}</div>
+          <div class="session-day">${escapeHtml(dayLabel)}</div>
+          <div class="session-date">${dateInfo.date} <span class="weekday">${dateInfo.weekday}</span></div>
         </div>
-        <div class="entry-pages">
-          ${section ? `${section} · ` : ''}p. ${escapeHtml(e.start_page)} → ${escapeHtml(e.end_page || '?')}
+        <div class="session-pages">
+          <div class="pages-label">Pages</div>
+          ${sectionInfo}
+          <div class="pages-range">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '<span style="font-size: 13px; color: var(--ink-muted); font-style: italic; font-family: \'Cormorant Garamond\', serif;">~ 진행 중</span>'}</div>
+          <div class="pages-count">${pageCount}${s.leader ? ' · 진행 ' + escapeHtml(s.leader) : ''}</div>
         </div>
       </div>
 
-      ${e.quote_text ? `
-        <div>
-          <span class="entry-quote-label">📜 마음에 남은 문장</span>
-          <div class="entry-quote">
-            <div class="entry-quote-text">${escapeHtml(e.quote_text)}</div>
-            <div class="entry-quote-source">
-              — ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ` · p. ${escapeHtml(e.quote_page)}` : ''}
-            </div>
-          </div>
-        </div>` : ''}
+      ${attendeesHtml ? `
+      <div class="attendance">
+        <span class="field-label">Attendees · 함께한 사람들</span>
+        <div class="attendees">${attendeesHtml}</div>
+      </div>` : ''}
 
-      ${e.my_mind ? `
-        <div>
-          <span class="entry-mind-label">✿ 남기고 싶은 나의 마음</span>
-          <div class="entry-mind">${escapeHtml(e.my_mind)}</div>
-        </div>` : ''}
+      ${s.reading_note ? `
+      <div>
+        <span class="field-label">Reading · 낭독 구간</span>
+        <div class="reading-note">${escapeHtml(s.reading_note)}</div>
+      </div>` : ''}
+
+      ${s.quote_text ? `
+      <div class="quote-block">
+        <div class="quote-text">${escapeHtml(s.quote_text)}</div>
+        ${s.quote_meta ? `<div class="quote-meta">— ${escapeHtml(s.quote_meta)}</div>` : ''}
+      </div>` : ''}
+
+      ${s.sharing ? `
+      <div class="sharing">
+        <span class="field-label">Sharing · 나눔에서 오간 이야기</span>
+        <div class="sharing-content">${escapeHtml(s.sharing)}</div>
+      </div>` : ''}
+
+      <div class="reflections">
+        <div class="reflections-head">
+          <span class="field-label">Reflections · 모두의 기록</span>
+          <span class="reflection-count">${reflections.length}개 남김</span>
+        </div>
+        <div class="reflection-list">${reflectionsHtml}</div>
+      </div>
     </article>
   `;
 }
 
-// ════════════════════════════════════════════════════════
-// 유틸
-// ════════════════════════════════════════════════════════
+function renderReflection(r, dayNum) {
+  const hasQuote = !!r.quote_text;
+  const hasMind = !!r.my_mind;
+  const cls = hasQuote && hasMind ? 'has-both' : hasQuote ? 'has-quote' : 'has-mind';
+  const time = formatTimeShort(r.timestamp);
+
+  // 현재 선택된 별칭과 일치하고, 당일 기록이면 편집 가능
+  const currentAlias = document.getElementById('inputAlias')?.value || '';
+  const isOwn = currentAlias && currentAlias === r.alias;
+  const isToday = r.timestamp && isSameDayLocal(r.timestamp, new Date());
+  const editable = isOwn && isToday;
+
+  const refId = `ref-${dayNum}-${encodeURIComponent(r.timestamp || '')}`;
+  const editedMark = r.updated_at ? '<span class="reflection-edited-mark">(수정됨)</span>' : '';
+
+  return `
+    <div class="reflection ${cls} ${editable ? 'editable' : ''}" id="${refId}" data-day="${dayNum}" data-timestamp="${escapeAttr(r.timestamp || '')}" data-alias="${escapeAttr(r.alias)}">
+      <div class="reflection-actions">
+        <button class="reflection-action-btn" title="이 기록을 이미지로 저장" onclick="downloadReflectionImage('${refId}')">⬇</button>
+        ${editable ? `
+          <button class="reflection-action-btn" title="수정" onclick="startEditReflection('${refId}')">✏️</button>
+          <button class="reflection-action-btn danger" title="삭제" onclick="deleteReflectionConfirm('${refId}')">🗑</button>` : ''}
+      </div>
+      <div class="reflection-content" id="${refId}-content">
+        <div class="reflection-header">
+          <span class="reflection-alias">
+            <a href="my_journal_15.html?alias=${encodeURIComponent(r.alias)}">${escapeHtml(r.alias)}</a>
+          </span>
+          ${time ? `<span class="reflection-time">${escapeHtml(time)}${editedMark}</span>` : ''}
+        </div>
+        ${hasQuote ? `
+          <div class="reflection-quote" data-quote-text="${escapeAttr(r.quote_text)}" data-quote-page="${escapeAttr(r.quote_page || '')}">
+            ${escapeHtml(r.quote_text)}
+            <div class="reflection-quote-source">
+              — ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ` · p. ${escapeHtml(r.quote_page)}` : ''}
+            </div>
+          </div>` : ''}
+        ${hasMind ? `<div class="reflection-mind" data-mind="${escapeAttr(r.my_mind)}">${escapeHtml(r.my_mind)}</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// 인라인 편집 시작
+function startEditReflection(refId) {
+  const el = document.getElementById(refId);
+  if (!el) return;
+  const day = el.dataset.day;
+  const timestamp = el.dataset.timestamp;
+  const alias = el.dataset.alias;
+
+  // 현재 값 가져오기
+  const session = sessions.find(s => Number(s.day) === Number(day));
+  if (!session) return;
+  const ref = (session.reflections || []).find(r => r.timestamp === timestamp);
+  if (!ref) return;
+
+  // 인라인 편집 폼으로 교체
+  el.classList.add('editing');
+  el.classList.remove('editable');
+  el.querySelector('.reflection-actions')?.remove();
+  el.querySelector('.reflection-content').innerHTML = `
+    <div class="reflection-edit-form">
+      <div>
+        <div class="reflection-edit-label">📜 마음이 머문 문장</div>
+        <textarea class="reflection-edit-quote" id="${refId}-quote" placeholder="문장 (선택)">${escapeHtml(ref.quote_text || '')}</textarea>
+        <div class="reflection-edit-page-row">
+          <label>p.</label>
+          <input type="text" class="reflection-edit-page" id="${refId}-page" value="${escapeAttr(ref.quote_page || '')}" placeholder="61">
+        </div>
+      </div>
+      <div>
+        <div class="reflection-edit-label">✿ 기록해두고 싶은 나의 마음</div>
+        <textarea class="reflection-edit-mind" id="${refId}-mind" placeholder="마음 (선택)">${escapeHtml(ref.my_mind || '')}</textarea>
+      </div>
+      <div class="reflection-edit-actions">
+        <span class="reflection-edit-status" id="${refId}-status"></span>
+        <button class="cancel" onclick="cancelEditReflection('${refId}')">취소</button>
+        <button class="save" id="${refId}-save" onclick="saveEditReflection('${refId}')">저장</button>
+      </div>
+    </div>
+  `;
+  // 첫 textarea에 포커스
+  document.getElementById(`${refId}-quote`)?.focus();
+}
+
+function cancelEditReflection(refId) {
+  // 전체 재렌더로 원복
+  renderSessions();
+}
+
+async function saveEditReflection(refId) {
+  const el = document.getElementById(refId);
+  if (!el) return;
+  const day = Number(el.dataset.day);
+  const timestamp = el.dataset.timestamp;
+  const alias = el.dataset.alias;
+
+  const quote = document.getElementById(`${refId}-quote`).value.trim();
+  const page = document.getElementById(`${refId}-page`).value.trim();
+  const mind = document.getElementById(`${refId}-mind`).value.trim();
+  const statusEl = document.getElementById(`${refId}-status`);
+  const saveBtn = document.getElementById(`${refId}-save`);
+
+  if (!quote && !mind) {
+    statusEl.textContent = '문장 또는 마음 중 하나는 비어있지 않아야 해.';
+    return;
+  }
+
+  saveBtn.disabled = true;
+  saveBtn.textContent = '저장 중…';
+  statusEl.textContent = '';
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'update_reflection',
+        day,
+        timestamp,
+        alias,
+        reflection: { quote_text: quote, quote_page: page, my_mind: mind }
+      })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const idx = sessions.findIndex(s => Number(s.day) === day);
+      if (idx >= 0 && data.session) {
+        sessions[idx] = data.session;
+        sessions.sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0));
+        renderSessions();
+        renderDashboard();
+      }
+    } else {
+      throw new Error(data.error || 'unknown');
+    }
+  } catch (err) {
+    statusEl.textContent = '저장 실패: ' + err.message;
+    saveBtn.disabled = false;
+    saveBtn.textContent = '저장';
+  }
+}
+
+async function deleteReflectionConfirm(refId) {
+  const el = document.getElementById(refId);
+  if (!el) return;
+  const day = Number(el.dataset.day);
+  const timestamp = el.dataset.timestamp;
+  const alias = el.dataset.alias;
+
+  if (!confirm('이 기록을 정말 지울까? 되돌릴 수 없어.')) return;
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'delete_reflection',
+        day,
+        timestamp,
+        alias
+      })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const idx = sessions.findIndex(s => Number(s.day) === day);
+      if (idx >= 0 && data.session) {
+        sessions[idx] = data.session;
+        renderSessions();
+        renderDashboard();
+        setStatus(`✦ 기록을 지웠어.`, 'success');
+        setTimeout(() => setStatus('', ''), 4000);
+      }
+    } else {
+      throw new Error(data.error || 'unknown');
+    }
+  } catch (err) {
+    alert('삭제 실패: ' + err.message);
+  }
+}
+
+function isSameDayLocal(iso, d2) {
+  if (!iso) return false;
+  const d1 = new Date(iso);
+  if (isNaN(d1.getTime())) return false;
+  return d1.getFullYear() === d2.getFullYear() &&
+         d1.getMonth() === d2.getMonth() &&
+         d1.getDate() === d2.getDate();
+}
+
+function renderSectionInfo(s) {
+  const sectionLabel = SECTION_LABELS[s.section] || s.section || '';
+  if (!sectionLabel) return '';
+
+  let chapterText = '';
+  if (s.section === 'main') {
+    const startNum = parseInt(s.start_page, 10);
+    const endNum = parseInt(s.end_page, 10) || startNum;
+    if (!isNaN(startNum)) {
+      const matches = contents.filter(c =>
+        c.section_type === 'main' &&
+        Number(c.page_start) <= endNum &&
+        Number(c.page_end) >= startNum
+      );
+      if (matches.length === 1) {
+        chapterText = `Ch. ${matches[0].num}`;
+      } else if (matches.length > 1) {
+        chapterText = `Ch. ${matches[0].num} → Ch. ${matches[matches.length-1].num}`;
+      }
+    }
+  }
+
+  return `<div class="pages-section"><span class="badge">${escapeHtml(sectionLabel)}</span>${chapterText ? escapeHtml(chapterText) : ''}</div>`;
+}
+
+function computePageCount(s) {
+  const sn = parseInt(s.start_page, 10);
+  const en = parseInt(s.end_page, 10);
+  if (!isNaN(sn) && !isNaN(en)) {
+    return `${en - sn + 1} pages`;
+  }
+  return s.end_page ? `${s.start_page} → ${s.end_page}` : `${s.start_page} 부터`;
+}
+
 function formatSessionDate(iso) {
   if (!iso) return { date: '', weekday: '' };
   const d = new Date(iso);
@@ -786,6 +2062,101 @@ function formatSessionDate(iso) {
   };
 }
 
+function formatTimeShort(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+// ════════════════════════════════════════════════════════
+// 멤버 기록 제출
+// ════════════════════════════════════════════════════════
+async function submitReflection() {
+  const alias = document.getElementById('inputAlias').value;
+  const day = document.getElementById('inputDay').value;
+  const quote = document.getElementById('inputQuote').value.trim();
+  const quotePage = document.getElementById('inputQuotePage').value.trim();
+  const mind = document.getElementById('inputMind').value.trim();
+
+  const statusEl = document.getElementById('inputStatus');
+  const btn = document.getElementById('inputSubmitBtn');
+
+  if (!alias || alias === '__other__') {
+    return setStatus('너의 별칭을 골라 줘.', 'error');
+  }
+  if (!day) {
+    return setStatus('아직 회차가 시작되지 않았어. 진행자가 첫 회차를 등록한 뒤에 남길 수 있어.', 'error');
+  }
+  if (!quote && !mind) {
+    return setStatus('문장 또는 너의 마음 중 하나는 적어 줘.', 'error');
+  }
+
+  btn.disabled = true;
+  btn.textContent = '남기는 중…';
+  statusEl.textContent = '';
+  statusEl.className = 'input-status';
+
+  try {
+    const res = await fetch(GAS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'add_reflection',
+        day: Number(day),
+        reflection: {
+          alias,
+          quote_text: quote,
+          quote_page: quotePage,
+          my_mind: mind
+        }
+      })
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      setStatus(`✦ 잘 받았어, ${alias}. 새벽 함께해 줘서 고마워.`, 'success');
+      // 입력 폼 초기화 (alias, day는 유지)
+      document.getElementById('inputQuote').value = '';
+      document.getElementById('inputQuotePage').value = '';
+      document.getElementById('inputMind').value = '';
+
+      // 해당 회차만 갱신
+      const idx = sessions.findIndex(s => Number(s.day) === Number(day));
+      if (idx >= 0 && data.session) {
+        sessions[idx] = data.session;
+        // sessions 재정렬 (혹시 모를 변경에 대비)
+        sessions.sort((a, b) => (Number(b.day) || 0) - (Number(a.day) || 0));
+        renderSessions();
+        renderDashboard();
+        populateDayDisplay();
+        // 해당 회차로 스크롤
+        setTimeout(() => {
+          const el = document.getElementById(`session-${day}`);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+      }
+      setTimeout(() => setStatus('', ''), 5000);
+    } else {
+      throw new Error(data.error || 'unknown');
+    }
+  } catch (err) {
+    setStatus('남기지 못했어: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '남기기 →';
+  }
+}
+
+function setStatus(msg, cls) {
+  const el = document.getElementById('inputStatus');
+  el.textContent = msg;
+  el.className = 'input-status' + (cls ? ' ' + cls : '');
+}
+
+// ════════════════════════════════════════════════════════
+// 유틸
+// ════════════════════════════════════════════════════════
 function escapeHtml(s) {
   if (s === null || s === undefined) return '';
   return String(s)
@@ -797,81 +2168,23 @@ function escapeHtml(s) {
 }
 
 function escapeAttr(s) {
-  return escapeHtml(s).replace(/'/g, '\\\'');
+  return escapeHtml(s);
 }
 
+
 // ════════════════════════════════════════════════════════
-// 다운로드 — 멤버 기록 전체를 PDF로
+// 다운로드 — 깔끔한 전용 레이아웃 생성 후 캡쳐/PDF화
 // ════════════════════════════════════════════════════════
 
-function buildPrintableMemberPage(alias, entries) {
-  const entriesHtml = entries.map(e => {
-    const dateInfo = formatSessionDate(e.date);
-    const section = SECTION_LABELS[e.section] || '';
-    const pageRange = e.end_page ? `p. ${e.start_page} ~ p. ${e.end_page}` : `p. ${e.start_page}`;
+// ─────────────── 공용 헬퍼 ───────────────
 
-    let html = '<div style="background: rgba(255,252,245,0.55); border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 22px 26px; border-radius: 2px; margin-bottom: 24px; page-break-inside: avoid;">';
-
-    // 헤더
-    html += '<div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px dashed #d4c8b3; flex-wrap: wrap;">';
-    html += `<div><div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase;">Day ${escapeHtml(e.day)}</div>`;
-    html += `<div style="font-family: 'Gowun Batang', serif; font-size: 14px; color: #4a423a; margin-top: 2px;">${dateInfo.date} ${dateInfo.weekday}</div></div>`;
-    html += `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #6b6258;">${section ? section + ' · ' : ''}${escapeHtml(pageRange)}</div>`;
-    html += '</div>';
-
-    // 인용
-    if (e.quote_text) {
-      html += '<div style="margin-bottom: 14px;">';
-      html += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">📜 마음에 남은 문장</div>';
-      html += '<div style="padding: 14px 18px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #d4b97e;">';
-      html += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 15px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(e.quote_text)}</div>`;
-      html += `<div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ' · p. ' + escapeHtml(e.quote_page) : ''}</div>`;
-      html += '</div></div>';
-    }
-
-    // 마음
-    if (e.my_mind) {
-      html += '<div>';
-      html += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 8px;">✿ 남기고 싶은 나의 마음</div>';
-      html += `<div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.9; color: #4a423a; padding: 12px 16px; background: rgba(255,255,255,0.4); border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(e.my_mind)}</div>`;
-      html += '</div>';
-    }
-
-    html += '</div>';
-    return html;
-  }).join('');
-
-  return `
-    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 50px 56px; max-width: 700px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
-      <!-- 헤더 -->
-      <div style="text-align: center; padding-bottom: 24px; margin-bottom: 32px; border-bottom: 1px solid #d4c8b3;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #8a6b35; text-transform: uppercase; margin-bottom: 12px;">HOUR OF THE HEART</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 28px; color: #7a3f2e; margin-bottom: 8px;">마음의 시간</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 17px; color: #2a2520; margin-bottom: 14px;"><span style="color: #7a3f2e; font-weight: 700;">${escapeHtml(alias)}</span>의 독서와 마음 기록</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 13px; color: #6b6258; margin-bottom: 2px;">여기 그리고 지금과 연결하기</div>
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #6b6258;">Connection in the Here and Now</div>
-        <div style="font-family: 'Gowun Batang', serif; font-size: 12px; color: #6b6258; margin-top: 14px;">책과 마음 읽기 ${entries.length}개</div>
-      </div>
-
-      <!-- 엔트리 -->
-      ${entriesHtml}
-
-      <!-- 워터마크 -->
-      <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #d4c8b3; text-align: center;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 0.25em; color: #8a6b35; font-size: 11px; margin-bottom: 6px;">READING · ALOUD · TOGETHER</div>
-        <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #6b6258;">모두의 새벽 + 낭만북클럽 · 시즌 15 『마음의 시간』</div>
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10px; color: #9a9085; margin-top: 4px;">bookclub.questionschool.net</div>
-      </div>
-    </div>
-  `;
-}
-
-async function captureElement(html) {
+async function captureElement(html, widthPx) {
+  widthPx = widthPx || 760;
   const wrapper = document.createElement('div');
   wrapper.style.position = 'fixed';
   wrapper.style.left = '-9999px';
   wrapper.style.top = '0';
-  wrapper.style.width = '700px';
+  wrapper.style.width = widthPx + 'px';
   wrapper.innerHTML = html;
   document.body.appendChild(wrapper);
 
@@ -891,26 +2204,234 @@ async function captureElement(html) {
   return canvas;
 }
 
-async function downloadMemberPdf() {
-  const entries = window._currentMemberEntries || [];
-  if (entries.length === 0 || !selectedAlias) {
-    alert('아직 기록이 없어.');
-    return;
+function getTodayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function watermarkHtml() {
+  return `
+    <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid #d4c8b3; text-align: center;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 0.25em; color: #8a6b35; font-size: 11px; margin-bottom: 6px;">READING · ALOUD · TOGETHER</div>
+      <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #6b6258;">모두의 새벽 + 낭만북클럽 · 시즌 15 『마음의 시간』</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10px; color: #9a9085; margin-top: 4px;">bookclub.questionschool.net</div>
+    </div>
+  `;
+}
+
+function pageHeaderHtml(eyebrowText, titleSuffix) {
+  titleSuffix = titleSuffix || '모두의 기록';
+  return `
+    <div style="text-align: center; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid #d4c8b3;">
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #8a6b35; text-transform: uppercase; margin-bottom: 10px;">${escapeHtml(eyebrowText)}</div>
+      <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 22px; color: #2a2520;"><span style="color: #7a3f2e;">마음의 시간</span> — ${escapeHtml(titleSuffix)}</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #6b6258; margin-top: 6px;">Connection in the Here and Now</div>
+    </div>
+  `;
+}
+
+// ─────────────── 1. Reflection 카드 PNG ───────────────
+
+function buildPrintableReflection(r, s) {
+  const dateInfo = formatSessionDate(s.date);
+  const time = formatTimeShort(r.timestamp);
+  const editedMark = r.updated_at ? ' (수정됨)' : '';
+
+  let inner = '';
+
+  if (r.quote_text) {
+    inner += `
+      <div style="margin-bottom: 16px; padding: 16px 20px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #d4b97e;">
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; line-height: 1.95; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.quote_text)}</div>
+        <div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>
+      </div>
+    `;
   }
 
-  const btn = document.getElementById('memberDownloadBtn');
-  const originalHtml = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<span>⏳</span><span>PDF 만드는 중…</span>';
+  if (r.my_mind) {
+    inner += `
+      <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #2a2520; padding: 14px 18px; background: rgba(255,255,255,0.5); border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>
+    `;
+  }
+
+  // 우측 하단 서명: 별칭 · 시간 (본문 글자체 크기, 색은 그대로)
+  inner += `
+    <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dotted rgba(176,138,74,0.25); text-align: right;">
+      <span style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 14px; color: #7a3f2e;">${escapeHtml(r.alias)}</span>
+      <span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #9a9085; margin-left: 10px;">${escapeHtml(time)}${editedMark}</span>
+    </div>
+  `;
+
+  // 회차 정보 (작은 라벨)
+  const sectionLabel = SECTION_LABELS[s.section] || '';
+  const pageInfo = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
+
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+      ${pageHeaderHtml('HOUR OF THE HEART', '오늘의 기록')}
+
+      <!-- 회차 정보 -->
+      <div style="text-align: center; margin-bottom: 22px;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(s.day).padStart(2,'0')}</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #4a423a;">${dateInfo.date} ${dateInfo.weekday}${sectionLabel ? ' · ' + sectionLabel : ''} · ${escapeHtml(pageInfo)}</div>
+      </div>
+
+      <!-- 메인 카드 -->
+      <div style="background: rgba(255,252,245,0.6); border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 26px 30px; border-radius: 2px;">
+        ${inner}
+      </div>
+
+      ${watermarkHtml()}
+    </div>
+  `;
+}
+
+async function downloadReflectionImage(refId) {
+  const el = document.getElementById(refId);
+  if (!el) return;
+  const day = Number(el.dataset.day);
+  const timestamp = el.dataset.timestamp;
+  const session = sessions.find(s => Number(s.day) === day);
+  if (!session) return;
+  const ref = (session.reflections || []).find(r => r.timestamp === timestamp);
+  if (!ref) return;
+
+  const btn = el.querySelector('.reflection-actions .reflection-action-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+
+  try {
+    const html = buildPrintableReflection(ref, session);
+    const canvas = await captureElement(html, 680);
+
+    canvas.toBlob((blob) => {
+      if (!blob) throw new Error('이미지 생성 실패');
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `마음의시간_Day${String(day).padStart(2,'0')}_${ref.alias}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  } catch (err) {
+    console.error(err);
+    alert('이미지 저장 실패: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '⬇'; }
+  }
+}
+
+// ─────────────── 2. 하루 회차 전체 PDF ───────────────
+
+function buildPrintableSessionDay(s) {
+  const dateInfo = formatSessionDate(s.date);
+  const sectionInfo = (s.section ? `${SECTION_LABELS[s.section] || s.section}` : '');
+  const pageRange = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
+  const attendeesList = (s.attendees || []).map(a => a.alias).join(' · ');
+  const reflections = (s.reflections || []).slice().sort((a, b) => {
+    const ta = a.timestamp || '', tb = b.timestamp || '';
+    if (tb < ta) return -1; if (tb > ta) return 1; return 0;
+  });
+
+  // 각 멤버 기록을 카드로
+  const refsHtml = reflections.map(r => {
+    const time = formatTimeShort(r.timestamp);
+    let html = '<div style="margin-bottom: 16px; padding: 14px 18px; background: rgba(255,255,255,0.55); border-left: 2px solid #b08a4a; border-radius: 2px; page-break-inside: avoid;">';
+    html += `<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">`;
+    html += `<div style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 15px; color: #7a3f2e;">${escapeHtml(r.alias)}</div>`;
+    html += `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; color: #9a9085;">${escapeHtml(time)}</div>`;
+    html += `</div>`;
+
+    if (r.quote_text) {
+      html += `<div style="margin-bottom: 10px; padding: 12px 16px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #d4b97e;">`;
+      html += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 14px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.quote_text)}</div>`;
+      html += `<div style="margin-top: 8px; padding-top: 6px; padding-left: 12px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>`;
+      html += `</div>`;
+    }
+    if (r.my_mind) {
+      html += `<div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>`;
+    }
+    html += '</div>';
+    return html;
+  }).join('');
+
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 46px 52px; max-width: 720px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
+      ${pageHeaderHtml('HOUR OF THE HEART', '모두의 기록')}
+
+      <!-- 회차 큰 정보 -->
+      <div style="background: rgba(255,252,245,0.6); border: 1px solid #e5dcc8; border-left: 3px solid #b08a4a; padding: 24px 28px; border-radius: 2px; margin-bottom: 26px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding-bottom: 14px; margin-bottom: 16px; border-bottom: 1px dashed #d4c8b3; flex-wrap: wrap;">
+          <div>
+            <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(s.day).padStart(2,'0')}${Number(s.day) === 1 ? ' · 첫 새벽' : ''}</div>
+            <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 20px; color: #2a2520;">${dateInfo.date} <span style="color: #6b6258; font-weight: 400; font-size: 16px;">${dateInfo.weekday}</span></div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Pages</div>
+            ${sectionInfo ? `<div style="font-size: 12px; color: #6b6258; margin-bottom: 2px;"><span style="display: inline-block; padding: 2px 8px; background: rgba(176,138,74,0.12); border: 1px solid rgba(176,138,74,0.25); border-radius: 100px; font-size: 11px; color: #8a6b35;">${escapeHtml(sectionInfo)}</span></div>` : ''}
+            <div style="font-family: 'Nanum Myeongjo', serif; font-size: 18px; color: #7a3f2e; font-weight: 700;">${escapeHtml(pageRange)}</div>
+            ${s.leader ? `<div style="font-size: 11px; color: #6b6258; font-style: italic; margin-top: 2px; font-family: 'Cormorant Garamond', serif;">진행 ${escapeHtml(s.leader)}</div>` : ''}
+          </div>
+        </div>
+
+        ${attendeesList ? `
+        <div style="margin-bottom: 14px;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">함께한 사람들</div>
+          <div style="font-family: 'Gowun Batang', serif; font-size: 13px; color: #4a423a;">${escapeHtml(attendeesList)}</div>
+        </div>` : ''}
+
+        ${s.reading_note ? `
+        <div style="margin-bottom: 14px;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">낭독 구간</div>
+          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; padding: 10px 14px; background: rgba(235,226,209,0.3); border-radius: 2px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.reading_note)}</div>
+        </div>` : ''}
+
+        ${s.quote_text ? `
+        <div style="margin-bottom: 14px; padding: 14px 18px; background: linear-gradient(to right, rgba(176,138,74,0.06), transparent); border-left: 2px solid #b08a4a;">
+          <div style="font-family: 'Nanum Myeongjo', serif; font-size: 14.5px; line-height: 1.9; color: #2a2520; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.quote_text)}</div>
+          ${s.quote_meta ? `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11.5px; color: #6b6258; margin-top: 6px; padding-left: 12px;">— ${escapeHtml(s.quote_meta)}</div>` : ''}
+        </div>` : ''}
+
+        ${s.sharing ? `
+        <div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">나눔에서 오간 이야기</div>
+          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.9; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.sharing)}</div>
+        </div>` : ''}
+      </div>
+
+      <!-- 멤버 기록 모음 -->
+      ${reflections.length > 0 ? `
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;">
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase;">Reflections · 모두의 기록</div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #6b6258;">${reflections.length}개</div>
+        </div>
+        ${refsHtml}
+      </div>` : `
+      <div style="text-align: center; padding: 30px; color: #9a9085; font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 13px;">이 새벽엔 아직 남겨진 기록이 없어.</div>
+      `}
+
+      ${watermarkHtml()}
+    </div>
+  `;
+}
+
+async function downloadSessionPdf(day) {
+  const session = sessions.find(s => Number(s.day) === Number(day));
+  if (!session) return;
+
+  const btn = document.querySelector(`#session-${day} .session-download-btn`);
+  if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
 
   try {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pageHeightMm = 297;
     const imgWidthMm = 210;
+    const pageHeightMm = 297;
 
-    const html = buildPrintableMemberPage(selectedAlias, entries);
-    const canvas = await captureElement(html);
+    const html = buildPrintableSessionDay(session);
+    const canvas = await captureElement(html, 720);
 
     const imgData = canvas.toDataURL('image/jpeg', 0.92);
     const imgHeightMm = (canvas.height * imgWidthMm) / canvas.width;
@@ -918,7 +2439,6 @@ async function downloadMemberPdf() {
     if (imgHeightMm <= pageHeightMm) {
       pdf.addImage(imgData, 'JPEG', 0, 0, imgWidthMm, imgHeightMm);
     } else {
-      // 긴 컨텐츠를 여러 페이지로 분할
       let yOffset = 0;
       while (yOffset < imgHeightMm) {
         if (yOffset > 0) pdf.addPage();
@@ -927,24 +2447,40 @@ async function downloadMemberPdf() {
       }
     }
 
-    const today = getTodayStr();
-    pdf.save(`마음의시간_${selectedAlias}_기록_${today}.pdf`);
+    pdf.save(`마음의시간_Day${String(day).padStart(2,'0')}_${session.date || getTodayStr()}.pdf`);
   } catch (err) {
     console.error(err);
     alert('PDF 저장 실패: ' + err.message);
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = originalHtml;
+    if (btn) { btn.disabled = false; btn.textContent = '⬇'; }
   }
 }
 
-function getTodayStr() {
-  const d = new Date();
-  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-}
 
 // ════════════════════════════════════════════════════════
-init();
+loadAll();
+
+// ════════════════════════════════════════════════════════
+// 자동 새로고침: 시간 기반 상태(예정→진행 중→마침)가 자동으로 전환되도록
+// 5분마다 대시보드와 회차 카드를 다시 렌더
+// (전체 데이터 재호출은 아님 — 클라이언트 시간만 다시 평가)
+// ════════════════════════════════════════════════════════
+setInterval(() => {
+  if (sessions.length > 0) {
+    renderDashboard();
+    populateDayDisplay();
+    renderSessions();
+  }
+}, 5 * 60 * 1000); // 5분마다
+
+// 페이지가 다시 활성화될 때도 갱신 (탭 전환, 화면 깸 등)
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && sessions.length > 0) {
+    renderDashboard();
+    populateDayDisplay();
+    renderSessions();
+  }
+});
 </script>
 
 </body>
