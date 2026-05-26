@@ -1830,19 +1830,19 @@ function renderSessionCard(s) {
       ${s.reading_note ? `
       <div>
         <span class="field-label">Reading · 낭독 구간</span>
-        <div class="reading-note">${escapeHtml(s.reading_note)}</div>
+        <div class="reading-note">${escapeHtml(cleanText(s.reading_note))}</div>
       </div>` : ''}
 
       ${s.quote_text ? `
       <div class="quote-block">
-        <div class="quote-text">${escapeHtml(s.quote_text)}</div>
+        <div class="quote-text">${escapeHtml(cleanText(s.quote_text))}</div>
         ${s.quote_meta ? `<div class="quote-meta">— ${escapeHtml(s.quote_meta)}</div>` : ''}
       </div>` : ''}
 
       ${s.sharing ? `
       <div class="sharing">
         <span class="field-label">Sharing · 나눔에서 오간 이야기</span>
-        <div class="sharing-content">${escapeHtml(s.sharing)}</div>
+        <div class="sharing-content">${escapeHtml(cleanText(s.sharing))}</div>
       </div>` : ''}
 
       <div class="reflections">
@@ -1895,12 +1895,12 @@ function renderReflection(r, dayNum) {
         </div>
         ${hasQuote ? `
           <div class="reflection-quote" data-quote-text="${escapeAttr(r.quote_text)}" data-quote-page="${escapeAttr(r.quote_page || '')}">
-            ${escapeHtml(r.quote_text)}
+            ${escapeHtml(cleanText(r.quote_text))}
             <div class="reflection-quote-source">
               — ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ` · p. ${escapeHtml(r.quote_page)}` : ''}
             </div>
           </div>` : ''}
-        ${hasMind ? `<div class="reflection-mind" data-mind="${escapeAttr(r.my_mind)}">${escapeHtml(r.my_mind)}</div>` : ''}
+        ${hasMind ? `<div class="reflection-mind" data-mind="${escapeAttr(r.my_mind)}">${escapeHtml(cleanText(r.my_mind))}</div>` : ''}
       </div>
     </div>
   `;
@@ -2207,6 +2207,17 @@ function escapeAttr(s) {
   return escapeHtml(s);
 }
 
+// 사용자 텍스트의 앞뒤 공백·빈 줄을 정리하고
+// 가운데에 3줄 이상 연속된 빈 줄은 2줄(=빈 줄 1개)로 정리
+function cleanText(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .replace(/\r\n/g, '\n')     // 윈도우 줄바꿈 정규화
+    .replace(/[ \t]+\n/g, '\n') // 줄 끝 공백 제거
+    .replace(/\n{3,}/g, '\n\n') // 연속 3줄 이상 빈 줄 → 1줄로
+    .trim();                    // 맨 앞·뒤 공백/빈 줄 제거
+}
+
 
 // ════════════════════════════════════════════════════════
 // 다운로드 — 깔끔한 전용 레이아웃 생성 후 캡쳐/PDF화
@@ -2278,7 +2289,7 @@ function buildPrintableReflection(r, s) {
   if (r.quote_text) {
     inner += `
       <div style="margin-bottom: 16px; padding: 16px 20px; background: #fafaf8; border-left: 2px solid #d4b97e;">
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; line-height: 1.95; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.quote_text)}</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; line-height: 1.95; color: #2a2520; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(r.quote_text))}</div>
         <div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>
       </div>
     `;
@@ -2286,7 +2297,7 @@ function buildPrintableReflection(r, s) {
 
   if (r.my_mind) {
     inner += `
-      <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #2a2520; padding: 14px 18px; background: #fafaf8; border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>
+      <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #2a2520; padding: 14px 18px; background: #fafaf8; border-radius: 2px; border-left: 2px solid #a55c47; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(r.my_mind))}</div>
     `;
   }
 
@@ -2397,19 +2408,19 @@ function buildSessionHeaderBlock(s) {
         ${s.reading_note ? `
         <div style="margin-bottom: 14px;">
           <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">낭독 구간</div>
-          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; padding: 10px 14px; background: #f5efe4; border-radius: 2px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.reading_note)}</div>
+          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; padding: 10px 14px; background: #f5efe4; border-radius: 2px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(s.reading_note))}</div>
         </div>` : ''}
 
         ${s.quote_text ? `
         <div style="margin-bottom: 14px; padding: 14px 18px; background: #fafaf8; border-left: 2px solid #b08a4a;">
-          <div style="font-family: 'Nanum Myeongjo', serif; font-size: 14.5px; line-height: 1.9; color: #2a2520; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.quote_text)}</div>
+          <div style="font-family: 'Nanum Myeongjo', serif; font-size: 14.5px; line-height: 1.9; color: #2a2520; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(s.quote_text))}</div>
           ${s.quote_meta ? `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11.5px; color: #6b6258; margin-top: 6px; padding-left: 12px;">— ${escapeHtml(s.quote_meta)}</div>` : ''}
         </div>` : ''}
 
         ${s.sharing ? `
         <div>
           <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">나눔에서 오간 이야기</div>
-          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.9; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(s.sharing)}</div>
+          <div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.9; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(s.sharing))}</div>
         </div>` : ''}
       </div>
     </div>
@@ -2439,12 +2450,12 @@ function buildReflectionCardBlock(r) {
 
   if (r.quote_text) {
     card += `<div style="margin-bottom: 10px; padding: 12px 16px; background: #ffffff; border: 1px solid #e5dcc8; border-left: 2px solid #d4b97e;">`;
-    card += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 14px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.quote_text)}</div>`;
+    card += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 14px; line-height: 1.9; color: #2a2520; font-style: italic; padding-left: 12px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(r.quote_text))}</div>`;
     card += `<div style="margin-top: 8px; padding-top: 6px; padding-left: 12px; border-top: 1px dotted rgba(176,138,74,0.25); font-family: 'Gowun Batang', serif; font-size: 11px; color: #6b6258; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${r.quote_page ? ' · p. ' + escapeHtml(r.quote_page) : ''}</div>`;
     card += `</div>`;
   }
   if (r.my_mind) {
-    card += `<div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(r.my_mind)}</div>`;
+    card += `<div style="font-family: 'Gowun Batang', serif; font-size: 13.5px; line-height: 1.85; color: #4a423a; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(r.my_mind))}</div>`;
   }
   card += '</div>';
 
