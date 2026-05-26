@@ -606,6 +606,16 @@
       </div>
 
       <div class="field">
+        <label>Question <span class="ko">· 함께 나눌 질문</span><span class="hint">진행자 전용 메모 · 참가자에게는 보이지 않아.</span></label>
+        <textarea id="fQuoteText" placeholder="다음 모임에서 함께 나눠보고 싶은 질문…"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Fellow Travelers <span class="ko">· 참가자 관련 메모</span><span class="hint">진행자 전용 메모 · 참가자에게는 보이지 않아.</span></label>
+        <textarea id="fQuoteMeta" placeholder="오늘 멤버들의 상태, 기억해둘 이야기…"></textarea>
+      </div>
+
+      <div class="field">
         <label>Sharing Note <span class="ko">· 나눈 이야기</span></label>
         <textarea id="fSharing" class="large" placeholder="30분간의 나눔에서 어떤 이야기가 오갔는지…"></textarea>
       </div>
@@ -840,6 +850,8 @@ async function submitForm() {
   const endPage = document.getElementById('fEndPage').value.trim();
   const leader = document.getElementById('fLeader').value.trim();
   const readingNote = document.getElementById('fReadingNote').value.trim();
+  const quoteText = document.getElementById('fQuoteText').value.trim();
+  const quoteMeta = document.getElementById('fQuoteMeta').value.trim();
   const sharing = document.getElementById('fSharing').value.trim();
 
   if (!day) return showStatus('Day를 입력해 줘.', 'error');
@@ -860,8 +872,8 @@ async function submitForm() {
     leader,
     attendees,
     reading_note: readingNote,
-    quote_text: '',
-    quote_meta: '',
+    quote_text: quoteText,
+    quote_meta: quoteMeta,
     sharing
   };
 
@@ -900,6 +912,8 @@ function resetForm() {
   document.getElementById('fEndPage').value = '';
   document.getElementById('fLeader').value = '';
   document.getElementById('fReadingNote').value = '';
+  document.getElementById('fQuoteText').value = '';
+  document.getElementById('fQuoteMeta').value = '';
   document.getElementById('fSharing').value = '';
   attendeePool.forEach(m => m.on = false);
   renderAttendees();
@@ -946,6 +960,8 @@ function editSession(day) {
   document.getElementById('fEndPage').value = s.end_page || '';
   document.getElementById('fLeader').value = s.leader || '';
   document.getElementById('fReadingNote').value = s.reading_note || '';
+  document.getElementById('fQuoteText').value = s.quote_text || '';
+  document.getElementById('fQuoteMeta').value = s.quote_meta || '';
   document.getElementById('fSharing').value = s.sharing || '';
 
   // 참석자 적용: 기존 풀에 있으면 on, 없으면 풀에 추가
