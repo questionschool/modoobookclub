@@ -657,6 +657,7 @@ const DEFAULT_MEMBERS = [
 // 상태
 // ════════════════════════════════════════════════════════
 let allSessions = [];
+let contents = [];
 let memberCounts = {};   // alias → 기록 수
 let selectedAlias = null;
 let currentSort = 'newest';  // 'newest' (최근부터, 기본) | 'oldest' (오래된 것부터)
@@ -675,9 +676,14 @@ async function init() {
   }
 
   try {
-    const res = await fetch(`${GAS_URL}?action=list_all`);
-    const data = await res.json();
+    const [sessionsRes, contentsRes] = await Promise.all([
+      fetch(`${GAS_URL}?action=list_all`),
+      fetch(`${GAS_URL}?action=list_contents`)
+    ]);
+    const data = await sessionsRes.json();
+    const contentsData = await contentsRes.json();
     allSessions = data.sessions || [];
+    contents = contentsData.contents || [];
     const members = (data.members && data.members.length) ? data.members : DEFAULT_MEMBERS;
 
     // 멤버별 기록 수 계산 (시즌 멤버 외 사람도 포함)
@@ -1045,6 +1051,36 @@ function buildPrintableEntry(e, alias) {
   const sectionLabel = SECTION_LABELS[e.section] || '';
   const pageInfo = e.end_page ? `p. ${e.start_page} ~ p. ${e.end_page}` : `p. ${e.start_page}`;
 
+  // 챕터 매칭 (본문 회차일 때만)
+  let chapterNum = '';
+  let chapterTitle = '';
+  if (e.section === 'main' && contents.length > 0) {
+    const startNum = parseInt(e.start_page, 10);
+    const endNum = parseInt(e.end_page, 10) || startNum;
+    if (!isNaN(startNum)) {
+      const matches = contents.filter(c =>
+        c.section_type === 'main' &&
+        Number(c.page_start) <= endNum &&
+        Number(c.page_end) >= startNum
+      );
+      if (matches.length === 1) {
+        chapterNum = `Chapter ${matches[0].num}`;
+        chapterTitle = matches[0].title || '';
+      } else if (matches.length > 1) {
+        chapterNum = `Chapter ${matches[0].num} → ${matches[matches.length - 1].num}`;
+      }
+    }
+  }
+
+  // 헤더 본문 구성: "Chapter 1. 늙은 치료사의 하루. p. 1 ~ p. 14"
+  // 또는 서론/후기: "서론. p. v ~ p. xxi"
+  let headerParts = [];
+  if (chapterNum) headerParts.push(chapterNum);
+  else if (sectionLabel) headerParts.push(sectionLabel);
+  if (chapterTitle) headerParts.push(chapterTitle);
+  headerParts.push(pageInfo);
+  const headerText = headerParts.join('. ');
+
   let inner = '';
 
   if (e.quote_text) {
@@ -1089,7 +1125,7 @@ function buildPrintableEntry(e, alias) {
       <!-- 회차 정보 -->
       <div style="text-align: center; margin-bottom: 22px;">
         <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(e.day).padStart(2,'0')}</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #4a423a;">${dateInfo.date} ${dateInfo.weekday}${sectionLabel ? ' · ' + sectionLabel : ''} · ${escapeHtml(pageInfo)}</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #4a423a;">${escapeHtml(headerText)}</div>
       </div>
 
       <!-- 메인 카드 -->
