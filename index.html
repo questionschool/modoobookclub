@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>모두의 새벽 + 낭만북클럽</title>
-<meta name="description" content="함께 소리내어 책을 읽는 여기, 그리고 지금.">
+<meta name="description" content="여기, 그리고 지금. 매일 아침 함께 모여 소리내어 천천히 책을 읽는 낭독 커뮤니티.">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="모두의 새벽 + 낭만북클럽">
-<meta property="og:description" content="함께 소리내어 책을 읽는 여기, 그리고 지금.">
+<meta property="og:description" content="여기, 그리고 지금. 매일 아침 함께 모여 소리내어 천천히 책을 읽는 낭독 커뮤니티.">
 <meta property="og:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
 <meta property="og:url" content="https://bookclub.questionschool.net/">
 <meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
@@ -112,13 +112,35 @@
     animation: fadeUp 1s ease 0.8s forwards;
   }
 
+  /* "여기, 그리고 지금" — 살짝 강조 */
+  .tagline-emphasis {
+    font-size: 1.15rem;
+    color: var(--ink);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+  }
+
+  /* 4줄 부제 그룹 */
+  .tagline-group {
+    margin-top: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.1s forwards;
+  }
+  .tagline-group .tagline {
+    opacity: 1;
+    animation: none;
+    color: var(--ink-light);
+    font-size: 0.98rem;
+    margin-bottom: 0.2rem;
+  }
+
   .ornament {
     color: var(--gold);
     letter-spacing: 0.5em;
     font-size: 0.9rem;
     margin: 2.5rem 0 2.5rem;
     opacity: 0;
-    animation: fadeUp 1s ease 1.1s forwards;
+    animation: fadeUp 1s ease 1.4s forwards;
   }
 
   .journal-btn {
@@ -138,7 +160,7 @@
     position: relative;
     overflow: hidden;
     opacity: 0;
-    animation: fadeUp 1s ease 1.7s forwards;
+    animation: fadeUp 1s ease 2s forwards;
   }
   .journal-btn::before {
     content: '';
@@ -172,7 +194,7 @@
     color: var(--ink-light);
     letter-spacing: 0.15em;
     opacity: 0;
-    animation: fadeUp 1s ease 2s forwards;
+    animation: fadeUp 1s ease 2.3s forwards;
   }
   .now-reading .season-no {
     color: var(--rose);
@@ -187,7 +209,7 @@
     margin-left: auto;
     margin-right: auto;
     opacity: 0;
-    animation: fadeUp 1.2s ease 1.4s forwards;
+    animation: fadeUp 1.2s ease 1.7s forwards;
   }
   .season-image img {
     width: 100%;
@@ -211,7 +233,7 @@
     gap: 1.5rem;
     flex-wrap: wrap;
     opacity: 0;
-    animation: fadeUp 1s ease 2.3s forwards;
+    animation: fadeUp 1s ease 2.6s forwards;
   }
   .sub-links a {
     font-family: 'Cormorant Garamond', serif;
@@ -297,14 +319,15 @@
     <div class="eyebrow">Hour of the Heart</div>
 
     <h1>모두의 새벽<span class="amp">+</span>낭만북클럽</h1>
-<br>
-    <p class="tagline">여기, 그리고 지금</p>
-<br>
-    <p class="tagline">매일 아침 함께 모여</p>
-    <p class="tagline">소리내어 천천히 책을 읽고</p>
-    <p class="tagline">서로의 목소리에 귀를 기울이는</p>
-    <p class="tagline">낭독 커뮤니티</p>
-    
+
+    <p class="tagline tagline-emphasis">여기, 그리고 지금</p>
+
+    <div class="tagline-group">
+      <p class="tagline">매일 아침 함께 모여</p>
+      <p class="tagline">소리내어 천천히 책을 읽고</p>
+      <p class="tagline">서로의 목소리에 귀를 기울이는</p>
+      <p class="tagline">낭독 커뮤니티</p>
+    </div>
 
     <div class="ornament">· · ·</div>
 
