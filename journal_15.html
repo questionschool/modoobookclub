@@ -1841,7 +1841,15 @@ function renderSessionCard(s) {
   const sectionInfo = renderSectionInfo(s);
   const pageCount = computePageCount(s);
 
-  const attendeesHtml = (s.attendees || []).map(a => `
+  // 함께한 사람들 정렬: 농담 맨 앞, 지평 맨 끝, 가운데는 시트 순서 그대로
+  // 진행자 둘이 양쪽 끝에서 다른 멤버들을 감싸는 느낌으로
+  const sortedAttendees = [...(s.attendees || [])].sort((a, b) => {
+    const aKey = a.alias === '농담' ? 0 : a.alias === '지평' ? 2 : 1;
+    const bKey = b.alias === '농담' ? 0 : b.alias === '지평' ? 2 : 1;
+    return aKey - bKey;
+  });
+
+  const attendeesHtml = sortedAttendees.map(a => `
     <span class="attendee${a.lead ? ' lead' : ''}">${escapeHtml(a.alias)}</span>
   `).join('');
 
@@ -1874,7 +1882,7 @@ function renderSessionCard(s) {
 
       ${attendeesHtml ? `
       <div class="attendance">
-        <span class="field-label">Attendees · 함께한 사람들</span>
+        <span class="field-label">Fellow Travelers · 오늘 마음의 시간을 함께 읽은 동료 여행자</span>
         <div class="attendees">${attendeesHtml}</div>
       </div>` : ''}
 
@@ -2443,7 +2451,13 @@ function buildSessionHeaderBlock(s) {
   const dateInfo = formatSessionDate(s.date);
   const sectionInfo = (s.section ? `${SECTION_LABELS[s.section] || s.section}` : '');
   const pageRange = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
-  const attendeesList = (s.attendees || []).map(a => a.alias).join(' · ');
+  // 함께한 사람들: 농담 맨 앞, 지평 맨 끝
+  const sortedAttendees = [...(s.attendees || [])].sort((a, b) => {
+    const aKey = a.alias === '농담' ? 0 : a.alias === '지평' ? 2 : 1;
+    const bKey = b.alias === '농담' ? 0 : b.alias === '지평' ? 2 : 1;
+    return aKey - bKey;
+  });
+  const attendeesList = sortedAttendees.map(a => a.alias).join(' · ');
 
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 46px 52px 24px; max-width: 720px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
@@ -2466,7 +2480,7 @@ function buildSessionHeaderBlock(s) {
 
         ${attendeesList ? `
         <div style="margin-bottom: 14px;">
-          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">함께한 사람들</div>
+          <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 6px;">Fellow Travelers · 오늘 마음의 시간을 함께 읽은 동료 여행자</div>
           <div style="font-family: 'Gowun Batang', serif; font-size: 13px; color: #4a423a;">${escapeHtml(attendeesList)}</div>
         </div>` : ''}
 
