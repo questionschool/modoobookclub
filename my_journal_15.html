@@ -806,12 +806,17 @@ function renderSelected() {
     });
   });
 
+  // 디버그: entries의 day/timestamp 확인
+  console.log('[renderSelected] currentSort:', currentSort);
+  console.log('[renderSelected] entries before sort:',
+    entries.map(e => ({ day: e.day, timestamp: e.timestamp, mind: (e.my_mind||'').slice(0,20) }))
+  );
+
   // 정렬 방향에 따라 (1차: day, 2차: timestamp)
   if (currentSort === 'oldest') {
     entries.sort((a, b) => {
       const dayDiff = (Number(a.day) || 0) - (Number(b.day) || 0);
       if (dayDiff !== 0) return dayDiff;
-      // 같은 day면 timestamp 오름차순
       const ta = a.timestamp || '', tb = b.timestamp || '';
       return ta < tb ? -1 : ta > tb ? 1 : 0;
     });
@@ -819,11 +824,14 @@ function renderSelected() {
     entries.sort((a, b) => {
       const dayDiff = (Number(b.day) || 0) - (Number(a.day) || 0);
       if (dayDiff !== 0) return dayDiff;
-      // 같은 day면 timestamp 내림차순
       const ta = a.timestamp || '', tb = b.timestamp || '';
       return tb < ta ? -1 : tb > ta ? 1 : 0;
     });
   }
+
+  console.log('[renderSelected] entries after sort:',
+    entries.map(e => ({ day: e.day, timestamp: e.timestamp, mind: (e.my_mind||'').slice(0,20) }))
+  );
 
   // 메타
   const metaParts = [];
