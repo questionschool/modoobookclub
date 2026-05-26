@@ -601,21 +601,12 @@
       </div>
 
       <div class="field">
-        <label>Reading Note <span class="ko">· 낭독한 구간 메모</span></label>
+        <label>Reading Note <span class="ko">· 읽은 이야기</span></label>
         <textarea id="fReadingNote" placeholder="이번 회차에 어디를 어떤 결로 읽었는지 짧게…"></textarea>
       </div>
 
       <div class="field">
-        <label>Quote <span class="ko">· 인상 깊은 문장</span><span class="hint">선택 사항. 없으면 비워 둬도 돼.</span></label>
-        <textarea id="fQuoteText" placeholder="문장 한두 줄…"></textarea>
-      </div>
-      <div class="field">
-        <label>Quote Source <span class="ko">· 출처와 메모</span></label>
-        <input type="text" id="fQuoteMeta" placeholder="예: 챕터 4, p. 61 · 윤슬이 골라 읽다">
-      </div>
-
-      <div class="field">
-        <label>Sharing <span class="ko">· 나눔에서 오간 이야기</span></label>
+        <label>Sharing Note <span class="ko">· 나눈 이야기</span></label>
         <textarea id="fSharing" class="large" placeholder="30분간의 나눔에서 어떤 이야기가 오갔는지…"></textarea>
       </div>
 
@@ -849,8 +840,6 @@ async function submitForm() {
   const endPage = document.getElementById('fEndPage').value.trim();
   const leader = document.getElementById('fLeader').value.trim();
   const readingNote = document.getElementById('fReadingNote').value.trim();
-  const quoteText = document.getElementById('fQuoteText').value.trim();
-  const quoteMeta = document.getElementById('fQuoteMeta').value.trim();
   const sharing = document.getElementById('fSharing').value.trim();
 
   if (!day) return showStatus('Day를 입력해 줘.', 'error');
@@ -871,8 +860,8 @@ async function submitForm() {
     leader,
     attendees,
     reading_note: readingNote,
-    quote_text: quoteText,
-    quote_meta: quoteMeta,
+    quote_text: '',
+    quote_meta: '',
     sharing
   };
 
@@ -911,8 +900,6 @@ function resetForm() {
   document.getElementById('fEndPage').value = '';
   document.getElementById('fLeader').value = '';
   document.getElementById('fReadingNote').value = '';
-  document.getElementById('fQuoteText').value = '';
-  document.getElementById('fQuoteMeta').value = '';
   document.getElementById('fSharing').value = '';
   attendeePool.forEach(m => m.on = false);
   renderAttendees();
@@ -959,8 +946,6 @@ function editSession(day) {
   document.getElementById('fEndPage').value = s.end_page || '';
   document.getElementById('fLeader').value = s.leader || '';
   document.getElementById('fReadingNote').value = s.reading_note || '';
-  document.getElementById('fQuoteText').value = s.quote_text || '';
-  document.getElementById('fQuoteMeta').value = s.quote_meta || '';
   document.getElementById('fSharing').value = s.sharing || '';
 
   // 참석자 적용: 기존 풀에 있으면 on, 없으면 풀에 추가
