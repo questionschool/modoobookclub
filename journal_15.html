@@ -1602,7 +1602,7 @@
     <div class="stat">
       <div class="stat-label">Members</div>
       <div class="stat-value" id="statMembers">—</div>
-      <div class="stat-sub">함께한 사람</div>
+      <div class="stat-sub">오늘 함께한 사람</div>
     </div>
     <div class="stat">
       <div class="stat-label">Records</div>
@@ -1882,12 +1882,12 @@ function renderDashboard() {
     }
   }
 
-  // Members: 시즌 동안 한 번이라도 참석/기록한 사람들 (visible 회차 기준)
-  const uniqueMembers = new Set();
-  visibleSessions.forEach(s => {
-    (s.attendees || []).forEach(a => uniqueMembers.add(a.alias));
-    (s.reflections || []).forEach(r => uniqueMembers.add(r.alias));
-  });
+  // Members: 오늘(최신) 회차의 attendees만 카운트 — 아래 칩 개수와 정확히 일치
+  // (관리자가 직접 입력하는 attendees가 단일 진실의 원천)
+  const todayAttendees = new Set();
+  if (latestSession) {
+    (latestSession.attendees || []).forEach(a => todayAttendees.add(a.alias));
+  }
 
   // Records: 오늘(최신) 회차의 기록만 카운트
   const recordCount = latestSession ? (latestSession.reflections || []).length : 0;
@@ -1903,7 +1903,7 @@ function renderDashboard() {
   document.getElementById('statPages').innerHTML = pagesDisplay;
   document.getElementById('statPagesSub').textContent = pagesSubDisplay;
 
-  document.getElementById('statMembers').textContent = uniqueMembers.size || '—';
+  document.getElementById('statMembers').textContent = todayAttendees.size || '—';
   document.getElementById('statRecords').textContent = recordCount;
 
   // Progress bar — 시간상 끝난 회차만 반영
