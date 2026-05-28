@@ -976,12 +976,16 @@
     line-height: 1.4;
     word-break: keep-all;
   }
-  /* 두 챕터 이상 걸친 회차: 제목이 길어지므로 조금 작게 + 폭 확보 */
+  /* 두 챕터 이상 걸친 회차: 각 챕터를 한 줄씩 표시, 조금 작게 */
   .pages-chapter-title.multi {
     font-size: 17px;
-    line-height: 1.5;
-    max-width: 320px;
+    line-height: 1.45;
+    max-width: 340px;
     margin-left: auto; /* 우측 정렬 유지 */
+  }
+  /* 같은 회차의 둘째 줄부터는 위 여백을 좁혀 한 덩어리로 보이게 */
+  .pages-chapter-title.multi + .pages-chapter-title.multi {
+    margin-top: 2px;
   }
 
   .pages-range {
@@ -2184,7 +2188,11 @@ function renderSessionCard(s) {
         </div>
         <div class="session-pages">
           ${sectionInfo.num ? `<div class="pages-chapter">${escapeHtml(sectionInfo.num)}</div>` : ''}
-          ${sectionInfo.title ? `<div class="pages-chapter-title${sectionInfo.multi ? ' multi' : ''}">${escapeHtml(sectionInfo.title)}</div>` : ''}
+          ${(sectionInfo.titleLines && sectionInfo.titleLines.length)
+            ? sectionInfo.titleLines.map(line =>
+                `<div class="pages-chapter-title${sectionInfo.multi ? ' multi' : ''}">${escapeHtml(line)}</div>`
+              ).join('')
+            : ''}
           <div class="pages-range">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '~'}</div>
         </div>
       </div>
@@ -2425,7 +2433,7 @@ function isSameDayLocal(iso, d2) {
 
 function renderSectionInfo(s) {
   const sectionLabel = SECTION_LABELS[s.section] || s.section || '';
-  if (!sectionLabel) return { num: '', title: '', multi: false };
+  if (!sectionLabel) return { num: '', title: '', titleLines: [], multi: false };
 
   // 본문 회차: Chapter N + 챕터 제목
   if (s.section === 'main') {
@@ -2439,23 +2447,26 @@ function renderSectionInfo(s) {
       );
       if (matches.length === 1) {
         const ch = matches[0];
-        return { num: `Chapter ${ch.num}`, title: ch.title || '', multi: false };
+        const t = ch.title || '';
+        return { num: `Chapter ${ch.num}`, title: t, titleLines: t ? [t] : [], multi: false };
       } else if (matches.length > 1) {
         const first = matches[0];
         const last = matches[matches.length - 1];
-        // 걸친 모든 챕터의 제목을 "번호. 제목" 형태로 & 로 연결
-        // (제목이 없는 챕터는 번호만)
-        const titles = matches
-          .map(c => c.title ? `${c.num}. ${c.title}` : `${c.num}장`)
-          .join(' & ');
-        return { num: `Chapter ${first.num} & ${last.num}`, title: titles, multi: true };
+        // 걸친 각 챕터를 "번호. 제목" 한 줄씩 (제목 없으면 "N장")
+        const lines = matches.map(c => c.title ? `${c.num}. ${c.title}` : `${c.num}장`);
+        return {
+          num: `Chapter ${first.num} & ${last.num}`,
+          title: lines.join(' & '),   // 기존 호환용 (한 줄 문자열)
+          titleLines: lines,          // 줄 단위 배열
+          multi: true
+        };
       }
     }
-    return { num: '', title: '', multi: false };
+    return { num: '', title: '', titleLines: [], multi: false };
   }
 
   // 서론/후기 등은 라벨만
-  return { num: sectionLabel, title: '', multi: false };
+  return { num: sectionLabel, title: '', titleLines: [], multi: false };
 }
 
 function computePageCount(s) {
@@ -2695,24 +2706,23 @@ function buildPrintableReflection(r, s) {
     </div>
   `;
 
-  // 회차 정보 — Chapter 1. 늙은 치료사의 하루. p. 1 ~ p. 14
-  const sectionLabel = SECTION_LABELS[s.section] || '';
+  // 회차 정보 — 챕터줄(단일: "Chapter N. 제목" / 다중: "1. 제목 & 2. 제목") + 페이지줄
   const pageInfo = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
   const sectionInfoObj = renderSectionInfo(s);
 
-  // 헤더 본문 구성
-  // 단일 본문 회차: "Chapter N. 챕터 제목. p. X ~ p. Y"
-  // 다중 챕터 회차: "1. 제목 & 2. 제목. p. X ~ p. Y" (제목에 이미 번호가 있어 Chapter N&M은 생략)
-  // 서론/후기: "서론. p. X ~ p. Y"
-  let headerParts = [];
+  // 헤더 본문 구성 (두 줄: 챕터줄 / 페이지줄)
+  // 단일 본문 회차: "Chapter N. 챕터 제목" + "p. X ~ p. Y"
+  // 다중 챕터 회차: "1. 제목 & 2. 제목" + "p. X ~ p. Y" (제목에 번호 포함 → Chapter N&M 생략)
+  // 서론/후기: "서론" + "p. X ~ p. Y"
+  let chapterLine = '';
   if (sectionInfoObj.multi) {
-    if (sectionInfoObj.title) headerParts.push(sectionInfoObj.title);
+    chapterLine = sectionInfoObj.title || '';
   } else {
-    if (sectionInfoObj.num) headerParts.push(sectionInfoObj.num);
-    if (sectionInfoObj.title) headerParts.push(sectionInfoObj.title);
+    const parts = [];
+    if (sectionInfoObj.num) parts.push(sectionInfoObj.num);
+    if (sectionInfoObj.title) parts.push(sectionInfoObj.title);
+    chapterLine = parts.join('. ');
   }
-  headerParts.push(pageInfo);
-  const headerText = headerParts.join('. ');
 
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f5efe4; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
@@ -2721,7 +2731,8 @@ function buildPrintableReflection(r, s) {
       <!-- 회차 정보 -->
       <div style="text-align: center; margin-bottom: 22px;">
         <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(s.day).padStart(2,'0')}</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #4a423a;">${escapeHtml(headerText)}</div>
+        ${chapterLine ? `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #4a423a; line-height: 1.5; word-break: keep-all;">${escapeHtml(chapterLine)}</div>` : ''}
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 14px; color: #6b6258; margin-top: 4px;">${escapeHtml(pageInfo)}</div>
       </div>
 
       <!-- 메인 카드 -->
@@ -2777,8 +2788,9 @@ async function downloadReflectionImage(refId) {
 // 회차 헤더 블록 (대제목 + 회차 정보 카드)
 function buildSessionHeaderBlock(s) {
   const dateInfo = formatSessionDate(s.date);
-  const sectionInfo = (s.section ? `${SECTION_LABELS[s.section] || s.section}` : '');
   const pageRange = s.end_page ? `p. ${s.start_page} ~ p. ${s.end_page}` : `p. ${s.start_page}`;
+  // 웹 카드와 동일한 챕터 정보 사용 (Chapter 번호 + 챕터 제목 줄들)
+  const sectionInfoObj = renderSectionInfo(s);
   // 함께한 사람들: 농담 맨 앞, 지평 맨 끝
   const sortedAttendees = [...(s.attendees || [])].sort((a, b) => {
     const aKey = a.alias === '농담' ? 0 : a.alias === '지평' ? 2 : 1;
@@ -2786,6 +2798,13 @@ function buildSessionHeaderBlock(s) {
     return aKey - bKey;
   });
   const attendeesList = sortedAttendees.map(a => a.alias).join(' · ');
+
+  // 챕터 제목 줄들 (웹 카드처럼 다중 챕터는 한 줄씩)
+  const titleLinesHtml = (sectionInfoObj.titleLines && sectionInfoObj.titleLines.length)
+    ? sectionInfoObj.titleLines.map((line, i) =>
+        `<div style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: ${sectionInfoObj.multi ? '15px' : '20px'}; color: #7a3f2e; line-height: 1.4; ${i > 0 ? 'margin-top: 2px;' : 'margin-top: 6px;'} word-break: keep-all;">${escapeHtml(line)}</div>`
+      ).join('')
+    : '';
 
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 46px 52px 24px; max-width: 720px; box-sizing: border-box; color: #2a2520; line-height: 1.7;">
@@ -2798,11 +2817,10 @@ function buildSessionHeaderBlock(s) {
             <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; letter-spacing: 0.2em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Day ${String(s.day).padStart(2,'0')}${Number(s.day) === 1 ? ' · 첫 새벽' : ''}</div>
             <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 20px; color: #2a2520;">${dateInfo.date} <span style="color: #6b6258; font-weight: 400; font-size: 16px;">${dateInfo.weekday}</span></div>
           </div>
-          <div style="text-align: right;">
-            <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #8a6b35; text-transform: uppercase; margin-bottom: 4px;">Pages</div>
-            ${sectionInfo ? `<div style="font-size: 12px; color: #6b6258; margin-bottom: 2px;"><span style="display: inline-block; padding: 2px 8px; background: rgba(176,138,74,0.12); border: 1px solid rgba(176,138,74,0.25); border-radius: 100px; font-size: 11px; color: #8a6b35;">${escapeHtml(sectionInfo)}</span></div>` : ''}
-            <div style="font-family: 'Nanum Myeongjo', serif; font-size: 18px; color: #7a3f2e; font-weight: 700;">${escapeHtml(pageRange)}</div>
-            ${s.leader ? `<div style="font-size: 11px; color: #6b6258; font-style: italic; margin-top: 2px; font-family: 'Cormorant Garamond', serif;">진행 ${escapeHtml(s.leader)}</div>` : ''}
+          <div style="text-align: right; max-width: 360px;">
+            ${sectionInfoObj.num ? `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; letter-spacing: 0.1em; color: #8a6b35;">${escapeHtml(sectionInfoObj.num)}</div>` : ''}
+            ${titleLinesHtml}
+            <div style="font-family: 'Nanum Myeongjo', serif; font-size: 14px; color: #4a423a; font-weight: 400; margin-top: 8px;">${escapeHtml(pageRange)}</div>
           </div>
         </div>
 
