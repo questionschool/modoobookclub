@@ -976,6 +976,13 @@
     line-height: 1.4;
     word-break: keep-all;
   }
+  /* 두 챕터 이상 걸친 회차: 제목이 길어지므로 조금 작게 + 폭 확보 */
+  .pages-chapter-title.multi {
+    font-size: 17px;
+    line-height: 1.5;
+    max-width: 320px;
+    margin-left: auto; /* 우측 정렬 유지 */
+  }
 
   .pages-range {
     font-family: 'Nanum Myeongjo', serif;
@@ -2177,7 +2184,7 @@ function renderSessionCard(s) {
         </div>
         <div class="session-pages">
           ${sectionInfo.num ? `<div class="pages-chapter">${escapeHtml(sectionInfo.num)}</div>` : ''}
-          ${sectionInfo.title ? `<div class="pages-chapter-title">${escapeHtml(sectionInfo.title)}</div>` : ''}
+          ${sectionInfo.title ? `<div class="pages-chapter-title${sectionInfo.multi ? ' multi' : ''}">${escapeHtml(sectionInfo.title)}</div>` : ''}
           <div class="pages-range">p. ${escapeHtml(s.start_page)} ${s.end_page ? '~ p. ' + escapeHtml(s.end_page) : '~'}</div>
         </div>
       </div>
@@ -2418,7 +2425,7 @@ function isSameDayLocal(iso, d2) {
 
 function renderSectionInfo(s) {
   const sectionLabel = SECTION_LABELS[s.section] || s.section || '';
-  if (!sectionLabel) return { num: '', title: '' };
+  if (!sectionLabel) return { num: '', title: '', multi: false };
 
   // 본문 회차: Chapter N + 챕터 제목
   if (s.section === 'main') {
@@ -2432,18 +2439,23 @@ function renderSectionInfo(s) {
       );
       if (matches.length === 1) {
         const ch = matches[0];
-        return { num: `Chapter ${ch.num}`, title: ch.title || '' };
+        return { num: `Chapter ${ch.num}`, title: ch.title || '', multi: false };
       } else if (matches.length > 1) {
         const first = matches[0];
         const last = matches[matches.length - 1];
-        return { num: `Chapter ${first.num} & ${last.num}`, title: '' };
+        // 걸친 모든 챕터의 제목을 "번호. 제목" 형태로 & 로 연결
+        // (제목이 없는 챕터는 번호만)
+        const titles = matches
+          .map(c => c.title ? `${c.num}. ${c.title}` : `${c.num}장`)
+          .join(' & ');
+        return { num: `Chapter ${first.num} & ${last.num}`, title: titles, multi: true };
       }
     }
-    return { num: '', title: '' };
+    return { num: '', title: '', multi: false };
   }
 
   // 서론/후기 등은 라벨만
-  return { num: sectionLabel, title: '' };
+  return { num: sectionLabel, title: '', multi: false };
 }
 
 function computePageCount(s) {
@@ -2689,11 +2701,16 @@ function buildPrintableReflection(r, s) {
   const sectionInfoObj = renderSectionInfo(s);
 
   // 헤더 본문 구성
-  // 본문 회차: "Chapter N. 챕터 제목. p. X ~ p. Y"
+  // 단일 본문 회차: "Chapter N. 챕터 제목. p. X ~ p. Y"
+  // 다중 챕터 회차: "1. 제목 & 2. 제목. p. X ~ p. Y" (제목에 이미 번호가 있어 Chapter N&M은 생략)
   // 서론/후기: "서론. p. X ~ p. Y"
   let headerParts = [];
-  if (sectionInfoObj.num) headerParts.push(sectionInfoObj.num);
-  if (sectionInfoObj.title) headerParts.push(sectionInfoObj.title);
+  if (sectionInfoObj.multi) {
+    if (sectionInfoObj.title) headerParts.push(sectionInfoObj.title);
+  } else {
+    if (sectionInfoObj.num) headerParts.push(sectionInfoObj.num);
+    if (sectionInfoObj.title) headerParts.push(sectionInfoObj.title);
+  }
   headerParts.push(pageInfo);
   const headerText = headerParts.join('. ');
 
