@@ -1131,6 +1131,48 @@
     gap: 14px;
   }
 
+  /* 정렬 토글 — Reflections 헤더와 목록 사이에 위치 */
+  .reflection-sort {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px dotted var(--line-soft);
+    flex-wrap: wrap;
+  }
+  .reflection-sort-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+  .reflection-sort-btn {
+    padding: 5px 14px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .reflection-sort-btn:hover:not(.active) {
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+  .reflection-sort-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+    background: rgba(122, 63, 46, 0.04);
+  }
+
   .reflection {
     padding: 12px 16px 36px;
     background: rgba(255, 255, 255, 0.5);
@@ -1689,6 +1731,23 @@ let sessions = [];
 let contents = [];
 let members = [];
 
+// 기록 정렬 방향: 'desc' = 최근 기록부터(기본), 'asc' = 오래된 기록부터
+let reflectionSortOrder = localStorage.getItem('journal15_sort') === 'asc' ? 'asc' : 'desc';
+
+// 정렬 토글 — 회차 카드의 정렬 버튼에서 호출
+function setReflectionSort(order) {
+  if (order !== 'asc' && order !== 'desc') return;
+  if (reflectionSortOrder === order) return;
+  reflectionSortOrder = order;
+  localStorage.setItem('journal15_sort', order);
+  if (sessions.length > 0) {
+    // 현재 보고 있던 회차를 기억해두고, 재렌더 후에도 같은 회차가 보이게
+    const currentDay = window._currentSessionDay;
+    renderSessions();
+    if (currentDay) showOnlySessionDay(currentDay);
+  }
+}
+
 // ════════════════════════════════════════════════════════
 // 초기 로딩
 // ════════════════════════════════════════════════════════
@@ -2168,11 +2227,16 @@ function renderSessionCard(s) {
   `).join('');
 
   const reflections = (s.reflections || []).slice().sort((a, b) => {
-    // 최신이 위로 (timestamp 내림차순)
     const ta = a.timestamp || '';
     const tb = b.timestamp || '';
-    if (tb < ta) return -1;
-    if (tb > ta) return 1;
+    // 'desc' = 최근 기록부터(타임스탬프 큰 게 위), 'asc' = 오래된 기록부터
+    if (reflectionSortOrder === 'asc') {
+      if (ta < tb) return -1;
+      if (ta > tb) return 1;
+    } else {
+      if (tb < ta) return -1;
+      if (tb > ta) return 1;
+    }
     return 0;
   });
   const reflectionsHtml = reflections.length === 0
@@ -2220,6 +2284,12 @@ function renderSessionCard(s) {
           <span class="field-label">Reflections · 모두의 기록</span>
           <span class="reflection-count">${reflections.length}개 남김</span>
         </div>
+        ${reflections.length >= 2 ? `
+        <div class="reflection-sort">
+          <span class="reflection-sort-label">정렬</span>
+          <button type="button" class="reflection-sort-btn${reflectionSortOrder === 'desc' ? ' active' : ''}" onclick="setReflectionSort('desc')">최근 기록부터</button>
+          <button type="button" class="reflection-sort-btn${reflectionSortOrder === 'asc' ? ' active' : ''}" onclick="setReflectionSort('asc')">오래된 기록부터</button>
+        </div>` : ''}
         <div class="reflection-list">${reflectionsHtml}</div>
       </div>
 
