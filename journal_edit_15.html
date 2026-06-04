@@ -679,6 +679,33 @@ let sessions = [];
 let attendeePool = [];   // [{alias, lead, on}]
 
 // ════════════════════════════════════════════════════════
+// 날짜 헬퍼 — 시트가 ISO 문자열로 변환해 보내는 경우 대비
+// ════════════════════════════════════════════════════════
+// 시트에 텍스트로 저장한 날짜라도, Sheets가 자동으로 Date 객체로 인식하면
+// GAS가 JSON으로 직렬화할 때 ISO 문자열("2026-06-03T15:00:00.000Z")로 바뀜.
+// <input type="date">는 "yyyy-MM-dd" 형식만 받으므로 변환 필수.
+function isoToDateInput(value) {
+  if (!value) return '';
+  // 이미 "YYYY-MM-DD" 단순 형태면 그대로
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+  // ISO 문자열이면 앞 10자가 yyyy-MM-dd 부분 — Sheets가 보낸 케이스는
+  // 시트의 로컬 자정을 UTC로 변환해 둔 형태라 앞 10자가 사용자 입력에 가장 가까움
+  if (typeof value === 'string') {
+    const m = value.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (m) return m[1];
+  }
+  // 기타 (Date 객체 등) — UTC 기준 yyyy-MM-dd로
+  const d = new Date(value);
+  if (!isNaN(d.getTime())) {
+    const y = d.getUTCFullYear();
+    const mo = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const da = String(d.getUTCDate()).padStart(2, '0');
+    return `${y}-${mo}-${da}`;
+  }
+  return '';
+}
+
+// ════════════════════════════════════════════════════════
 // 게이트
 // ════════════════════════════════════════════════════════
 function getKeyFromUrl() {
@@ -960,7 +987,8 @@ function editSession(day) {
 
   document.getElementById('editDay').value = s.day;
   document.getElementById('fDay').value = s.day;
-  document.getElementById('fDate').value = s.date || '';
+  // 날짜: Sheets가 ISO 문자열로 변환해 보낼 수 있으므로 yyyy-MM-dd로 정규화
+  document.getElementById('fDate').value = isoToDateInput(s.date);
   document.getElementById('fSection').value = s.section || '';
   document.getElementById('fStartPage').value = s.start_page || '';
   document.getElementById('fEndPage').value = s.end_page || '';
@@ -1291,7 +1319,9 @@ async function downloadAdminPdf(day) {
       }
     }
 
-    const filename = `마음의시간_Day${String(s.day).padStart(2,'0')}_${s.date}_진행자.pdf`;
+    // 파일명: 시트가 ISO로 보낸 경우 대비해 날짜 정규화
+    const dateForFilename = isoToDateInput(s.date) || 'unknown';
+    const filename = `마음의시간_Day${String(s.day).padStart(2,'0')}_${dateForFilename}_진행자.pdf`;
     pdf.save(filename);
   } catch (err) {
     console.error(err);
@@ -1321,7 +1351,9 @@ async function downloadAdminImage(day) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `마음의시간_Day${String(s.day).padStart(2,'0')}_${s.date}_진행자.png`;
+      // 파일명: 시트가 ISO로 보낸 경우 대비해 날짜 정규화
+      const dateForFilename = isoToDateInput(s.date) || 'unknown';
+      a.download = `마음의시간_Day${String(s.day).padStart(2,'0')}_${dateForFilename}_진행자.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
