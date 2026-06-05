@@ -141,6 +141,21 @@
   }
 
   .gate button:hover { background: var(--accent-soft); }
+  .gate button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .gate-message {
+    margin-top: 16px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    min-height: 20px;
+    color: var(--ink-muted);
+  }
+  .gate-message.error { color: var(--error); }
+  .gate-message.checking {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--gold-deep);
+  }
 
   /* ============ TOOLBAR ============ */
   .toolbar {
@@ -542,9 +557,11 @@
   <div id="gateView" class="gate" style="display:none;">
     <div class="gate-icon">✦</div>
     <p>진행자 전용 페이지야. 입력 키를 적어 줘.</p>
-    <input type="password" id="gateKey" placeholder="입력 키" autocomplete="off">
+    <input type="password" id="gateKey" placeholder="입력 키" autocomplete="off"
+           onkeydown="if(event.key==='Enter'){enterGate();event.preventDefault();}">
     <br>
-    <button onclick="enterGate()">들어가기 →</button>
+    <button id="gateBtn" onclick="enterGate()">들어가기 →</button>
+    <div id="gateMessage" class="gate-message"></div>
   </div>
 
   <!-- ============ EDITOR (키 통과 시) ============ -->
@@ -713,13 +730,61 @@ function getKeyFromUrl() {
   return m ? decodeURIComponent(m[1]) : null;
 }
 
-function enterGate() {
+async function enterGate() {
   const k = document.getElementById('gateKey').value.trim();
   if (!k) return;
-  // 게이트는 클라이언트에선 키 형태만 확인하고, 실제 검증은 저장할 때 GAS가 함
-  editKey = k;
-  sessionStorage.setItem('journal15_key', k);
-  showEditor();
+
+  const btn = document.getElementById('gateBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '확인 중…'; }
+  setGateMessage('키를 확인하는 중…', 'checking');
+
+  try {
+    const result = await verifyKey(k);
+    if (result === 'ok') {
+      editKey = k;
+      sessionStorage.setItem('journal15_key', k);
+      setGateMessage('', '');
+      showEditor();
+    } else if (result === 'invalid') {
+      // 키가 명확히 거부됨 — sessionStorage도 정리
+      sessionStorage.removeItem('journal15_key');
+      setGateMessage('키가 맞지 않아. 다시 확인해 줘.', 'error');
+      document.getElementById('gateKey').value = '';
+      document.getElementById('gateKey').focus();
+    } else {
+      // 네트워크/일시 오류 — 키는 일단 받고 들여보내되 안내
+      editKey = k;
+      sessionStorage.setItem('journal15_key', k);
+      setGateMessage('서버 응답이 이상해. 일단 들어가지만, 저장 시 다시 시도해 줘.', 'error');
+      setTimeout(() => showEditor(), 800);
+    }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '들어가기 →'; }
+  }
+}
+
+// GAS 키 검증: 존재하지 않는 day로 delete_session 호출
+//   - 키 OK  → GAS는 키 검증 통과 후 deleteSession()에서 false 응답 → { ok: true, deleted: false }
+//   - 키 NG  → GAS는 키 검증 단계에서 { ok: false, error: 'Invalid edit key' }
+//   - 네트워크 에러 → 'network'
+// 데이터에는 영향 없음 (day 0은 존재하지 않으니까).
+async function verifyKey(key) {
+  try {
+    const data = await apiPost({ action: 'delete_session', key: key, day: 0 });
+    if (data && data.ok === true) return 'ok';
+    if (data && data.error && String(data.error).indexOf('Invalid edit key') !== -1) return 'invalid';
+    // 기타 응답 — 보수적으로 network 취급
+    return 'network';
+  } catch (e) {
+    return 'network';
+  }
+}
+
+function setGateMessage(msg, cls) {
+  const el = document.getElementById('gateMessage');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.className = 'gate-message' + (cls ? ' ' + cls : '');
 }
 
 function logout() {
@@ -727,6 +792,8 @@ function logout() {
   sessionStorage.removeItem('journal15_key');
   document.getElementById('editorView').style.display = 'none';
   document.getElementById('gateView').style.display = 'block';
+  setGateMessage('', '');
+  document.getElementById('gateKey').value = '';
 }
 
 function showEditor() {
@@ -1124,16 +1191,36 @@ function escapeHtml(s) {
 // ════════════════════════════════════════════════════════
 // 진입점
 // ════════════════════════════════════════════════════════
-(function init() {
+(async function init() {
   // URL 쿼리 ?key=… 또는 sessionStorage
   const k = getKeyFromUrl() || sessionStorage.getItem('journal15_key');
   if (k) {
+    // 저장된 키가 있어도 자동 통과시키지 않고 검증
+    document.getElementById('gateView').style.display = 'block';
+    setGateMessage('저장된 키를 확인하는 중…', 'checking');
+
+    const result = await verifyKey(k);
+    if (result === 'ok') {
+      editKey = k;
+      sessionStorage.setItem('journal15_key', k);
+      setGateMessage('', '');
+      showEditor();
+      return;
+    }
+    if (result === 'invalid') {
+      // 저장된 키가 실제론 틀린 키 — 정리하고 게이트로
+      sessionStorage.removeItem('journal15_key');
+      setGateMessage('저장된 키가 더 이상 유효하지 않아. 다시 입력해 줘.', 'error');
+      return;
+    }
+    // network — 검증 못 했으면 일단 들여보내고 저장 시 재검증
     editKey = k;
     sessionStorage.setItem('journal15_key', k);
+    setGateMessage('', '');
     showEditor();
-  } else {
-    document.getElementById('gateView').style.display = 'block';
+    return;
   }
+  document.getElementById('gateView').style.display = 'block';
 })();
 
 // ════════════════════════════════════════════════════════
