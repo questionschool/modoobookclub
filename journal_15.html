@@ -843,6 +843,8 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 6px;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 
   /* 시즌 다운로드 영역 (Sessions 섹션 상단) */
@@ -2294,6 +2296,10 @@ function renderSessionCard(s) {
       </div>
 
       <div class="session-download-row">
+        <button class="session-download-btn" onclick="downloadSessionMarkdown(${s.day})" title="이 하루 전체를 마크다운 파일로 저장">
+          <span style="font-size: 13px;">📝</span>
+          <span>오늘의 기록 .md로 저장</span>
+        </button>
         <button class="session-download-btn" onclick="downloadSessionPdf(${s.day})" title="이 하루 전체를 PDF로 저장">
           <span style="font-size: 13px;">📄</span>
           <span>오늘의 기록 PDF로 저장</span>
@@ -2973,11 +2979,173 @@ function buildWatermarkBlock() {
   `;
 }
 
+// ─────────────── 3. 하루 회차 전체 Markdown ───────────────
+
+function buildSessionMarkdown(session) {
+  const dateInfo = formatSessionDate(session.date);
+  const sectionInfoObj = renderSectionInfo(session);
+  const pageRange = session.end_page
+    ? `p. ${session.start_page} ~ p. ${session.end_page}`
+    : `p. ${session.start_page}`;
+
+  // 함께한 사람들: 농담 맨 앞, 지평 맨 끝
+  const sortedAttendees = [...(session.attendees || [])].sort((a, b) => {
+    const aKey = a.alias === '농담' ? 0 : a.alias === '지평' ? 2 : 1;
+    const bKey = b.alias === '농담' ? 0 : b.alias === '지평' ? 2 : 1;
+    return aKey - bKey;
+  });
+
+  // 챕터 정보 한 줄
+  let chapterLine = '';
+  if (sectionInfoObj.multi) {
+    chapterLine = sectionInfoObj.title || '';
+  } else {
+    const parts = [];
+    if (sectionInfoObj.num) parts.push(sectionInfoObj.num);
+    if (sectionInfoObj.title) parts.push(sectionInfoObj.title);
+    chapterLine = parts.join('. ');
+  }
+
+  const lines = [];
+  lines.push(`# 마음의 시간 — 모두의 기록`);
+  lines.push('');
+  lines.push(`> *Hour of the Heart · Connection in the Here and Now*`);
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+
+  // 회차 헤더
+  const dayLabel = Number(session.day) === 1
+    ? `Day ${String(session.day).padStart(2,'0')} · 첫 새벽`
+    : `Day ${String(session.day).padStart(2,'0')}`;
+  lines.push(`## ${dayLabel} · ${dateInfo.date} ${dateInfo.weekday}`);
+  lines.push('');
+  if (chapterLine) {
+    lines.push(`**${chapterLine}**  `);
+  }
+  lines.push(pageRange);
+  lines.push('');
+
+  if (sortedAttendees.length > 0) {
+    lines.push(`### Fellow Travelers · 오늘 마음의 시간을 함께 읽은 동료 여행자`);
+    lines.push('');
+    lines.push(sortedAttendees.map(a => a.alias).join(' · '));
+    lines.push('');
+  }
+
+  if (session.reading_note) {
+    lines.push(`### Reading Note · 읽은 이야기`);
+    lines.push('');
+    lines.push(cleanText(session.reading_note));
+    lines.push('');
+  }
+
+  if (session.sharing) {
+    lines.push(`### Sharing Note · 나눈 이야기`);
+    lines.push('');
+    lines.push(cleanText(session.sharing));
+    lines.push('');
+  }
+
+  // Reflections — 오래된 순으로 (PDF와 동일)
+  const reflections = (session.reflections || []).slice().sort((a, b) => {
+    const ta = a.timestamp || '', tb = b.timestamp || '';
+    if (ta < tb) return -1; if (ta > tb) return 1; return 0;
+  });
+
+  lines.push('---');
+  lines.push('');
+  lines.push(`## Reflections · 모두의 기록 (${reflections.length}개)`);
+  lines.push('');
+
+  if (reflections.length === 0) {
+    lines.push('*이 새벽엔 아직 남겨진 기록이 없어.*');
+    lines.push('');
+  } else {
+    reflections.forEach((r, idx) => {
+      const time = formatTimeShort(r.timestamp);
+      const editedMark = r.updated_at ? ' (수정됨)' : '';
+      lines.push(`### ${r.alias}${time ? ` — ${time}${editedMark}` : ''}`);
+      lines.push('');
+
+      if (r.quote_text) {
+        lines.push(`**📜 마음에 남은 문장**`);
+        lines.push('');
+        const quoteLines = cleanText(r.quote_text).split('\n');
+        quoteLines.forEach(ql => lines.push(`> ${ql}`));
+        lines.push('>');
+        lines.push(`> — ${BOOK_AUTHOR} 『${BOOK_TITLE}』${r.quote_page ? ` · p. ${r.quote_page}` : ''}`);
+        lines.push('');
+      }
+
+      if (r.my_mind) {
+        lines.push(`**✿ 남기고 싶은 나의 마음**`);
+        lines.push('');
+        lines.push(cleanText(r.my_mind));
+        lines.push('');
+      }
+
+      if (idx < reflections.length - 1) {
+        lines.push('---');
+        lines.push('');
+      }
+    });
+  }
+
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+  lines.push(`*READING · ALOUD · TOGETHER*  `);
+  lines.push(`*모두의 새벽 + 낭만북클럽 · 시즌 15 『마음의 시간』*  `);
+  lines.push(`*bookclub.questionschool.net*`);
+  lines.push('');
+
+  return lines.join('\n');
+}
+
+function downloadSessionMarkdown(day) {
+  const session = sessions.find(s => Number(s.day) === Number(day));
+  if (!session) return;
+
+  // 카드의 .md 버튼은 .session-download-row 안의 첫 번째 버튼
+  const row = document.querySelector(`#session-${day} .session-download-row`);
+  const btn = row ? row.querySelector('button:first-child') : null;
+  const originalBtnHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span><span>저장 중…</span>';
+  }
+
+  try {
+    const md = buildSessionMarkdown(session);
+    const ymd = extractKSTDate(session.date);
+    const dateStr = ymd ? `${ymd.y}-${String(ymd.m).padStart(2,'0')}-${String(ymd.d).padStart(2,'0')}` : getTodayStr();
+    const filename = `마음의시간_Day${String(day).padStart(2,'0')}_${dateStr}.md`;
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error(err);
+    alert('마크다운 저장 실패: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = originalBtnHtml; }
+  }
+}
+
 async function downloadSessionPdf(day) {
   const session = sessions.find(s => Number(s.day) === Number(day));
   if (!session) return;
 
-  const btn = document.querySelector(`#session-${day} .session-download-btn`);
+  // 카드의 PDF 버튼은 .session-download-row 안의 두 번째 버튼
+  const row = document.querySelector(`#session-${day} .session-download-row`);
+  const btn = row ? row.querySelector('button:last-child') : null;
   const originalBtnHtml = btn ? btn.innerHTML : '';
   if (btn) {
     btn.disabled = true;
