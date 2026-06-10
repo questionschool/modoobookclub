@@ -605,6 +605,10 @@
     <div class="selected-header">
       <div class="selected-name" id="selectedName">—</div>
       <div class="selected-meta" id="selectedMeta">—</div>
+      <button class="member-download-btn" id="memberDownloadMdBtn" onclick="downloadMemberMarkdown()" style="display:none; margin-right: 6px;">
+        <span style="font-size: 13px;">📝</span>
+        <span>내 기록 .md로 저장</span>
+      </button>
       <button class="member-download-btn" id="memberDownloadBtn" onclick="downloadMemberPdf()" style="display:none;">
         <span style="font-size: 13px;">📄</span>
         <span>내 기록 PDF로 저장</span>
@@ -834,6 +838,12 @@ function renderSelected() {
   const dlBtn = document.getElementById('memberDownloadBtn');
   if (dlBtn) {
     dlBtn.style.display = entries.length > 0 ? 'inline-flex' : 'none';
+  }
+
+  // .md 다운로드 버튼: 기록이 1개 이상일 때만 표시
+  const dlMdBtn = document.getElementById('memberDownloadMdBtn');
+  if (dlMdBtn) {
+    dlMdBtn.style.display = entries.length > 0 ? 'inline-flex' : 'none';
   }
 
   // 정렬 토글: 기록이 2개 이상일 때만 표시 (1개면 정렬할 게 없음)
@@ -1189,6 +1199,135 @@ async function downloadEntryImage(entryId) {
     alert('이미지 저장 실패: ' + err.message);
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = '⬇'; }
+  }
+}
+
+// ─────────────── 멤버 Markdown 다운로드 (시즌 전체) ───────────────
+
+function buildMemberMarkdown(alias, entries) {
+  const lines = [];
+  lines.push(`# 마음의 시간 — ${alias}의 독서와 마음 기록`);
+  lines.push('');
+  lines.push(`> *Hour of the Heart · Connection in the Here and Now*`);
+  lines.push(`>`);
+  lines.push(`> 책과 마음 읽기 ${entries.length}개`);
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+
+  entries.forEach((e, idx) => {
+    const dateInfo = formatSessionDate(e.date);
+    const sectionLabel = SECTION_LABELS[e.section] || '';
+    const pageInfo = e.end_page ? `p. ${e.start_page} ~ p. ${e.end_page}` : `p. ${e.start_page}`;
+
+    // 챕터 매칭 (본문 회차일 때만) — buildPrintableEntry와 동일한 로직
+    let chapterNum = '';
+    let chapterTitle = '';
+    if (e.section === 'main' && contents.length > 0) {
+      const startNum = parseInt(e.start_page, 10);
+      const endNum = parseInt(e.end_page, 10) || startNum;
+      if (!isNaN(startNum)) {
+        const matches = contents.filter(c =>
+          c.section_type === 'main' &&
+          Number(c.page_start) <= endNum &&
+          Number(c.page_end) >= startNum
+        );
+        if (matches.length === 1) {
+          chapterNum = `Chapter ${matches[0].num}`;
+          chapterTitle = matches[0].title || '';
+        } else if (matches.length > 1) {
+          chapterNum = `Chapter ${matches[0].num} → ${matches[matches.length - 1].num}`;
+        }
+      }
+    }
+
+    // 챕터 라인
+    const headerParts = [];
+    if (chapterNum) headerParts.push(chapterNum);
+    else if (sectionLabel) headerParts.push(sectionLabel);
+    if (chapterTitle) headerParts.push(chapterTitle);
+    const chapterLine = headerParts.join('. ');
+
+    lines.push(`## Day ${String(e.day).padStart(2,'0')} · ${dateInfo.date} ${dateInfo.weekday}`);
+    lines.push('');
+    if (chapterLine) {
+      lines.push(`**${chapterLine}**  `);
+    }
+    lines.push(pageInfo);
+    lines.push('');
+
+    if (e.quote_text) {
+      lines.push(`### 📜 마음에 남은 문장`);
+      lines.push('');
+      const quoteLines = cleanText(e.quote_text).split('\n');
+      quoteLines.forEach(ql => lines.push(`> ${ql}`));
+      lines.push('>');
+      lines.push(`> — ${BOOK_AUTHOR} 『${BOOK_TITLE}』${e.quote_page ? ` · p. ${e.quote_page}` : ''}`);
+      lines.push('');
+    }
+
+    if (e.my_mind) {
+      lines.push(`### ✿ 남기고 싶은 나의 마음`);
+      lines.push('');
+      lines.push(cleanText(e.my_mind));
+      lines.push('');
+    }
+
+    if (idx < entries.length - 1) {
+      lines.push('---');
+      lines.push('');
+    }
+  });
+
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+  lines.push(`*READING · ALOUD · TOGETHER*  `);
+  lines.push(`*모두의 새벽 + 낭만북클럽 · 시즌 15 『마음의 시간』*  `);
+  lines.push(`*bookclub.questionschool.net*`);
+  lines.push('');
+
+  return lines.join('\n');
+}
+
+function downloadMemberMarkdown() {
+  const rawEntries = window._currentMemberEntries || [];
+  if (rawEntries.length === 0 || !selectedAlias) {
+    alert('아직 기록이 없어.');
+    return;
+  }
+
+  // PDF와 동일하게 오래된 기록부터 정렬 (시간 흐름대로 읽기 좋게)
+  const entries = [...rawEntries].sort((a, b) =>
+    (Number(a.day) || 0) - (Number(b.day) || 0)
+  );
+
+  const btn = document.getElementById('memberDownloadMdBtn');
+  const originalHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span><span>저장 중…</span>';
+  }
+
+  try {
+    const md = buildMemberMarkdown(selectedAlias, entries);
+    const today = getTodayStr();
+    const filename = `마음의시간_${selectedAlias}_기록_${today}.md`;
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error(err);
+    alert('마크다운 저장 실패: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = originalHtml; }
   }
 }
 
