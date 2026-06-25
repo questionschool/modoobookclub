@@ -959,27 +959,29 @@ function updateChapterHint() {
     return;
   }
 
-  if (section !== 'main') {
-    const label = section === 'front' ? '서론·앞부분' : '후기·끝부분';
-    hint.textContent = `${label} · p. ${start}${end ? ' → ' + end : ''}`;
+  // 서론(front)은 로마 숫자라 본문·후기와 비교 불가 — 그대로 안내
+  if (section === 'front') {
+    hint.textContent = `서론·앞부분 · p. ${start}${end ? ' → ' + end : ''}`;
     hint.classList.remove('empty');
     return;
   }
 
-  // 본문: 챕터 범위를 본다
+  // 본문(main) · 후기(back): 같은 아라비아 번호 체계
+  // 섹션 라벨과 무관하게 페이지가 겹치는 챕터를 모두 안내한다
+  // (본문 끝장과 후기를 한 회차에 같이 읽는 날 양쪽 다 보여줌)
   const startNum = parseInt(start, 10);
   const endNum = parseInt(end, 10) || startNum;
   if (isNaN(startNum)) {
-    hint.textContent = '본문 페이지는 숫자로 입력해 줘 (예: 49)';
+    hint.textContent = '페이지는 숫자로 입력해 줘 (예: 49)';
     hint.classList.add('empty');
     return;
   }
 
   const matches = contents.filter(c =>
-    c.section_type === 'main' &&
+    (c.section_type === 'main' || c.section_type === 'back') &&
     Number(c.page_start) <= endNum &&
     Number(c.page_end) >= startNum
-  );
+  ).sort((a, b) => Number(a.page_start) - Number(b.page_start));
 
   if (matches.length === 0) {
     hint.textContent = '해당하는 챕터를 찾지 못했어. 페이지를 확인해 줘.';
@@ -987,9 +989,14 @@ function updateChapterHint() {
     return;
   }
 
+  // 챕터 라벨: 본문은 'Ch. N 「제목」', 후기는 '「제목」'
+  const labelOf = (c) => c.section_type === 'main'
+    ? `Ch. ${c.num} 「${c.title}」`
+    : `「${c.title}」`;
+
   const label = matches.length === 1
-    ? `Ch. ${matches[0].num} 「${matches[0].title}」`
-    : `Ch. ${matches[0].num} 「${matches[0].title}」 → Ch. ${matches[matches.length-1].num} 「${matches[matches.length-1].title}」`;
+    ? labelOf(matches[0])
+    : `${labelOf(matches[0])} → ${labelOf(matches[matches.length-1])}`;
   const pageCount = endNum - startNum + 1;
   hint.textContent = `📖 ${label} · ${pageCount}쪽`;
   hint.classList.remove('empty');
