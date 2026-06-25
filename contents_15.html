@@ -698,9 +698,10 @@ function isSessionStarted(session) {
 //   future    - 아직 (회차 자체가 입력되지 않음)
 // ════════════════════════════════════════════════════════
 function computeChapterStatus(chapter) {
-  // 본문 외 섹션 (front/back)
-  if (chapter.section_type !== 'main') {
-    const relevantSessions = sessions.filter(s => s.section === chapter.section_type);
+  // 서론(front): 로마 숫자 페이지라 본문·후기 페이지와 비교 불가
+  //   → 섹션 라벨로만 판정한다.
+  if (chapter.section_type === 'front') {
+    const relevantSessions = sessions.filter(s => s.section === 'front');
     if (relevantSessions.length === 0) {
       return { status: 'future', daysLabel: '' };
     }
@@ -717,12 +718,15 @@ function computeChapterStatus(chapter) {
     return { status, daysLabel };
   }
 
-  // 본문 챕터
+  // 본문(main) · 후기(back) 챕터
+  //   둘 다 같은 아라비아 페이지 번호 체계라서, 회차의 섹션 라벨이 무엇이든
+  //   페이지 범위가 챕터와 겹치면 그 회차에서 다룬 걸로 본다.
+  //   (한 회차에서 본문 끝장과 후기를 같이 읽는 날에 양쪽 다 자동으로 처리됨)
   const chStart = Number(chapter.page_start);
   const chEnd = Number(chapter.page_end);
 
   const relevantSessions = sessions.filter(s => {
-    if (s.section !== 'main') return false;
+    if (s.section !== 'main' && s.section !== 'back') return false;
     const sStart = parseInt(s.start_page, 10);
     const sEnd = parseInt(s.end_page, 10) || sStart;
     if (isNaN(sStart)) return false;
