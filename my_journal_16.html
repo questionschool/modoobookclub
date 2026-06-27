@@ -894,7 +894,7 @@ function renderEntry(e) {
 
       ${e.quote_text ? `
         <div>
-          <span class="entry-quote-label">📜 마음에 남은 문장</span>
+          <span class="entry-quote-label">📜 담아두고 싶은 문장</span>
           <div class="entry-quote">
             <div class="entry-quote-text">${escapeHtml(cleanText(e.quote_text))}</div>
             <div class="entry-quote-source">
@@ -992,7 +992,7 @@ function buildMemberEntryBlock(e) {
 
   if (e.quote_text) {
     card += '<div style="margin-bottom: 14px;">';
-    card += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #1c6577; text-transform: uppercase; margin-bottom: 8px;">📜 마음에 남은 문장</div>';
+    card += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #1c6577; text-transform: uppercase; margin-bottom: 8px;">📜 담아두고 싶은 문장</div>';
     card += '<div style="padding: 14px 18px; background: #ffffff; border: 1px solid #dde7ed; border-left: 2px solid #5fabbd;">';
     card += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 15px; line-height: 1.9; color: #1a2837; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.quote_text))}</div>`;
     card += `<div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(42,132,153,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #5e7185; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ' · p. ' + escapeHtml(e.quote_page) : ''}</div>`;
@@ -1096,7 +1096,7 @@ function buildPrintableEntry(e, alias) {
   if (e.quote_text) {
     inner += `
       <div style="margin-bottom: 18px;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #1c6577; text-transform: uppercase; margin-bottom: 8px;">📜 마음에 남은 문장</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #1c6577; text-transform: uppercase; margin-bottom: 8px;">📜 담아두고 싶은 문장</div>
         <div style="padding: 14px 18px; background: linear-gradient(to right, rgba(42, 132, 153, 0.06), transparent); border-left: 2px solid #5fabbd;">
           <div style="font-family: 'Nanum Myeongjo', serif; font-size: 15px; line-height: 1.9; color: #1a2837; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.quote_text))}</div>
           <div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(42,132,153,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #5e7185; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ' · p. ' + escapeHtml(e.quote_page) : ''}</div>
@@ -1257,7 +1257,7 @@ function buildMemberMarkdown(alias, entries) {
     lines.push('');
 
     if (e.quote_text) {
-      lines.push(`### 📜 마음에 남은 문장`);
+      lines.push(`### 📜 담아두고 싶은 문장`);
       lines.push('');
       const quoteLines = cleanText(e.quote_text).split('\n');
       quoteLines.forEach(ql => lines.push(`> ${ql}`));
