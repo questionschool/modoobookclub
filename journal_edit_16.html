@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>일지 입력 · 이마고 · 진행자 전용</title>
+<title>이마고 · 낭독 회차 관리 · 진행자 전용</title>
 <meta name="robots" content="noindex, nofollow">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -353,7 +353,7 @@
   /* ============ PAGE SECTION ============ */
   .page-section-grid {
     display: grid;
-    grid-template-columns: 140px 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 12px;
     align-items: end;
   }
@@ -549,7 +549,7 @@
 
   <header>
     <div class="eyebrow">Season 16 · Editor</div>
-    <h1>일지 입력 — <span class="accent">이마고</span></h1>
+    <h1><span class="accent">이마고</span> — 낭독 회차 관리</h1>
     <p class="subtitle">A space only the hosts walk into.</p>
   </header>
 
@@ -593,18 +593,12 @@
       </div>
 
       <div class="field">
-        <label>Section &amp; Pages <span class="ko">· 섹션과 페이지</span><span class="hint">모임 전에는 시작 페이지만, 모임 끝난 뒤 끝 페이지를 추가하면 돼.</span></label>
+        <label>Pages <span class="ko">· 시작과 끝 페이지</span><span class="hint">모임 전에는 시작 페이지만, 모임 끝난 뒤 끝 페이지를 추가하면 돼.</span></label>
         <div class="page-section-grid">
-          <select id="fSection" onchange="updateChapterHint()">
-            <option value="">섹션 선택</option>
-            <option value="front">서론·앞부분 (로마 숫자)</option>
-            <option value="main">본문 (아라비아 숫자)</option>
-            <option value="back">후기·끝부분</option>
-          </select>
-          <input type="text" id="fStartPage" placeholder="시작 (예: xvi 또는 49)" oninput="updateChapterHint()">
-          <input type="text" id="fEndPage" placeholder="끝 (모임 후 입력)" oninput="updateChapterHint()">
+          <input type="number" id="fStartPage" placeholder="시작 페이지 (예: 79)" oninput="updateChapterHint()" min="1">
+          <input type="number" id="fEndPage" placeholder="끝 페이지 (모임 후 입력)" oninput="updateChapterHint()" min="1">
         </div>
-        <div class="chapter-hint empty" id="chapterHint">섹션과 페이지를 입력하면 어떤 챕터에 해당하는지 보여줘.</div>
+        <div class="chapter-hint empty" id="chapterHint">페이지를 입력하면 어떤 챕터에 해당하는지 보여줘.</div>
       </div>
 
       <div class="field">
@@ -874,13 +868,9 @@ function autofillNewSession() {
   // Date: 오늘 (KST 기준 yyyy-MM-dd)
   document.getElementById('fDate').value = getTodayKstDateString();
 
-  // Section: 최근 회차의 섹션 따라가기, 없으면 'main' (대부분의 회차)
-  const section = (latest && latest.section) ? latest.section : 'main';
-  document.getElementById('fSection').value = section;
-
   // Start Page: 본문→본문 흐름이고 최근 회차에 end_page가 있을 때만 자동 계산
   // (서론→본문이나 본문→후기 같은 경계는 사용자가 직접 입력하는 편이 안전)
-  if (latest && latest.section === 'main' && section === 'main' && latest.end_page) {
+  if (latest && latest.section === 'main' && latest.end_page) {
     const lastEnd = parseInt(latest.end_page, 10);
     if (!isNaN(lastEnd)) {
       document.getElementById('fStartPage').value = String(lastEnd + 1);
@@ -948,37 +938,26 @@ function addAttendee() {
 // 챕터 힌트 (입력한 페이지 범위가 어떤 챕터에 해당하는지)
 // ════════════════════════════════════════════════════════
 function updateChapterHint() {
-  const section = document.getElementById('fSection').value;
   const start = document.getElementById('fStartPage').value.trim();
   const end = document.getElementById('fEndPage').value.trim();
   const hint = document.getElementById('chapterHint');
 
-  if (!section || !start) {
-    hint.textContent = '섹션과 페이지를 입력하면 어떤 챕터에 해당하는지 보여줘.';
+  if (!start) {
+    hint.textContent = '페이지를 입력하면 어떤 챕터에 해당하는지 보여줘.';
     hint.classList.add('empty');
     return;
   }
 
-  // 서론(front)은 로마 숫자라 본문·후기와 비교 불가 — 그대로 안내
-  if (section === 'front') {
-    hint.textContent = `서론·앞부분 · p. ${start}${end ? ' → ' + end : ''}`;
-    hint.classList.remove('empty');
-    return;
-  }
-
-  // 본문(main) · 후기(back): 같은 아라비아 번호 체계
-  // 섹션 라벨과 무관하게 페이지가 겹치는 챕터를 모두 안내한다
-  // (본문 끝장과 후기를 한 회차에 같이 읽는 날 양쪽 다 보여줌)
   const startNum = parseInt(start, 10);
   const endNum = parseInt(end, 10) || startNum;
   if (isNaN(startNum)) {
-    hint.textContent = '페이지는 숫자로 입력해 줘 (예: 49)';
+    hint.textContent = '페이지는 숫자로 입력해 줘 (예: 79)';
     hint.classList.add('empty');
     return;
   }
 
+  // 페이지 범위와 겹치는 챕터를 모두 찾는다 (front · main · back 모두 검색)
   const matches = contents.filter(c =>
-    (c.section_type === 'main' || c.section_type === 'back') &&
     Number(c.page_start) <= endNum &&
     Number(c.page_end) >= startNum
   ).sort((a, b) => Number(a.page_start) - Number(b.page_start));
@@ -989,10 +968,11 @@ function updateChapterHint() {
     return;
   }
 
-  // 챕터 라벨: 본문은 'Ch. N 「제목」', 후기는 '「제목」'
-  const labelOf = (c) => c.section_type === 'main'
-    ? `Ch. ${c.num} 「${c.title}」`
-    : `「${c.title}」`;
+  // 챕터 라벨
+  const labelOf = (c) => {
+    if (c.section_type === 'main') return `Ch. ${c.num} 「${c.title}」`;
+    return `「${c.title}」`;
+  };
 
   const label = matches.length === 1
     ? labelOf(matches[0])
@@ -1002,13 +982,23 @@ function updateChapterHint() {
   hint.classList.remove('empty');
 }
 
+// 페이지 범위로부터 section_type(front/main/back) 자동 결정
+function detectSection(startNum, endNum) {
+  const matches = contents.filter(c =>
+    Number(c.page_start) <= endNum &&
+    Number(c.page_end) >= startNum
+  );
+  if (matches.length === 0) return 'main';   // 매칭 실패 시 기본값
+  matches.sort((a, b) => Number(a.page_start) - Number(b.page_start));
+  return matches[0].section_type || 'main';
+}
+
 // ════════════════════════════════════════════════════════
 // 폼 제출
 // ════════════════════════════════════════════════════════
 async function submitForm() {
   const day = document.getElementById('fDay').value.trim();
   const date = document.getElementById('fDate').value;
-  const section = document.getElementById('fSection').value;
   const startPage = document.getElementById('fStartPage').value.trim();
   const endPage = document.getElementById('fEndPage').value.trim();
   const leader = document.getElementById('fLeader').value.trim();
@@ -1019,8 +1009,12 @@ async function submitForm() {
 
   if (!day) return showStatus('Day를 입력해 줘.', 'error');
   if (!date) return showStatus('날짜를 입력해 줘.', 'error');
-  if (!section) return showStatus('섹션을 선택해 줘.', 'error');
   if (!startPage) return showStatus('시작 페이지를 입력해 줘.', 'error');
+
+  // 페이지 범위로 section 자동 결정 (front/main/back)
+  const startNum = parseInt(startPage, 10);
+  const endNum = parseInt(endPage, 10) || startNum;
+  const section = detectSection(startNum, endNum);
 
   const attendees = attendeePool
     .filter(m => m.on)
@@ -1070,7 +1064,6 @@ function resetForm() {
   document.getElementById('editDay').value = '';
   document.getElementById('fDay').value = '';
   document.getElementById('fDate').value = '';
-  document.getElementById('fSection').value = '';
   document.getElementById('fStartPage').value = '';
   document.getElementById('fEndPage').value = '';
   document.getElementById('fLeader').value = '';
@@ -1123,7 +1116,6 @@ function editSession(day) {
   document.getElementById('fDay').value = s.day;
   // 날짜: Sheets가 ISO 문자열로 변환해 보낼 수 있으므로 yyyy-MM-dd로 정규화
   document.getElementById('fDate').value = isoToDateInput(s.date);
-  document.getElementById('fSection').value = s.section || '';
   document.getElementById('fStartPage').value = s.start_page || '';
   document.getElementById('fEndPage').value = s.end_page || '';
   document.getElementById('fLeader').value = s.leader || '';
@@ -1369,9 +1361,9 @@ function buildAdminFullHtml(s, bgColor) {
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: ${bgColor}; padding: 50px 56px; max-width: 760px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
       <!-- 헤더 -->
       <div style="text-align: center; padding-bottom: 22px; margin-bottom: 30px; border-bottom: 1px solid #c5d4de;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 10px;">HOUR OF THE HEART · Admin Full Record</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 10px;">IMAGO · Admin Full Record</div>
         <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 22px; color: #1a2837;"><span style="color: #155b80;">이마고</span> — 진행자 풀 기록</div>
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #5e7185; margin-top: 6px;">Connection in the Here and Now</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #5e7185; margin-top: 6px;">Getting the Love You Want</div>
       </div>
 
       <!-- 회차 정보 -->
@@ -1475,7 +1467,7 @@ async function downloadAdminPdf(day) {
 
     // 파일명: 시트가 ISO로 보낸 경우 대비해 날짜 정규화
     const dateForFilename = isoToDateInput(s.date) || 'unknown';
-    const filename = `마음의시간_Day${String(s.day).padStart(2,'0')}_${dateForFilename}_진행자.pdf`;
+    const filename = `이마고_Day${String(s.day).padStart(2,'0')}_${dateForFilename}_진행자.pdf`;
     pdf.save(filename);
   } catch (err) {
     console.error(err);
@@ -1507,7 +1499,7 @@ async function downloadAdminImage(day) {
       a.href = url;
       // 파일명: 시트가 ISO로 보낸 경우 대비해 날짜 정규화
       const dateForFilename = isoToDateInput(s.date) || 'unknown';
-      a.download = `마음의시간_Day${String(s.day).padStart(2,'0')}_${dateForFilename}_진행자.png`;
+      a.download = `이마고_Day${String(s.day).padStart(2,'0')}_${dateForFilename}_진행자.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

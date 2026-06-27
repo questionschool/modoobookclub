@@ -960,16 +960,16 @@ function cleanText(s) {
 // 다운로드 — 멤버 기록 전체를 PDF로 (블록 단위 페이지 분할)
 // ════════════════════════════════════════════════════════
 
-// 헤더 블록 (HOUR OF THE HEART, 이마고, 별칭의 독서와 마음 기록...)
+// 헤더 블록 (IMAGO, 이마고, 별칭의 독서와 마음 기록...)
 function buildMemberHeaderBlock(alias, entries) {
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 50px 56px 24px; max-width: 700px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
       <div style="text-align: center; padding-bottom: 24px; border-bottom: 1px solid #c5d4de;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 12px;">HOUR OF THE HEART</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 12px;">IMAGO</div>
         <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 28px; color: #155b80; margin-bottom: 8px;">이마고</div>
         <div style="font-family: 'Nanum Myeongjo', serif; font-size: 17px; color: #1a2837; margin-bottom: 14px;"><span style="color: #155b80; font-weight: 700;">${escapeHtml(alias)}</span>의 독서와 마음 기록</div>
         <div style="font-family: 'Nanum Myeongjo', serif; font-size: 13px; color: #5e7185; margin-bottom: 2px;">당신이 원하는 사랑 만들기</div>
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185;">Connection in the Here and Now</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185;">Getting the Love You Want</div>
         <div style="font-family: 'Gowun Batang', serif; font-size: 12px; color: #5e7185; margin-top: 14px;">책과 마음 읽기 ${entries.length}개</div>
       </div>
     </div>
@@ -1127,9 +1127,9 @@ function buildPrintableEntry(e, alias) {
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ecf4f9; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
       <!-- 헤더 -->
       <div style="text-align: center; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid #c5d4de;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 10px;">HOUR OF THE HEART</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 10px;">IMAGO</div>
         <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 22px; color: #1a2837;"><span style="color: #155b80;">이마고</span> — 오늘의 기록</div>
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185; margin-top: 6px;">Connection in the Here and Now</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185; margin-top: 6px;">Getting the Love You Want</div>
       </div>
 
       <!-- 회차 정보 -->
@@ -1188,7 +1188,7 @@ async function downloadEntryImage(entryId) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `마음의시간_Day${String(day).padStart(2,'0')}_${selectedAlias}.png`;
+      a.download = `이마고_Day${String(day).padStart(2,'0')}_${selectedAlias}.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -1208,7 +1208,7 @@ function buildMemberMarkdown(alias, entries) {
   const lines = [];
   lines.push(`# 이마고 — ${alias}의 독서와 마음 기록`);
   lines.push('');
-  lines.push(`> *Hour of the Heart · Connection in the Here and Now*`);
+  lines.push(`> *Imago · Getting the Love You Want*`);
   lines.push(`>`);
   lines.push(`> 책과 마음 읽기 ${entries.length}개`);
   lines.push('');
@@ -1312,7 +1312,7 @@ function downloadMemberMarkdown() {
   try {
     const md = buildMemberMarkdown(selectedAlias, entries);
     const today = getTodayStr();
-    const filename = `마음의시간_${selectedAlias}_기록_${today}.md`;
+    const filename = `이마고_${selectedAlias}_기록_${today}.md`;
 
     const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -1424,7 +1424,7 @@ async function downloadMemberPdf() {
     }
 
     const today = getTodayStr();
-    pdf.save(`마음의시간_${selectedAlias}_기록_${today}.pdf`);
+    pdf.save(`이마고_${selectedAlias}_기록_${today}.pdf`);
   } catch (err) {
     console.error(err);
     alert('PDF 저장 실패: ' + err.message);

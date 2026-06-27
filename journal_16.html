@@ -2940,7 +2940,7 @@ function buildPrintableReflection(r, s) {
 
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ecf4f9; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
-      ${pageHeaderHtml('HOUR OF THE HEART', '오늘의 기록')}
+      ${pageHeaderHtml('IMAGO', '오늘의 기록')}
 
       <!-- 회차 정보 -->
       <div style="text-align: center; margin-bottom: 22px;">
@@ -2981,7 +2981,7 @@ async function downloadReflectionImage(refId) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `마음의시간_Day${String(day).padStart(2,'0')}_${ref.alias}.png`;
+      a.download = `이마고_Day${String(day).padStart(2,'0')}_${ref.alias}.png`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -3022,7 +3022,7 @@ function buildSessionHeaderBlock(s) {
 
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 46px 52px 24px; max-width: 720px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
-      ${pageHeaderHtml('HOUR OF THE HEART', '모두의 기록')}
+      ${pageHeaderHtml('IMAGO', '모두의 기록')}
 
       <!-- 회차 큰 정보 -->
       <div style="background: #f5fafd; border: 1px solid #dde7ed; border-left: 3px solid #2a8499; padding: 24px 28px; border-radius: 2px;">
@@ -3258,7 +3258,7 @@ function downloadSessionMarkdown(day) {
     const md = buildSessionMarkdown(session);
     const ymd = extractKSTDate(session.date);
     const dateStr = ymd ? `${ymd.y}-${String(ymd.m).padStart(2,'0')}-${String(ymd.d).padStart(2,'0')}` : getTodayStr();
-    const filename = `마음의시간_Day${String(day).padStart(2,'0')}_${dateStr}.md`;
+    const filename = `이마고_Day${String(day).padStart(2,'0')}_${dateStr}.md`;
 
     const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -3384,7 +3384,7 @@ async function downloadSessionPdf(day) {
     // 깔끔한 날짜 문자열 만들기 (ISO timestamp 잘라내기)
     const ymd = extractKSTDate(session.date);
     const dateStr = ymd ? `${ymd.y}-${String(ymd.m).padStart(2,'0')}-${String(ymd.d).padStart(2,'0')}` : getTodayStr();
-    pdf.save(`마음의시간_Day${String(day).padStart(2,'0')}_${dateStr}.pdf`);
+    pdf.save(`이마고_Day${String(day).padStart(2,'0')}_${dateStr}.pdf`);
   } catch (err) {
     console.error(err);
     alert('PDF 저장 실패: ' + err.message);
