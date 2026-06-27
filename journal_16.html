@@ -225,6 +225,88 @@
     color: var(--gold-deep);
   }
 
+  /* ============ ZOOM TIME-GUARD MODAL ============ */
+  .zoom-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 40, 55, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+    animation: zoomModalFade 0.2s ease;
+  }
+  .zoom-modal[hidden] { display: none; }
+  @keyframes zoomModalFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .zoom-modal-card {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 40px 36px 28px;
+    max-width: 420px;
+    width: calc(100% - 40px);
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(21, 91, 128, 0.25);
+    animation: zoomModalRise 0.25s ease;
+  }
+  @keyframes zoomModalRise {
+    from { transform: translateY(12px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  .zoom-modal-eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  .zoom-modal-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 16px;
+    line-height: 1.5;
+  }
+  .zoom-modal-body {
+    font-family: 'Gowun Batang', serif;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.75;
+    margin: 0 0 28px;
+  }
+  .zoom-modal-body strong {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .zoom-modal-sub {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+  .zoom-modal-close {
+    font-family: 'Gowun Batang', serif;
+    font-size: 14px;
+    color: var(--cream);
+    background: var(--accent);
+    border: none;
+    border-radius: 3px;
+    padding: 10px 32px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.15s;
+  }
+  .zoom-modal-close:hover {
+    background: var(--gold-deep);
+  }
+
   /* ============ JOURNAL INPUT (위로 올라온 입력 영역) ============ */
   .journal-input {
     background: linear-gradient(180deg, rgba(245, 250, 253, 0.85), rgba(236, 244, 249, 0.6));
@@ -1571,14 +1653,14 @@
   <header>
     <div class="eyebrow">Season 16 · Reading Journal</div>
     <h1 class="title"><span class="accent">이마고</span> — 모두의 기록</h1>
-    <p class="subtitle">Connection in the Here and Now</p>
+    <p class="subtitle">Getting the Love You Want</p>
     <div class="season-meta">
       <span><span class="dot"></span>하빌 헨드릭스 · 헬렌 라켈리 헌트</span>
-      <span><span class="dot"></span>2026. 5. 26 — 6. 30 (예상)</span>
+      <span><span class="dot"></span>2026. 7. 6 — 9. 4 (예상)</span>
       <span><span class="dot"></span>평일 새벽 6:00 – 7:00</span>
     </div>
     <div class="zoom-join">
-      <a href="https://us02web.zoom.us/j/86324239516?pwd=IIPBgvoepGMyGRptvKLfkRunc4e3pL.1" target="_blank" rel="noopener">
+      <a id="zoomJoinBtn" href="https://us02web.zoom.us/j/86324239516?pwd=IIPBgvoepGMyGRptvKLfkRunc4e3pL.1" target="_blank" rel="noopener" onclick="return handleZoomClick(event);">
         <span class="zoom-icon">📹</span>
         <span class="zoom-label">JOIN</span>
         <span class="zoom-text">Zoom Meeting 참가하기</span>
@@ -1704,6 +1786,59 @@
   </footer>
 
 </div>
+
+<!-- ============ ZOOM TIME-GUARD MODAL ============ -->
+<div id="zoomTimeModal" class="zoom-modal" hidden>
+  <div class="zoom-modal-card" role="dialog" aria-modal="true" aria-labelledby="zoomModalTitle">
+    <div class="zoom-modal-eyebrow">⏱ 낭독 시간이 아니야</div>
+    <h3 class="zoom-modal-title" id="zoomModalTitle">지금은 낭독시간이 아닙니다</h3>
+    <p class="zoom-modal-body">
+      낭만북클럽은 평일 새벽 <strong>6:00 – 7:00</strong>에 만나.
+      <span class="zoom-modal-sub">(입장은 5:30부터 · 한국 시간 기준)</span>
+    </p>
+    <button class="zoom-modal-close" type="button" onclick="closeZoomModal()">알겠어</button>
+  </div>
+</div>
+
+<script>
+  // ════════════════════════════════════════════════════════
+  // Zoom 시간 가드 — 한국 시간 5:30 ~ 7:00 사이에만 링크 작동
+  // ════════════════════════════════════════════════════════
+  function isZoomReadingTime() {
+    const now = new Date();
+    // UTC 시각 + 9시간 → KST. getUTCHours/getUTCMinutes로 읽으면 시간대 무관.
+    const kst = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+    const totalMin = kst.getUTCHours() * 60 + kst.getUTCMinutes();
+    return totalMin >= (5 * 60 + 30) && totalMin < (7 * 60);
+  }
+
+  function handleZoomClick(e) {
+    if (!isZoomReadingTime()) {
+      e.preventDefault();
+      const modal = document.getElementById('zoomTimeModal');
+      if (modal) modal.hidden = false;
+      return false;
+    }
+    return true;
+  }
+
+  function closeZoomModal() {
+    const modal = document.getElementById('zoomTimeModal');
+    if (modal) modal.hidden = true;
+  }
+
+  // 모달 배경 클릭 · ESC 키로도 닫기
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('zoomTimeModal');
+    if (!modal) return;
+    modal.addEventListener('click', function(ev) {
+      if (ev.target === modal) closeZoomModal();
+    });
+    document.addEventListener('keydown', function(ev) {
+      if (ev.key === 'Escape' && !modal.hidden) closeZoomModal();
+    });
+  });
+</script>
 
 <script>
 // ════════════════════════════════════════════════════════
@@ -2742,7 +2877,7 @@ function pageHeaderHtml(eyebrowText, titleSuffix) {
     <div style="text-align: center; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid #c5d4de;">
       <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 10px;">${escapeHtml(eyebrowText)}</div>
       <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 22px; color: #1a2837;"><span style="color: #155b80;">이마고</span> — ${escapeHtml(titleSuffix)}</div>
-      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185; margin-top: 6px;">Connection in the Here and Now</div>
+      <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185; margin-top: 6px;">Getting the Love You Want</div>
     </div>
   `;
 }
@@ -3012,7 +3147,7 @@ function buildSessionMarkdown(session) {
   const lines = [];
   lines.push(`# 이마고 — 모두의 기록`);
   lines.push('');
-  lines.push(`> *Hour of the Heart · Connection in the Here and Now*`);
+  lines.push(`> *Imago · Getting the Love You Want*`);
   lines.push('');
   lines.push('---');
   lines.push('');
