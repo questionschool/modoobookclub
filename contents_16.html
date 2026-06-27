@@ -538,6 +538,20 @@
     margin-bottom: 2px;
   }
 
+  /* 챕터 연결 매핑 (본문 ↔ 실습) */
+  .chapter-link {
+    font-family: 'Gowun Batang', 'Nanum Myeongjo', serif;
+    font-size: 11.5px;
+    color: var(--gold-deep);
+    margin-top: 6px;
+    letter-spacing: 0.02em;
+    padding: 2px 8px;
+    background: rgba(42, 132, 153, 0.07);
+    border-left: 2px solid var(--gold);
+    display: inline-block;
+    border-radius: 0 2px 2px 0;
+  }
+
   /* 이마고 실습 번호 (E01~E18) */
   .chapter-num.ex {
     font-size: 11px;
@@ -931,41 +945,41 @@ const IMAGO_TOC = [
   { partKey: 'prologue', kr: '1988년 판에 쓰는 서문',                            en: '',                                        mode: 'side' },
 
   // ── 제1부 · 무의식적인 파트너십 ──
-  { partKey: 'part1', ch: 1, kr: '당신이 사랑에 빠지게 되는 진짜 이유',  en: 'THE MYSTERY OF ATTRACTION',   mode: 'read', pageStart: 79,  pageEnd: 98 },
-  { partKey: 'part1', ch: 2, kr: '어린 시절의 상처',                  en: 'CHILDHOOD WOUNDS',           mode: 'read', pageStart: 99,  pageEnd: 122 },
-  { partKey: 'part1', ch: 3, kr: '당신의 이마고(Imago)',              en: 'YOUR IMAGO',                 mode: 'read', pageStart: 123, pageEnd: 137 },
+  { partKey: 'part1', ch: 1, kr: '당신이 사랑에 빠지게 되는 진짜 이유',  en: 'THE MYSTERY OF ATTRACTION',   mode: 'read', pageStart: 79,  pageEnd: 98,  linked: '실습 1' },
+  { partKey: 'part1', ch: 2, kr: '어린 시절의 상처',                  en: 'CHILDHOOD WOUNDS',           mode: 'read', pageStart: 99,  pageEnd: 122, linked: '실습 2, 4, 7' },
+  { partKey: 'part1', ch: 3, kr: '당신의 이마고(Imago)',              en: 'YOUR IMAGO',                 mode: 'read', pageStart: 123, pageEnd: 137, linked: '실습 3, 6' },
   { partKey: 'part1', ch: 4, kr: '로맨틱한 사랑 (콩깍지가 씌임)',          en: 'ROMANTIC LOVE',              mode: 'read', pageStart: 139, pageEnd: 159 },
   { partKey: 'part1', ch: 5, kr: '힘겨루기 (주도권 잡기)',              en: 'THE POWER STRUGGLE',         mode: 'read', pageStart: 161, pageEnd: 185 },
 
   // ── 제2부 · 의식이 깨어 있는 파트너십 ──
   { partKey: 'part2', ch: 6,  kr: '의식적으로 깨어나기 (되어 가기)',                  en: 'BECOMING CONSCIOUS',                                  mode: 'read', pageStart: 189, pageEnd: 208 },
-  { partKey: 'part2', ch: 7,  kr: '헌신에 대한 결정 : 탈출구를 닫아라!',               en: 'COMMITMENT',                                          mode: 'read', pageStart: 209, pageEnd: 228 },
-  { partKey: 'part2', ch: 8,  kr: '나 자신과 파트너(배우자)에 대해 더 많이 알아 가기',   en: 'INCREASING YOUR KNOWLEDGE OF YOURSELF AND YOUR PARTNER', mode: 'read', pageStart: 229, pageEnd: 267 },
-  { partKey: 'part2', ch: 9,  kr: '두 사람(커플, 부부)만의 안전지대를 만들어 가기',      en: 'CREATING A ZONE OF SAFETY',                          mode: 'read', pageStart: 269, pageEnd: 289 },
-  { partKey: 'part2', ch: 10, kr: '두 사람(커플, 부부)만의 교육과정을 구성하기',         en: 'DEFINING YOUR CURRICULUM',                            mode: 'read', pageStart: 291, pageEnd: 319 },
-  { partKey: 'part2', ch: 11, kr: '두 사람(커플, 부부)만의 신성한 공간 만들기',          en: 'CREATING A SACRED SPACE',                             mode: 'read', pageStart: 321, pageEnd: 354 },
-  { partKey: 'part2', ch: 12, kr: '두 가지 다른 관계의 초상화',                       en: 'PORTRAIT OF TWO RELATIONSHIPS',                       mode: 'read', pageStart: 355, pageEnd: 412 },
+  { partKey: 'part2', ch: 7,  kr: '헌신에 대한 결정 : 탈출구를 닫아라!',               en: 'COMMITMENT',                                          mode: 'read', pageStart: 209, pageEnd: 228, linked: '실습 9' },
+  { partKey: 'part2', ch: 8,  kr: '나 자신과 파트너(배우자)에 대해 더 많이 알아 가기',   en: 'INCREASING YOUR KNOWLEDGE OF YOURSELF AND YOUR PARTNER', mode: 'read', pageStart: 229, pageEnd: 267, linked: '실습 8' },
+  { partKey: 'part2', ch: 9,  kr: '두 사람(커플, 부부)만의 안전지대를 만들어 가기',      en: 'CREATING A ZONE OF SAFETY',                          mode: 'read', pageStart: 269, pageEnd: 289, linked: '실습 10, 11, 12' },
+  { partKey: 'part2', ch: 10, kr: '두 사람(커플, 부부)만의 교육과정을 구성하기',         en: 'DEFINING YOUR CURRICULUM',                            mode: 'read', pageStart: 291, pageEnd: 319, linked: '실습 5, 14' },
+  { partKey: 'part2', ch: 11, kr: '두 사람(커플, 부부)만의 신성한 공간 만들기',          en: 'CREATING A SACRED SPACE',                             mode: 'read', pageStart: 321, pageEnd: 354, linked: '실습 13, 15, 16, 17' },
+  { partKey: 'part2', ch: 12, kr: '두 가지 다른 관계의 초상화',                       en: 'PORTRAIT OF TWO RELATIONSHIPS',                       mode: 'read', pageStart: 355, pageEnd: 412, linked: '실습 18' },
 
   // ── 제3부 · 이마고 실습과정 ──
   { partKey: 'part3', ch: 13,   kr: "'의식이 깨어 있는 협력관계'로 가는 이마고 실습 10단계", en: 'TEN STEPS TOWARD A CONSCIOUS PARTNERSHIP',  mode: 'read', pageStart: 415, pageEnd: 420 },
-  { partKey: 'part3', ex: 1,  kr: '우리(커플, 부부)의 관계 비전',                          en: 'YOUR RELATIONSHIP VISION',                  mode: 'read', pageStart: 421, pageEnd: 424 },
-  { partKey: 'part3', ex: 2,  kr: '어린 시절의 상처',                                    en: 'CHILDHOOD WOUNDS',                          mode: 'read', pageStart: 425, pageEnd: 426 },
-  { partKey: 'part3', ex: 3,  kr: '이마고 정밀 검사',                                    en: 'IMAGO WORKUP',                              mode: 'read', pageStart: 427, pageEnd: 429 },
-  { partKey: 'part3', ex: 4,  kr: '어린 시절의 좌절 경험',                                en: 'CHILDHOOD FRUSTRATIONS',                    mode: 'read', pageStart: 430, pageEnd: 431 },
-  { partKey: 'part3', ex: 5,  kr: '부모-자녀 대화법',                                    en: 'PARENT-CHILD DIALOGUE',                     mode: 'read', pageStart: 432, pageEnd: 437 },
-  { partKey: 'part3', ex: 6,  kr: '파트너(배우자)에 대해 알아가기 (파트너의 프로파일)',         en: 'PARTNER PROFILE',                           mode: 'read', pageStart: 438, pageEnd: 440 },
-  { partKey: 'part3', ex: 7,  kr: '미해결과제',                                          en: 'UNFINISHED BUSINESS',                       mode: 'read', pageStart: 441, pageEnd: 442 },
-  { partKey: 'part3', ex: 8,  kr: '이마고대화법',                                        en: 'THE IMAGO DIALOGUE',                        mode: 'read', pageStart: 443, pageEnd: 450 },
-  { partKey: 'part3', ex: 9,  kr: '헌신에 대한 결정 : 탈출구를 차단하기!',                   en: 'THE COMMITMENT DECISION',                   mode: 'read', pageStart: 451, pageEnd: 454 },
-  { partKey: 'part3', ex: 10, kr: '서로를 돌보아 주는 행동들',                              en: 'REROMANTICIZING',                           mode: 'read', pageStart: 455, pageEnd: 459 },
-  { partKey: 'part3', ex: 11, kr: "파트너를 깜짝 놀라게 해 줄 선물과도 같은 '뜻밖의 돌봄 행동 목록'", en: 'THE SURPRISE LIST',                         mode: 'read', pageStart: 460, pageEnd: 461 },
-  { partKey: 'part3', ex: 12, kr: '재미있고 활기를 북돋워 주는 활동들의 목록',                  en: 'THE FUN LIST',                              mode: 'read', pageStart: 462, pageEnd: 463 },
-  { partKey: 'part3', ex: 13, kr: '긍정적인 칭찬의 홍수 퍼붓기',                            en: 'POSITIVE FLOODING',                         mode: 'read', pageStart: 464, pageEnd: 466 },
-  { partKey: 'part3', ex: 14, kr: '행동수정요청(BCR) 대화법',                              en: 'THE BEHAVIOR CHANGE REQUEST DIALOGUE',      mode: 'read', pageStart: 467, pageEnd: 472 },
-  { partKey: 'part3', ex: 15, kr: '파트너(배우자) 안아 주기',                              en: 'THE HOLDING EXERCISE',                      mode: 'read', pageStart: 473, pageEnd: 475 },
-  { partKey: 'part3', ex: 16, kr: '당신의 부정성을 소유하고 제거하기',                        en: 'OWNING AND ELIMINATING YOUR NEGATIVITY',    mode: 'read', pageStart: 476, pageEnd: 479 },
-  { partKey: 'part3', ex: 17, kr: '부정성 제로 훈련과 다시 연결하기 과정',                    en: 'SELF-INTEGRATION',                          mode: 'read', pageStart: 480, pageEnd: 482 },
-  { partKey: 'part3', ex: 18, kr: '사랑을 시각화하기',                                    en: 'VISUALIZATION OF LOVE',                     mode: 'read', pageStart: 483, pageEnd: 484 },
+  { partKey: 'part3', ex: 1,  kr: '우리(커플, 부부)의 관계 비전',                          en: 'YOUR RELATIONSHIP VISION',                  mode: 'read', pageStart: 421, pageEnd: 424, linked: '제1장' },
+  { partKey: 'part3', ex: 2,  kr: '어린 시절의 상처',                                    en: 'CHILDHOOD WOUNDS',                          mode: 'read', pageStart: 425, pageEnd: 426, linked: '제2장' },
+  { partKey: 'part3', ex: 3,  kr: '이마고 정밀 검사',                                    en: 'IMAGO WORKUP',                              mode: 'read', pageStart: 427, pageEnd: 429, linked: '제3장' },
+  { partKey: 'part3', ex: 4,  kr: '어린 시절의 좌절 경험',                                en: 'CHILDHOOD FRUSTRATIONS',                    mode: 'read', pageStart: 430, pageEnd: 431, linked: '제2장' },
+  { partKey: 'part3', ex: 5,  kr: '부모-자녀 대화법',                                    en: 'PARENT-CHILD DIALOGUE',                     mode: 'read', pageStart: 432, pageEnd: 437, linked: '제10장' },
+  { partKey: 'part3', ex: 6,  kr: '파트너(배우자)에 대해 알아가기 (파트너의 프로파일)',         en: 'PARTNER PROFILE',                           mode: 'read', pageStart: 438, pageEnd: 440, linked: '제3장' },
+  { partKey: 'part3', ex: 7,  kr: '미해결과제',                                          en: 'UNFINISHED BUSINESS',                       mode: 'read', pageStart: 441, pageEnd: 442, linked: '제2장' },
+  { partKey: 'part3', ex: 8,  kr: '이마고대화법',                                        en: 'THE IMAGO DIALOGUE',                        mode: 'read', pageStart: 443, pageEnd: 450, linked: '제8장' },
+  { partKey: 'part3', ex: 9,  kr: '헌신에 대한 결정 : 탈출구를 차단하기!',                   en: 'THE COMMITMENT DECISION',                   mode: 'read', pageStart: 451, pageEnd: 454, linked: '제7장' },
+  { partKey: 'part3', ex: 10, kr: '서로를 돌보아 주는 행동들',                              en: 'REROMANTICIZING',                           mode: 'read', pageStart: 455, pageEnd: 459, linked: '제9장' },
+  { partKey: 'part3', ex: 11, kr: "파트너를 깜짝 놀라게 해 줄 선물과도 같은 '뜻밖의 돌봄 행동 목록'", en: 'THE SURPRISE LIST',                         mode: 'read', pageStart: 460, pageEnd: 461, linked: '제9장' },
+  { partKey: 'part3', ex: 12, kr: '재미있고 활기를 북돋워 주는 활동들의 목록',                  en: 'THE FUN LIST',                              mode: 'read', pageStart: 462, pageEnd: 463, linked: '제9장' },
+  { partKey: 'part3', ex: 13, kr: '긍정적인 칭찬의 홍수 퍼붓기',                            en: 'POSITIVE FLOODING',                         mode: 'read', pageStart: 464, pageEnd: 466, linked: '제11장' },
+  { partKey: 'part3', ex: 14, kr: '행동수정요청(BCR) 대화법',                              en: 'THE BEHAVIOR CHANGE REQUEST DIALOGUE',      mode: 'read', pageStart: 467, pageEnd: 472, linked: '제10장' },
+  { partKey: 'part3', ex: 15, kr: '파트너(배우자) 안아 주기',                              en: 'THE HOLDING EXERCISE',                      mode: 'read', pageStart: 473, pageEnd: 475, linked: '제11장' },
+  { partKey: 'part3', ex: 16, kr: '당신의 부정성을 소유하고 제거하기',                        en: 'OWNING AND ELIMINATING YOUR NEGATIVITY',    mode: 'read', pageStart: 476, pageEnd: 479, linked: '제11장' },
+  { partKey: 'part3', ex: 17, kr: '부정성 제로 훈련과 다시 연결하기 과정',                    en: 'SELF-INTEGRATION',                          mode: 'read', pageStart: 480, pageEnd: 482, linked: '제11장' },
+  { partKey: 'part3', ex: 18, kr: '사랑을 시각화하기',                                    en: 'VISUALIZATION OF LOVE',                     mode: 'read', pageStart: 483, pageEnd: 484, linked: '제12장' },
 
   // ── 끝맺음 ──
   { partKey: 'epilogue', kr: '당신의 커플(부부)관계를 위해 전문가의 도움이 필요할 때',                   en: 'Seeking Professional Help', mode: 'read', pageStart: 485, pageEnd: 488 },
@@ -1090,6 +1104,11 @@ function renderItem(item, part) {
     else if (status === 'scheduled') pillHtml = '<span class="status-pill scheduled">⌛ 곧 읽음</span>';
     else                           pillHtml = '<span class="status-pill future">읽기 전</span>';
 
+    // 연결 매핑 표시 (본문 ↔ 실습)
+    const linkedHtml = item.linked
+      ? `<div class="chapter-link">↔ ${escapeHtml(item.linked)}</div>`
+      : '';
+
     return `
       <article class="chapter ${status}">
         ${numDisplay}
@@ -1101,6 +1120,7 @@ function renderItem(item, part) {
             <span class="sep">·</span><span>${escapeHtml(pageCount)}</span>
             ${daysLabel ? `<span class="sep">·</span><span class="days">${escapeHtml(daysLabel)}</span>` : ''}
           </div>
+          ${linkedHtml}
         </div>
         <div class="chapter-status">${pillHtml}</div>
       </article>
