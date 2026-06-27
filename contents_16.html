@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>책의 지도 — 이마고</title>
+<title>이마고 : 당신이 원하는 사랑 만들기 — 목차</title>
 <meta name="description" content="하빌 헨드릭스 · 헬렌 라켈리 헌트의 『이마고』 챕터 지도. 우리가 어디까지 왔는지, 어디로 가고 있는지.">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="책의 지도 — 이마고">
+<meta property="og:title" content="이마고 : 당신이 원하는 사랑 만들기 — 목차">
 <meta property="og:description" content="하빌 헨드릭스 · 헬렌 라켈리 헌트의 『이마고』 — 우리가 어디까지 왔는지, 어디로 가고 있는지.">
 <meta property="og:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
 <meta property="og:image:width" content="1200">
@@ -485,6 +485,66 @@
     border: 1px solid rgba(42, 132, 153, 0.3);
   }
 
+  /* 비낭독 라벨 */
+  .status-pill.side {
+    color: var(--ink-muted);
+    background: rgba(94, 113, 133, 0.08);
+    border: 1px solid var(--line);
+  }
+  .status-pill.ref {
+    color: var(--ink-faint);
+    background: rgba(138, 155, 171, 0.06);
+    border: 1px solid rgba(138, 155, 171, 0.3);
+  }
+  .chapter.side-only {
+    opacity: 0.78;
+  }
+  .chapter.side-only .chapter-title {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  /* 부(部) 부제 — 한글 부제 · 영문 */
+  .part-title-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .part-sub-kr {
+    font-family: 'Gowun Batang', 'Nanum Myeongjo', serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+  .part-sub-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    margin-top: 2px;
+  }
+
+  /* 챕터 영문 제목 */
+  .chapter-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12.5px;
+    letter-spacing: 0.06em;
+    color: var(--gold-deep);
+    margin-top: 3px;
+    margin-bottom: 2px;
+  }
+
+  /* 이마고 실습 번호 (E01~E18) */
+  .chapter-num.ex {
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--gold-deep);
+  }
+
   /* LOADING */
   .loading-skeleton {
     background: linear-gradient(90deg, rgba(245,250,253,0.3) 0%, rgba(245,250,253,0.8) 50%, rgba(245,250,253,0.3) 100%);
@@ -558,8 +618,8 @@
 
   <header>
     <div class="eyebrow">Season 16 · Table of Contents</div>
-    <h1 class="title">책의 지도 — <span class="accent">이마고</span></h1>
-    <p class="subtitle">A map of where we've been, and where we're going.</p>
+    <h1 class="title"><span class="accent">이마고</span> : 당신이 원하는 사랑 만들기 — 목차</h1>
+    <p class="subtitle">Getting the Love You Want : A Guide for Couples.</p>
     <div class="book-meta">
       <span><span class="dot"></span>하빌 헨드릭스 · 헬렌 라켈리 헌트</span>
       <span><span class="dot"></span>22장 · 약 342쪽</span>
@@ -627,7 +687,7 @@
 
 <script>
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
-const TOTAL_PAGES = 342;
+const TOTAL_PAGES = 416;   // 이마고 낭독 대상 35개 항목의 총 페이지 수
 
 let sessions = [];
 let contents = [];
@@ -789,27 +849,16 @@ function renderSummary() {
     }
   });
 
-  // 페이지 진도: 시간상 끝난 회차만 계산에 반영
-  const finishedMainSessions = sessions.filter(s =>
-    s.section === 'main' && isSessionFinished(s)
-  );
-  const maxMainPage = finishedMainSessions.length > 0
-    ? Math.max(...finishedMainSessions.map(s =>
-        parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0))
-    : 0;
-
-  const hasFinishedFront = sessions.some(s => s.section === 'front' && isSessionFinished(s));
-  let pagesRead = maxMainPage + (hasFinishedFront ? 17 : 0);
-
-  const hasFinishedBack = sessions.some(s => s.section === 'back' && isSessionFinished(s));
-  if (hasFinishedBack) {
-    const backEnds = sessions.filter(s => s.section === 'back' && isSessionFinished(s))
-      .map(s => parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0);
-    pagesRead = Math.max(pagesRead, Math.max(...backEnds) + 17);
-  }
-
-  // Sessions 카운트도 시간상 끝난 것만
+  // 페이지 진도: 시간상 끝난 회차의 페이지 범위를 단순 합산 (이마고는 front도 아라비아 숫자)
   const finishedSessions = sessions.filter(isSessionFinished);
+  let pagesRead = 0;
+  finishedSessions.forEach(s => {
+    const sStart = parseInt(s.start_page, 10);
+    const sEnd = parseInt(s.end_page, 10) || sStart;
+    if (!isNaN(sStart)) {
+      pagesRead += sEnd - sStart + 1;
+    }
+  });
 
   document.getElementById('statCompleted').innerHTML =
     `${done} <span class="small">/ ${mainChapters.length} ch.</span>`;
@@ -854,6 +903,82 @@ function renderSummary() {
 }
 
 // ════════════════════════════════════════════════════════
+// 이마고 목차 정적 메타데이터
+// (GAS의 Contents_16 시트는 낭독 대상 35개만 / 여기에 영문, 부 그룹, 개별독서·참고자료를 더해 화면을 채움)
+// ════════════════════════════════════════════════════════
+const IMAGO_TOC = [
+  // ── 序 · 책의 앞부분 (Prologue) ──
+  { partKey: 'prologue', kr: '『세계 최고의 커플테라피 이마고』 30주년 기념 출간에 즈음하여, 이 책에 대한 찬사의 글', en: '', mode: 'side' },
+  { partKey: 'prologue', kr: '역자 서문',                                      en: '',                                        mode: 'read',  pageStart: 11, pageEnd: 14 },
+  { partKey: 'prologue', kr: '한국어판 출간을 축하하며',                          en: '',                                        mode: 'read',  pageStart: 15, pageEnd: 16 },
+  { partKey: 'prologue', kr: '조 로빈슨 씨께 특별히 감사드리는 글',                  en: '',                                        mode: 'side' },
+  { partKey: 'prologue', kr: '감사의 글',                                       en: '',                                        mode: 'side' },
+  { partKey: 'prologue', kr: '30주년(2019년)에 쓰는 서문',                       en: '',                                        mode: 'read',  pageStart: 25, pageEnd: 34 },
+  { partKey: 'prologue', kr: '20주년(2008년)에 쓰는 서문',                       en: '',                                        mode: 'side' },
+  { partKey: 'prologue', kr: '2001년 판에 쓰는 서문',                            en: '',                                        mode: 'side' },
+  { partKey: 'prologue', kr: '1988년 판에 쓰는 서문',                            en: '',                                        mode: 'side' },
+
+  // ── 제1부 · 무의식적인 파트너십 ──
+  { partKey: 'part1', ch: 1, kr: '당신이 사랑에 빠지게 되는 진짜 이유',  en: 'THE MYSTERY OF ATTRACTION',   mode: 'read', pageStart: 79,  pageEnd: 98 },
+  { partKey: 'part1', ch: 2, kr: '어린 시절의 상처',                  en: 'CHILDHOOD WOUNDS',           mode: 'read', pageStart: 99,  pageEnd: 122 },
+  { partKey: 'part1', ch: 3, kr: '당신의 이마고(Imago)',              en: 'YOUR IMAGO',                 mode: 'read', pageStart: 123, pageEnd: 137 },
+  { partKey: 'part1', ch: 4, kr: '로맨틱한 사랑 (콩깍지가 씌임)',          en: 'ROMANTIC LOVE',              mode: 'read', pageStart: 139, pageEnd: 159 },
+  { partKey: 'part1', ch: 5, kr: '힘겨루기 (주도권 잡기)',              en: 'THE POWER STRUGGLE',         mode: 'read', pageStart: 161, pageEnd: 185 },
+
+  // ── 제2부 · 의식이 깨어 있는 파트너십 ──
+  { partKey: 'part2', ch: 6,  kr: '의식적으로 깨어나기 (되어 가기)',                  en: 'BECOMING CONSCIOUS',                                  mode: 'read', pageStart: 189, pageEnd: 208 },
+  { partKey: 'part2', ch: 7,  kr: '헌신에 대한 결정 : 탈출구를 닫아라!',               en: 'COMMITMENT',                                          mode: 'read', pageStart: 209, pageEnd: 228 },
+  { partKey: 'part2', ch: 8,  kr: '나 자신과 파트너(배우자)에 대해 더 많이 알아 가기',   en: 'INCREASING YOUR KNOWLEDGE OF YOURSELF AND YOUR PARTNER', mode: 'read', pageStart: 229, pageEnd: 267 },
+  { partKey: 'part2', ch: 9,  kr: '두 사람(커플, 부부)만의 안전지대를 만들어 가기',      en: 'CREATING A ZONE OF SAFETY',                          mode: 'read', pageStart: 269, pageEnd: 289 },
+  { partKey: 'part2', ch: 10, kr: '두 사람(커플, 부부)만의 교육과정을 구성하기',         en: 'DEFINING YOUR CURRICULUM',                            mode: 'read', pageStart: 291, pageEnd: 319 },
+  { partKey: 'part2', ch: 11, kr: '두 사람(커플, 부부)만의 신성한 공간 만들기',          en: 'CREATING A SACRED SPACE',                             mode: 'read', pageStart: 321, pageEnd: 354 },
+  { partKey: 'part2', ch: 12, kr: '두 가지 다른 관계의 초상화',                       en: 'PORTRAIT OF TWO RELATIONSHIPS',                       mode: 'read', pageStart: 355, pageEnd: 412 },
+
+  // ── 제3부 · 이마고 실습과정 ──
+  { partKey: 'part3', ch: 13,   kr: "'의식이 깨어 있는 협력관계'로 가는 이마고 실습 10단계", en: 'TEN STEPS TOWARD A CONSCIOUS PARTNERSHIP',  mode: 'read', pageStart: 415, pageEnd: 420 },
+  { partKey: 'part3', ex: 1,  kr: '우리(커플, 부부)의 관계 비전',                          en: 'YOUR RELATIONSHIP VISION',                  mode: 'read', pageStart: 421, pageEnd: 424 },
+  { partKey: 'part3', ex: 2,  kr: '어린 시절의 상처',                                    en: 'CHILDHOOD WOUNDS',                          mode: 'read', pageStart: 425, pageEnd: 426 },
+  { partKey: 'part3', ex: 3,  kr: '이마고 정밀 검사',                                    en: 'IMAGO WORKUP',                              mode: 'read', pageStart: 427, pageEnd: 429 },
+  { partKey: 'part3', ex: 4,  kr: '어린 시절의 좌절 경험',                                en: 'CHILDHOOD FRUSTRATIONS',                    mode: 'read', pageStart: 430, pageEnd: 431 },
+  { partKey: 'part3', ex: 5,  kr: '부모-자녀 대화법',                                    en: 'PARENT-CHILD DIALOGUE',                     mode: 'read', pageStart: 432, pageEnd: 437 },
+  { partKey: 'part3', ex: 6,  kr: '파트너(배우자)에 대해 알아가기 (파트너의 프로파일)',         en: 'PARTNER PROFILE',                           mode: 'read', pageStart: 438, pageEnd: 440 },
+  { partKey: 'part3', ex: 7,  kr: '미해결과제',                                          en: 'UNFINISHED BUSINESS',                       mode: 'read', pageStart: 441, pageEnd: 442 },
+  { partKey: 'part3', ex: 8,  kr: '이마고대화법',                                        en: 'THE IMAGO DIALOGUE',                        mode: 'read', pageStart: 443, pageEnd: 450 },
+  { partKey: 'part3', ex: 9,  kr: '헌신에 대한 결정 : 탈출구를 차단하기!',                   en: 'THE COMMITMENT DECISION',                   mode: 'read', pageStart: 451, pageEnd: 454 },
+  { partKey: 'part3', ex: 10, kr: '서로를 돌보아 주는 행동들',                              en: 'REROMANTICIZING',                           mode: 'read', pageStart: 455, pageEnd: 459 },
+  { partKey: 'part3', ex: 11, kr: "파트너를 깜짝 놀라게 해 줄 선물과도 같은 '뜻밖의 돌봄 행동 목록'", en: 'THE SURPRISE LIST',                         mode: 'read', pageStart: 460, pageEnd: 461 },
+  { partKey: 'part3', ex: 12, kr: '재미있고 활기를 북돋워 주는 활동들의 목록',                  en: 'THE FUN LIST',                              mode: 'read', pageStart: 462, pageEnd: 463 },
+  { partKey: 'part3', ex: 13, kr: '긍정적인 칭찬의 홍수 퍼붓기',                            en: 'POSITIVE FLOODING',                         mode: 'read', pageStart: 464, pageEnd: 466 },
+  { partKey: 'part3', ex: 14, kr: '행동수정요청(BCR) 대화법',                              en: 'THE BEHAVIOR CHANGE REQUEST DIALOGUE',      mode: 'read', pageStart: 467, pageEnd: 472 },
+  { partKey: 'part3', ex: 15, kr: '파트너(배우자) 안아 주기',                              en: 'THE HOLDING EXERCISE',                      mode: 'read', pageStart: 473, pageEnd: 475 },
+  { partKey: 'part3', ex: 16, kr: '당신의 부정성을 소유하고 제거하기',                        en: 'OWNING AND ELIMINATING YOUR NEGATIVITY',    mode: 'read', pageStart: 476, pageEnd: 479 },
+  { partKey: 'part3', ex: 17, kr: '부정성 제로 훈련과 다시 연결하기 과정',                    en: 'SELF-INTEGRATION',                          mode: 'read', pageStart: 480, pageEnd: 482 },
+  { partKey: 'part3', ex: 18, kr: '사랑을 시각화하기',                                    en: 'VISUALIZATION OF LOVE',                     mode: 'read', pageStart: 483, pageEnd: 484 },
+
+  // ── 끝맺음 ──
+  { partKey: 'epilogue', kr: '당신의 커플(부부)관계를 위해 전문가의 도움이 필요할 때',                   en: 'Seeking Professional Help', mode: 'read', pageStart: 485, pageEnd: 488 },
+  { partKey: 'epilogue', kr: '미주',                                                                  en: 'Notes',                     mode: 'ref' },
+  { partKey: 'epilogue', kr: '참고문헌',                                                                en: 'Bibliography',              mode: 'ref' },
+  { partKey: 'epilogue', kr: '찾아보기',                                                                en: 'Index',                     mode: 'ref' },
+  { partKey: 'epilogue', kr: '이 책의 공동 저자인 하빌 헨드릭스 박사와 헬렌 라컬리 헌트 박사 부부에 대하여',  en: 'About the Authors',         mode: 'ref' },
+  { partKey: 'epilogue', kr: '이 책의 공동번역자인 오제은 박사와 김혜진 박사에 대하여 / 한국에서 이마고 커플(부부)상담을 신청하려면? 외 안내사항', en: '', mode: 'ref' }
+];
+
+const IMAGO_PARTS = {
+  prologue: { label: 'PART · 시작 글',   title: '책의 앞부분, Prologue',  metaKey: 'prologueMeta', sectionType: 'front' },
+  part1:    { label: 'PART I · 본문',   title: '무의식적인 파트너십',
+              titleSub: '의식이 잠자고 있는 커플관계, 결혼생활',
+              titleEn: 'THE UNCONSCIOUS PARTNERSHIP',                                              sectionType: 'main' },
+  part2:    { label: 'PART II · 본문',  title: '의식이 깨어 있는 파트너십',
+              titleSub: '살아 있는 협력관계',
+              titleEn: 'THE CONSCIOUS PARTNERSHIP',                                                sectionType: 'main' },
+  part3:    { label: 'PART III · 본문', title: '이마고 실습과정',
+              titleEn: 'THE EXERCISES',                                                            sectionType: 'main' },
+  epilogue: { label: 'PART · 끝맺음',   title: '책의 마무리',                                        sectionType: 'back' }
+};
+
+
+// ════════════════════════════════════════════════════════
 // 챕터 카드 렌더링
 // ════════════════════════════════════════════════════════
 function renderContents() {
@@ -865,91 +990,125 @@ function renderContents() {
     return;
   }
 
-  // 섹션별로 그루핑
-  const front = contents.filter(c => c.section_type === 'front');
-  const main = contents.filter(c => c.section_type === 'main');
-  const back = contents.filter(c => c.section_type === 'back');
+  // PART 단위로 그룹화
+  const grouped = { prologue: [], part1: [], part2: [], part3: [], epilogue: [] };
+  IMAGO_TOC.forEach(item => grouped[item.partKey].push(item));
+
+  // PART 별 메타 정보 (낭독 분량 합산)
+  function partMeta(items) {
+    const readItems = items.filter(i => i.mode === 'read');
+    if (readItems.length === 0) return '';
+    const totalPages = readItems.reduce((sum, i) => sum + (i.pageEnd - i.pageStart + 1), 0);
+    return `${readItems.length}편 · ${totalPages}쪽 낭독`;
+  }
 
   const html = `
-    ${front.length > 0 ? renderPart('PART · 시작 글', '책의 들머리', 'v – xxi · 17쪽', front, 'front') : ''}
-    ${main.length > 0 ? renderPart('PART · 본문', '스물두 개의 사례', `p. 1 – 314 · ${main.length} chapters`, main, 'main') : ''}
-    ${back.length > 0 ? renderPart('PART · 끝맺음', '책의 마무리', 'p. 315 – 325 · 11쪽', back, 'back') : ''}
+    ${renderPart('prologue', grouped.prologue, partMeta(grouped.prologue))}
+    ${renderPart('part1',    grouped.part1,    partMeta(grouped.part1))}
+    ${renderPart('part2',    grouped.part2,    partMeta(grouped.part2))}
+    ${renderPart('part3',    grouped.part3,    partMeta(grouped.part3))}
+    ${renderPart('epilogue', grouped.epilogue, partMeta(grouped.epilogue))}
   `;
 
   document.getElementById('contentsList').innerHTML = html;
 }
 
-function renderPart(label, title, meta, chapters, sectionType) {
-  const chaptersHtml = chapters.map(ch => renderChapter(ch, sectionType)).join('');
+function renderPart(partKey, items, meta) {
+  if (items.length === 0) return '';
+  const part = IMAGO_PARTS[partKey];
+
+  // 부 제목 : 한글 메인 + (선택) 부제 + 영문
+  let titleHtml = `<span>${escapeHtml(part.title)}</span>`;
+  if (part.titleSub) {
+    titleHtml += `<span class="part-sub-kr">${escapeHtml(part.titleSub)}</span>`;
+  }
+  if (part.titleEn) {
+    titleHtml += `<span class="part-sub-en">${escapeHtml(part.titleEn)}</span>`;
+  }
+
+  const itemsHtml = items.map(item => renderItem(item, part)).join('');
+
   return `
     <div class="part">
-      <div class="part-label">${escapeHtml(label)}</div>
+      <div class="part-label">${escapeHtml(part.label)}</div>
       <div class="part-title">
-        <span>${escapeHtml(title)}</span>
-        <span class="meta">${escapeHtml(meta)}</span>
+        <div class="part-title-text">${titleHtml}</div>
+        ${meta ? `<span class="meta">${escapeHtml(meta)}</span>` : ''}
       </div>
-      <div class="chapters">${chaptersHtml}</div>
+      <div class="chapters">${itemsHtml}</div>
     </div>
   `;
 }
 
-function renderChapter(chapter, sectionType) {
-  const { status, daysLabel } = computeChapterStatus(chapter);
-
+function renderItem(item, part) {
   // 챕터 번호 표시
   let numDisplay = '';
-  if (sectionType === 'main') {
-    numDisplay = `<div class="chapter-num">${String(chapter.num).padStart(2, '0')}</div>`;
-  } else if (sectionType === 'front') {
+  if (part.sectionType === 'front') {
     numDisplay = `<div class="chapter-num special">序</div>`;
-  } else {
-    // back: 후기는 跋, 감사의 글은 謝
-    const symbol = chapter.title.includes('감사') ? '謝' : '跋';
-    numDisplay = `<div class="chapter-num special">${symbol}</div>`;
+  } else if (part.sectionType === 'back') {
+    numDisplay = `<div class="chapter-num special">跋</div>`;
+  } else if (item.ch !== undefined) {
+    numDisplay = `<div class="chapter-num">${String(item.ch).padStart(2, '0')}</div>`;
+  } else if (item.ex !== undefined) {
+    numDisplay = `<div class="chapter-num ex">E${String(item.ex).padStart(2, '0')}</div>`;
   }
 
-  // 페이지 정보
-  const pageInfo = chapter.section_type === 'main'
-    ? `p. ${chapter.page_start} – ${chapter.page_end}`
-    : `p. ${chapter.page_start} – ${chapter.page_end}`;
+  // 영문 제목
+  const enHtml = item.en ? `<div class="chapter-en">${escapeHtml(item.en)}</div>` : '';
+  // 실습은 한글 라벨 prefix
+  const exPrefix = (item.ex !== undefined) ? `이마고 실습 ${item.ex} · ` : '';
+  const titleText = `${exPrefix}${item.kr}`;
 
-  // 분량 계산 (대략)
-  const pStart = chapter.page_start;
-  const pEnd = chapter.page_end;
-  let pageCount = '';
-  if (typeof pStart === 'number' && typeof pEnd === 'number') {
-    pageCount = `${pEnd - pStart + 1}쪽`;
-  } else {
-    // 로마 숫자는 단순 계산이 어려우니 챕터마다 다름
-    const rs = romanToNum(pStart);
-    const re = romanToNum(pEnd);
-    if (rs && re) pageCount = `${re - rs + 1}쪽`;
+  // mode 별 분기
+  if (item.mode === 'read') {
+    // 낭독 대상 — sessions 데이터로 진행 상태 계산
+    const chapterLike = {
+      section_type: part.sectionType,
+      page_start: item.pageStart,
+      page_end: item.pageEnd
+    };
+    const { status, daysLabel } = computeChapterStatus(chapterLike);
+
+    const pageInfo = `p. ${item.pageStart} – ${item.pageEnd}`;
+    const pageCount = `${item.pageEnd - item.pageStart + 1}쪽`;
+
+    let pillHtml = '';
+    if (status === 'done')         pillHtml = '<span class="status-pill done">✓ 마침</span>';
+    else if (status === 'current') pillHtml = '<span class="status-pill current">⟶ 진행 중</span>';
+    else if (status === 'scheduled') pillHtml = '<span class="status-pill scheduled">⌛ 예정</span>';
+    else                           pillHtml = '<span class="status-pill future">아직</span>';
+
+    return `
+      <article class="chapter ${status}">
+        ${numDisplay}
+        <div class="chapter-body">
+          <div class="chapter-title">${escapeHtml(titleText)}</div>
+          ${enHtml}
+          <div class="chapter-info">
+            <span>${escapeHtml(pageInfo)}</span>
+            <span class="sep">·</span><span>${escapeHtml(pageCount)}</span>
+            ${daysLabel ? `<span class="sep">·</span><span class="days">${escapeHtml(daysLabel)}</span>` : ''}
+          </div>
+        </div>
+        <div class="chapter-status">${pillHtml}</div>
+      </article>
+    `;
   }
 
-  // 상태 pill
-  let pillHtml = '';
-  if (status === 'done') {
-    pillHtml = '<span class="status-pill done">✓ 마침</span>';
-  } else if (status === 'current') {
-    pillHtml = '<span class="status-pill current">⟶ 진행 중</span>';
-  } else if (status === 'scheduled') {
-    pillHtml = '<span class="status-pill scheduled">⌛ 예정</span>';
-  } else {
-    pillHtml = '<span class="status-pill future">아직</span>';
-  }
+  // 비낭독: 개별독서 (side) / 참고자료 (ref)
+  const sideLabel = item.mode === 'side' ? '개별독서' : '참고자료';
+  const sideCls   = item.mode === 'side' ? 'side'     : 'ref';
 
   return `
-    <article class="chapter ${status}">
+    <article class="chapter side-only ${sideCls}">
       ${numDisplay}
       <div class="chapter-body">
-        <div class="chapter-title">${escapeHtml(chapter.title)}</div>
-        <div class="chapter-info">
-          <span>${escapeHtml(pageInfo)}</span>
-          ${pageCount ? `<span class="sep">·</span><span>${escapeHtml(pageCount)}</span>` : ''}
-          ${daysLabel ? `<span class="sep">·</span><span class="days">${escapeHtml(daysLabel)}</span>` : ''}
-        </div>
+        <div class="chapter-title">${escapeHtml(titleText)}</div>
+        ${enHtml}
       </div>
-      <div class="chapter-status">${pillHtml}</div>
+      <div class="chapter-status">
+        <span class="status-pill ${sideCls}">${sideLabel}</span>
+      </div>
     </article>
   `;
 }
