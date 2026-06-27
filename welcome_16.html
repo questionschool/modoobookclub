@@ -750,6 +750,167 @@
     .zoom-info .value { display: block; margin-bottom: 8px; }
     .author-figure { max-width: 280px; margin: 30px auto 0; }
   }
+  /* ============ HOWTO BOX (진행 방식 안내) ============ */
+  .howto-card {
+    margin-top: 0 !important;
+    padding: 36px 32px;
+  }
+
+  .howto-eyebrow {
+    font-size: 0.78rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  /* 시간 구성 시각화 */
+  .howto-time {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 40px;
+  }
+
+  .howto-time-card {
+    text-align: center;
+    padding: 26px 16px 22px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+
+  .howto-time-card:hover {
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+  .howto-time-num {
+    font-family: 'Cormorant Garamond', 'Noto Serif KR', serif;
+    font-size: 2.6rem;
+    font-weight: 500;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .howto-time-unit {
+    font-size: 1rem;
+    margin-left: 4px;
+    color: var(--ink-muted);
+    font-weight: 400;
+    font-style: italic;
+  }
+
+  .howto-time-label {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+  }
+
+  .howto-time-sub {
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.01em;
+  }
+
+  .howto-time-divider {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--gold-deep);
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  /* 나눔의 내용 */
+  .howto-lead {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 0.98rem;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+
+  .howto-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 22px;
+  }
+
+  .howto-list li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 9px;
+    color: var(--ink-soft);
+    font-family: 'Gowun Batang', 'Noto Serif KR', serif;
+    font-size: 0.97rem;
+    line-height: 1.7;
+  }
+
+  .howto-list li::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 12px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  .howto-body {
+    color: var(--ink-soft);
+    margin-bottom: 0;
+    line-height: 1.85;
+  }
+
+  /* 인용구 */
+  .howto-quote {
+    margin: 32px 0 24px;
+    padding: 28px 0 24px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+    font-family: 'Cormorant Garamond', 'Noto Serif KR', serif;
+    font-style: italic;
+    font-size: 1.08rem;
+    color: var(--accent);
+    line-height: 1.75;
+    font-weight: 500;
+  }
+
+  /* 작은 노트 */
+  .howto-notes {
+    margin-top: 8px;
+  }
+
+  .howto-notes p {
+    font-size: 0.86rem;
+    color: var(--ink-muted);
+    line-height: 1.75;
+    margin-bottom: 8px;
+  }
+
+  .howto-note-mark {
+    color: var(--gold);
+    margin-right: 6px;
+    font-style: italic;
+  }
+
+  /* 모바일 — 시간 카드 세로 배치 */
+  @media (max-width: 560px) {
+    .howto-card { padding: 28px 22px; }
+    .howto-time { grid-template-columns: 1fr; gap: 12px; }
+    .howto-time-divider { transform: rotate(90deg); font-size: 1.2rem; }
+    .howto-time-num { font-size: 2.2rem; }
+  }
+
 </style>
 </head>
 <body>
@@ -776,14 +937,47 @@
 
   <!-- 진행 방식 안내 -->
   <section>
-    <div class="card" style="margin-top: 0;">
-      <p style="font-size:0.78rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:24px; font-weight:500;">낭만북클럽은 이렇게 진행돼</p>
-      <p>30분 낭독(돌아가며 읽기) 후 30분간 서로의 이야기를 나눠.</p>
-      <p style="font-size:0.94rem; color:var(--ink-muted); line-height:1.85;">(모임에서는 별칭과 수평어를 써. 수평어는 '친절하고 다정한 반말' 정도로 이해하면 좋겠어. 이 안내문도 수평어로 작성되었어.)</p>
-      <p>낭독이 끝난 후 이해되지 않았던 부분, 인상 깊었던 문장, 몸이 반응했던 순간들을 이야기로 나눠.</p>
-      <p>혼자 읽을 때는 어렵게 느껴졌던 내용도 다른 사람의 감상과 연결될 때 훨씬 부드럽게 소화돼.</p>
-      <p style="border-top:1px solid var(--line); padding-top:22px; margin-top:8px; font-family:'Cormorant Garamond','Noto Serif KR',serif; font-style:italic; color:var(--ink-soft);">&lsquo;함께 나눈다&rsquo;는 그 자체가 이 여정의 안전한 울타리가 되어줘.</p>
-      <p style="font-size:0.86rem; color:var(--ink-muted); margin-top:14px;">* 책은 미리 읽고 참여할 필요가 없어.</p>
+    <div class="card howto-card">
+      <p class="howto-eyebrow">낭만북클럽은 이렇게 진행돼</p>
+
+      <!-- 시간 구성 시각화 -->
+      <div class="howto-time">
+        <div class="howto-time-card">
+          <div class="howto-time-num">30<span class="howto-time-unit">분</span></div>
+          <div class="howto-time-label">함께 낭독</div>
+          <div class="howto-time-sub">돌아가며 읽기</div>
+        </div>
+        <div class="howto-time-divider">+</div>
+        <div class="howto-time-card">
+          <div class="howto-time-num">30<span class="howto-time-unit">분</span></div>
+          <div class="howto-time-label">마음 나눔</div>
+          <div class="howto-time-sub">서로 이야기 나누기</div>
+        </div>
+      </div>
+
+      <!-- 나눔의 내용 -->
+      <p class="howto-lead">낭독이 끝난 뒤, 이런 순간들을 함께 꺼내 봐.</p>
+      <ul class="howto-list">
+        <li>이해되지 않았던 부분</li>
+        <li>인상 깊었던 문장</li>
+        <li>몸이 반응했던 순간</li>
+      </ul>
+      <p class="howto-body">
+        혼자 읽을 때는 어렵게 느껴졌던 내용도,
+        다른 사람의 감상과 연결될 때 훨씬 부드럽게 소화돼.
+      </p>
+
+      <!-- 인용구 -->
+      <blockquote class="howto-quote">
+        &lsquo;함께 나눈다&rsquo;는 그 자체가<br>
+        이 여정의 안전한 울타리가 되어줘.
+      </blockquote>
+
+      <!-- 작은 노트 -->
+      <div class="howto-notes">
+        <p><span class="howto-note-mark">✦</span> 책은 미리 읽고 참여할 필요가 없어.</p>
+        <p><span class="howto-note-mark">✦</span> 모임에서는 별칭과 수평어를 써. 수평어는 &lsquo;친절하고 다정한 반말&rsquo; 정도로 이해하면 좋겠어. 이 안내문도 수평어로 작성되었어.</p>
+      </div>
     </div>
   </section>
 
@@ -843,7 +1037,7 @@
     <span class="section-num">II · Welcome</span>
     <h2>환영의 인사</h2>
     <p>
-      안녕? 모두의 심리상담사 농담과 함께 '모두의 새벽 + 낭만북클럽' 낭독모임 호스트를 맡고 있는
+      안녕? 모두의 상담사 농담과 함께 '모두의 새벽 + 낭만북클럽' 낭독모임 호스트를 맡고 있는
       <strong style="color:var(--accent);">질문술사 지평</strong>이야.
     </p>
     <p>
