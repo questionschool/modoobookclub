@@ -586,9 +586,9 @@
 
   <!-- HEADER -->
   <header>
-    <div class="eyebrow">Season 16 · My Journal</div>
+    <div class="eyebrow">Season 16 · My Reading Journal</div>
     <h1>나의 기록 — <span class="accent">이마고</span></h1>
-    <p class="subtitle">A collection of one heart, day by day.</p>
+    <p class="subtitle">IMAGO : Getting the Love You Want</p>
   </header>
 
   <!-- MEMBER PICKER -->
@@ -652,9 +652,10 @@ const SECTION_LABELS = { front: '서론', main: '본문', back: '후기' };
 const BOOK_AUTHOR = '하빌&헬렌';
 const BOOK_TITLE = '이마고 : 당신이 원하는 사랑 만들기';
 
+// 시즌 16 참가자 (가나다 순) — 농담 첫째 · 지평 마지막
 const DEFAULT_MEMBERS = [
-  '농담', '마성', '목마가렛', '밝은열정', '보나',
-  '여운', '연경', '자연', '자유', '지평', '프란체스코'
+  '농담', '목마가렛', '보나', '연경',
+  '자연', '자유', '프란체스코', '지평'
 ];
 
 // ════════════════════════════════════════════════════════
@@ -960,17 +961,18 @@ function cleanText(s) {
 // 다운로드 — 멤버 기록 전체를 PDF로 (블록 단위 페이지 분할)
 // ════════════════════════════════════════════════════════
 
-// 헤더 블록 (IMAGO, 이마고, 별칭의 독서와 마음 기록...)
+// 헤더 블록 (한 줄 통합 + 별칭/카운트)
 function buildMemberHeaderBlock(alias, entries) {
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 50px 56px 24px; max-width: 700px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
-      <div style="text-align: center; padding-bottom: 24px; border-bottom: 1px solid #c5d4de;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 12px;">IMAGO</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 28px; color: #155b80; margin-bottom: 8px;">이마고</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 17px; color: #1a2837; margin-bottom: 14px;"><span style="color: #155b80; font-weight: 700;">${escapeHtml(alias)}</span>의 독서와 마음 기록</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 13px; color: #5e7185; margin-bottom: 2px;">당신이 원하는 사랑 만들기</div>
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185;">Getting the Love You Want</div>
-        <div style="font-family: 'Gowun Batang', serif; font-size: 12px; color: #5e7185; margin-top: 14px;">책과 마음 읽기 ${entries.length}개</div>
+      <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #c5d4de;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #1c6577; letter-spacing: 0.08em; margin-bottom: 16px;">
+          Getting the Love You Want
+          <span style="color: #a8b8c5; margin: 0 6px;">:</span>
+          <span style="text-transform: uppercase; letter-spacing: 0.22em; font-style: normal;">IMAGO READING NOTE</span>
+        </div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 17px; color: #1a2837;"><span style="color: #155b80; font-weight: 700;">${escapeHtml(alias)}</span>의 독서와 마음 기록</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #5e7185; margin-top: 8px; letter-spacing: 0.05em;">${entries.length} entries · 책과 마음 읽기 ${entries.length}개</div>
       </div>
     </div>
   `;
@@ -1015,13 +1017,13 @@ function buildMemberEntryBlock(e) {
   `;
 }
 
-// 워터마크 블록
+// 워터마크 블록 (한 줄 통합)
 function buildMemberWatermarkBlock() {
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 20px 56px 32px; max-width: 700px; box-sizing: border-box;">
       <div style="padding-top: 20px; border-top: 1px solid #c5d4de; text-align: center;">
         <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 0.25em; color: #1c6577; font-size: 11px; margin-bottom: 6px;">READING · ALOUD · TOGETHER</div>
-        <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #5e7185;">모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』</div>
+        <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #5e7185; line-height: 1.7;">모두의 새벽 + 낭만북클럽 · 『이마고 : 당신이 원하는 사랑 만들기』 &amp; 낭독 모임 후 기록</div>
         <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10px; color: #8a9bab; margin-top: 4px;">bookclub.questionschool.net</div>
       </div>
     </div>
@@ -1082,14 +1084,13 @@ function buildPrintableEntry(e, alias) {
     }
   }
 
-  // 헤더 본문 구성: "Chapter 1. 늙은 치료사의 하루. p. 1 ~ p. 14"
-  // 또는 서론/후기: "서론. p. v ~ p. xxi"
+  // 헤더 본문 구성: "Chapter 1 · 늙은 치료사의 하루 · p. 1 ~ p. 14"
   let headerParts = [];
   if (chapterNum) headerParts.push(chapterNum);
   else if (sectionLabel) headerParts.push(sectionLabel);
   if (chapterTitle) headerParts.push(chapterTitle);
   headerParts.push(pageInfo);
-  const headerText = headerParts.join('. ');
+  const headerText = headerParts.join(' · ');
 
   let inner = '';
 
@@ -1125,17 +1126,19 @@ function buildPrintableEntry(e, alias) {
 
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ecf4f9; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
-      <!-- 헤더 -->
-      <div style="text-align: center; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid #c5d4de;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 10px;">IMAGO</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 22px; color: #1a2837;"><span style="color: #155b80;">이마고</span> — 오늘의 기록</div>
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185; margin-top: 6px;">Getting the Love You Want</div>
+      <!-- 헤더 (한 줄 통합) -->
+      <div style="text-align: center; padding-bottom: 18px; margin-bottom: 22px; border-bottom: 1px solid #c5d4de;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #1c6577; letter-spacing: 0.08em;">
+          Getting the Love You Want
+          <span style="color: #a8b8c5; margin: 0 6px;">:</span>
+          <span style="text-transform: uppercase; letter-spacing: 0.22em; font-style: normal;">IMAGO READING NOTE</span>
+        </div>
       </div>
 
-      <!-- 회차 정보 -->
-      <div style="text-align: center; margin-bottom: 22px;">
-        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #1c6577; text-transform: uppercase; margin-bottom: 4px;">Day ${String(e.day).padStart(2,'0')}</div>
-        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #2f4759;">${escapeHtml(headerText)}</div>
+      <!-- 회차 정보 (한 줄 통합) -->
+      <div style="text-align: center; margin-bottom: 22px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #5e7185; letter-spacing: 0.1em; word-break: keep-all;">
+        <span style="text-transform: uppercase; letter-spacing: 0.2em; color: #1c6577;">Day ${String(e.day).padStart(2,'0')}</span>
+        <span style="color: #c5d4de; margin: 0 8px;">·</span><span style="font-style: normal; color: #2f4759; letter-spacing: 0.02em;">${escapeHtml(headerText)}</span>
       </div>
 
       <!-- 메인 카드 -->
@@ -1143,10 +1146,10 @@ function buildPrintableEntry(e, alias) {
         ${inner}
       </div>
 
-      <!-- 워터마크 -->
+      <!-- 워터마크 (한 줄 통합) -->
       <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid #c5d4de; text-align: center;">
         <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 0.25em; color: #1c6577; font-size: 11px; margin-bottom: 6px;">READING · ALOUD · TOGETHER</div>
-        <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #5e7185;">모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』</div>
+        <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #5e7185; line-height: 1.7;">모두의 새벽 + 낭만북클럽 · 『이마고 : 당신이 원하는 사랑 만들기』 &amp; 낭독 모임 후 기록</div>
         <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10px; color: #8a9bab; margin-top: 4px;">bookclub.questionschool.net</div>
       </div>
     </div>
@@ -1283,7 +1286,7 @@ function buildMemberMarkdown(alias, entries) {
   lines.push('---');
   lines.push('');
   lines.push(`*READING · ALOUD · TOGETHER*  `);
-  lines.push(`*모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』*  `);
+  lines.push(`*모두의 새벽 + 낭만북클럽 · 『이마고 : 당신이 원하는 사랑 만들기』 & 낭독 모임 후 기록*  `);
   lines.push(`*bookclub.questionschool.net*`);
   lines.push('');
 
