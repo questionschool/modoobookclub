@@ -622,8 +622,8 @@
     <p class="subtitle">Getting the Love You Want : A Guide for Couples.</p>
     <div class="book-meta">
       <span><span class="dot"></span>하빌 헨드릭스 · 헬렌 라켈리 헌트</span>
-      <span><span class="dot"></span>22장 · 약 342쪽</span>
-      <span><span class="dot"></span>시그마프레스</span>
+      <span><span class="dot"></span>본문 13장 + 이마고 실습 18</span>
+      <span><span class="dot"></span>학지사</span>
     </div>
   </header>
 
@@ -655,13 +655,13 @@
   <!-- LEGEND -->
   <div class="legend">
     <span class="legend-item">
-      <span class="legend-dot done"></span>읽었어
+      <span class="legend-dot done"></span>읽었음
     </span>
     <span class="legend-item">
-      <span class="legend-dot current"></span>지금 읽는 중
+      <span class="legend-dot current"></span>읽는 중
     </span>
     <span class="legend-item">
-      <span class="legend-dot future"></span>아직
+      <span class="legend-dot future"></span>읽기 전
     </span>
   </div>
 
@@ -831,25 +831,31 @@ function computeChapterStatus(chapter) {
 // SUMMARY 렌더링
 // ════════════════════════════════════════════════════════
 function renderSummary() {
-  const mainChapters = contents.filter(c => c.section_type === 'main');
+  // 낭독 대상 35개 (IMAGO_TOC의 mode === 'read')
+  const readItems = IMAGO_TOC.filter(i => i.mode === 'read');
 
   let done = 0;
-  let currentCh = null;
-  let nextCh = null;          // 진행 중이 없으면 다음에 읽을 챕터
+  let currentItem = null;
+  let nextItem = null;
 
-  mainChapters.forEach(ch => {
-    const { status } = computeChapterStatus(ch);
+  readItems.forEach(item => {
+    const part = IMAGO_PARTS[item.partKey];
+    const chapterLike = {
+      section_type: part.sectionType,
+      page_start: item.pageStart,
+      page_end: item.pageEnd
+    };
+    const { status } = computeChapterStatus(chapterLike);
     if (status === 'done') {
       done++;
-    } else if (status === 'current' && !currentCh) {
-      currentCh = ch;
-    } else if ((status === 'future' || status === 'scheduled') && !nextCh && !currentCh) {
-      // 진행 중이 없을 때 가장 빠른 다음 챕터
-      nextCh = ch;
+    } else if (status === 'current' && !currentItem) {
+      currentItem = item;
+    } else if ((status === 'future' || status === 'scheduled') && !nextItem && !currentItem) {
+      nextItem = item;
     }
   });
 
-  // 페이지 진도: 시간상 끝난 회차의 페이지 범위를 단순 합산 (이마고는 front도 아라비아 숫자)
+  // 페이지 진도: 시간상 끝난 회차의 페이지 범위를 단순 합산
   const finishedSessions = sessions.filter(isSessionFinished);
   let pagesRead = 0;
   finishedSessions.forEach(s => {
@@ -861,25 +867,22 @@ function renderSummary() {
   });
 
   document.getElementById('statCompleted').innerHTML =
-    `${done} <span class="small">/ ${mainChapters.length} ch.</span>`;
+    `${done} <span class="small">/ ${readItems.length} ch.</span>`;
 
-  // In Progress 표시: 우선순위 (진행 중 챕터 > 다음 챕터 > 시작 전/완독)
+  // In Progress 표시 — 한글 라벨
   let inProgressHtml;
   let inProgressSub = '';
-  if (currentCh) {
-    inProgressHtml = `Ch. ${currentCh.num}`;
-    inProgressSub = '진행 중';
-  } else if (done === mainChapters.length && mainChapters.length > 0) {
+  if (currentItem) {
+    inProgressHtml = tocItemKrLabel(currentItem);
+    inProgressSub = '읽는 중';
+  } else if (done === readItems.length && readItems.length > 0) {
     inProgressHtml = '✨';
     inProgressSub = '완독';
-  } else if (nextCh) {
-    inProgressHtml = `Ch. ${nextCh.num}`;
-    inProgressSub = '다음 챕터';
-  } else if (finishedSessions.length > 0) {
-    inProgressHtml = '—';
-    inProgressSub = '서론 마침';
+  } else if (nextItem) {
+    inProgressHtml = tocItemKrLabel(nextItem);
+    inProgressSub = '다음 차례';
   } else {
-    inProgressHtml = '—';
+    inProgressHtml = 'Prologue';
     inProgressSub = '시작 전';
   }
   document.getElementById('statCurrent').innerHTML = inProgressHtml;
@@ -900,6 +903,15 @@ function renderSummary() {
 
   const pct = Math.min(100, Math.round((pagesRead / TOTAL_PAGES) * 100));
   document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// IMAGO_TOC 항목을 한글 라벨로 변환 (In Progress 표시용)
+function tocItemKrLabel(item) {
+  if (item.partKey === 'prologue') return 'Prologue';
+  if (item.ch !== undefined) return `${item.ch}장`;
+  if (item.ex !== undefined) return `이마고 실습 ${item.ex}`;
+  if (item.partKey === 'epilogue') return '책의 마무리';
+  return '—';
 }
 
 // ════════════════════════════════════════════════════════
@@ -965,7 +977,7 @@ const IMAGO_TOC = [
 ];
 
 const IMAGO_PARTS = {
-  prologue: { label: 'PART · 시작 글',   title: '책의 앞부분, Prologue',  metaKey: 'prologueMeta', sectionType: 'front' },
+  prologue: { label: 'PART · 여는 글',   title: '책의 앞부분, Prologue',  metaKey: 'prologueMeta', sectionType: 'front' },
   part1:    { label: 'PART I · 본문',   title: '무의식적인 파트너십',
               titleSub: '의식이 잠자고 있는 커플관계, 결혼생활',
               titleEn: 'THE UNCONSCIOUS PARTNERSHIP',                                              sectionType: 'main' },
@@ -1073,10 +1085,10 @@ function renderItem(item, part) {
     const pageCount = `${item.pageEnd - item.pageStart + 1}쪽`;
 
     let pillHtml = '';
-    if (status === 'done')         pillHtml = '<span class="status-pill done">✓ 마침</span>';
-    else if (status === 'current') pillHtml = '<span class="status-pill current">⟶ 진행 중</span>';
-    else if (status === 'scheduled') pillHtml = '<span class="status-pill scheduled">⌛ 예정</span>';
-    else                           pillHtml = '<span class="status-pill future">아직</span>';
+    if (status === 'done')         pillHtml = '<span class="status-pill done">✓ 읽었음</span>';
+    else if (status === 'current') pillHtml = '<span class="status-pill current">⟶ 읽는 중</span>';
+    else if (status === 'scheduled') pillHtml = '<span class="status-pill scheduled">⌛ 곧 읽음</span>';
+    else                           pillHtml = '<span class="status-pill future">읽기 전</span>';
 
     return `
       <article class="chapter ${status}">
