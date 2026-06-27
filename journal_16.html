@@ -1764,7 +1764,7 @@ async function loadAll() {
     return;
   }
   try {
-    const res = await fetch(`${GAS_URL}?action=list_all`);
+    const res = await fetch(`${GAS_URL}?action=list_all&season=16`);
     const data = await res.json();
     sessions = data.sessions || [];
     contents = data.contents || [];
@@ -2434,7 +2434,8 @@ async function saveEditReflection(refId) {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
-        action: 'update_reflection',
+          season: '16',
+          action: 'update_reflection',
         day,
         timestamp,
         alias,
@@ -2474,7 +2475,8 @@ async function deleteReflectionConfirm(refId) {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
-        action: 'delete_reflection',
+          season: '16',
+          action: 'delete_reflection',
         day,
         timestamp,
         alias
@@ -2604,7 +2606,8 @@ async function submitReflection() {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
-        action: 'add_reflection',
+          season: '16',
+          action: 'add_reflection',
         day: Number(day),
         reflection: {
           alias,

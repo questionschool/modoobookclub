@@ -634,7 +634,7 @@ let contents = [];
 
 async function loadAll() {
   try {
-    const res = await fetch(`${GAS_URL}?action=list_all`);
+    const res = await fetch(`${GAS_URL}?action=list_all&season=16`);
     const data = await res.json();
     sessions = data.sessions || [];
     contents = data.contents || [];

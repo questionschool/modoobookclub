@@ -681,8 +681,8 @@ async function init() {
 
   try {
     const [sessionsRes, contentsRes] = await Promise.all([
-      fetch(`${GAS_URL}?action=list_all`),
-      fetch(`${GAS_URL}?action=list_contents`)
+      fetch(`${GAS_URL}?action=list_all&season=16`),
+      fetch(`${GAS_URL}?action=list_contents&season=16`)
     ]);
     const data = await sessionsRes.json();
     const contentsData = await contentsRes.json();

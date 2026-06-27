@@ -808,7 +808,7 @@ async function apiGet(action) {
   if (!GAS_URL || GAS_URL.startsWith('PASTE_')) {
     throw new Error('GAS_URL이 아직 설정되지 않았어');
   }
-  const res = await fetch(`${GAS_URL}?action=${action}`);
+  const res = await fetch(`${GAS_URL}?action=${action}&season=16`);
   return res.json();
 }
 
@@ -816,10 +816,12 @@ async function apiPost(body) {
   if (!GAS_URL || GAS_URL.startsWith('PASTE_')) {
     throw new Error('GAS_URL이 아직 설정되지 않았어');
   }
+  // 시즌 16 자동 주입 (body에 이미 season이 없을 때만)
+  const bodyWithSeason = body.season ? body : Object.assign({ season: '16' }, body);
   const res = await fetch(GAS_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(body)
+    body: JSON.stringify(bodyWithSeason)
   });
   return res.json();
 }
