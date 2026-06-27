@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>책의 지도 — 이마고</title>
+<meta name="description" content="하빌 헨드릭스 · 헬렌 라켈리 헌트의 『이마고』 챕터 지도. 우리가 어디까지 왔는지, 어디로 가고 있는지.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="책의 지도 — 이마고">
+<meta property="og:description" content="하빌 헨드릭스 · 헬렌 라켈리 헌트의 『이마고』 — 우리가 어디까지 왔는지, 어디로 가고 있는지.">
+<meta property="og:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://bookclub.questionschool.net/contents_16.html">
+<meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream: #ecf4f9;
+    --cream-deep: #d8e7f0;
+    --cream-soft: #f5fafd;
+    --ink: #1a2837;
+    --ink-soft: #2f4759;
+    --ink-muted: #5e7185;
+    --ink-faint: #8a9bab;
+    --gold: #2a8499;
+    --gold-deep: #1c6577;
+    --gold-soft: #5fabbd;
+    --line: #c5d4de;
+    --line-soft: #dde7ed;
+    --accent: #155b80;
+    --accent-soft: #2a7aa3;
+    --status-done: #6b8e5a;
+    --status-current: #155b80;
+    --status-future: #a8b8c5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(at 15% 10%, rgba(42, 132, 153, 0.06) 0px, transparent 50%),
+      radial-gradient(at 85% 90%, rgba(21, 91, 128, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 60px 28px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 40px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line-soft);
+    flex-wrap: wrap;
+  }
+
+  .nav a {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    padding-bottom: 6px;
+  }
+
+  .nav a:hover { color: var(--accent); }
+  .nav a.current { color: var(--accent); border-bottom: 1px solid var(--accent); }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 20px 0 50px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 50px;
+  }
+
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  h1.title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: clamp(26px, 4.5vw, 34px);
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+
+  h1.title .accent { color: var(--accent); }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-muted);
+    margin-bottom: 24px;
+  }
+
+  .book-meta {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-family: 'Gowun Batang', serif;
+  }
+
+  .book-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .book-meta .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* SUMMARY */
+  .summary {
+    background: rgba(245, 250, 253, 0.7);
+    border: 1px solid var(--line);
+    padding: 28px 30px;
+    margin-bottom: 56px;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .summary::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 30px;
+    width: 50px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .summary-stat {
+    text-align: center;
+  }
+
+  .summary-stat-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .summary-stat-value {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+
+  .summary-stat-value .small {
+    font-size: 13px;
+    color: var(--ink-muted);
+    font-weight: 400;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--line-soft);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 18px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold));
+    width: 0%;
+    transition: width 0.6s ease;
+    position: relative;
+  }
+
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    right: -3px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+    padding: 16px 20px;
+    background: rgba(245, 250, 253, 0.5);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+  }
+
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-dot.done { background: var(--status-done); }
+  .legend-dot.current {
+    background: var(--status-current);
+    box-shadow: 0 0 0 3px rgba(21, 91, 128, 0.15);
+  }
+  .legend-dot.future {
+    background: transparent;
+    border: 1.5px solid var(--status-future);
+  }
+
+  /* SECTION */
+  h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3vw, 26px);
+    color: var(--ink);
+    margin-bottom: 30px;
+    letter-spacing: -0.005em;
+    position: relative;
+    padding-bottom: 14px;
+  }
+
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 36px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .part {
+    margin-bottom: 56px;
+  }
+
+  .part-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .part-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 22px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .part-title .meta {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* CHAPTERS */
+  .chapters {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .chapter {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 18px;
+    background: rgba(245, 250, 253, 0.5);
+    border: 1px solid var(--line-soft);
+    border-left: 2px solid var(--line-soft);
+    border-radius: 2px;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .chapter:hover {
+    background: rgba(245, 250, 253, 0.9);
+  }
+
+  .chapter.done {
+    border-left-color: var(--status-done);
+  }
+
+  .chapter.current {
+    border-left-color: var(--status-current);
+    background: linear-gradient(to right, rgba(21, 91, 128, 0.05), rgba(245, 250, 253, 0.6));
+    box-shadow: 0 1px 3px rgba(21, 91, 128, 0.08);
+  }
+
+  .chapter.future {
+    opacity: 0.7;
+  }
+
+  .chapter.scheduled {
+    border-left-color: var(--gold-soft);
+    background: rgba(42, 132, 153, 0.04);
+  }
+
+  .chapter-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--gold-deep);
+    text-align: right;
+    line-height: 1;
+  }
+
+  .chapter-num.special {
+    font-size: 14px;
+    color: var(--ink-muted);
+  }
+
+  .chapter-body { min-width: 0; }
+
+  .chapter-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+    line-height: 1.4;
+    margin-bottom: 4px;
+    word-break: keep-all;
+  }
+
+  .chapter.future .chapter-title {
+    color: var(--ink-muted);
+    font-weight: 400;
+  }
+
+  .chapter-info {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  .chapter-info .sep {
+    color: var(--line);
+  }
+
+  .chapter-info .days {
+    color: var(--accent);
+    font-style: normal;
+    font-family: 'Gowun Batang', serif;
+    font-size: 12px;
+  }
+
+  .chapter-status {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-pill {
+    font-family: 'Gowun Batang', serif;
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .status-pill.done {
+    background: rgba(107, 142, 90, 0.12);
+    color: var(--status-done);
+    border: 1px solid rgba(107, 142, 90, 0.3);
+  }
+
+  .status-pill.current {
+    background: rgba(21, 91, 128, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(21, 91, 128, 0.3);
+    font-weight: 700;
+  }
+
+  .status-pill.future {
+    color: var(--ink-faint);
+    border: 1px dashed var(--line);
+  }
+
+  .status-pill.scheduled {
+    color: var(--gold-deep);
+    background: rgba(42, 132, 153, 0.08);
+    border: 1px solid rgba(42, 132, 153, 0.3);
+  }
+
+  /* LOADING */
+  .loading-skeleton {
+    background: linear-gradient(90deg, rgba(245,250,253,0.3) 0%, rgba(245,250,253,0.8) 50%, rgba(245,250,253,0.3) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite;
+    height: 60px;
+    border-radius: 2px;
+    margin-bottom: 10px;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding-top: 56px;
+    margin-top: 60px;
+    border-top: 1px solid var(--line);
+  }
+
+  footer .reading {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  footer p {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  footer a:hover { border-bottom-color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 40px 18px 80px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .chapter { grid-template-columns: 28px 1fr; gap: 12px; padding: 14px 14px; }
+    .chapter-status {
+      grid-column: 2;
+      grid-row: 2;
+      margin-top: 8px;
+    }
+    .nav { gap: 16px; flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <a href="journal_16.html">📖 일지</a>
+    <a href="my_journal_16.html">✿ 나의 기록</a>
+    <a href="contents_16.html" class="current">📋 목차</a>
+    <a href="welcome_16.html">✦ 환영</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow">Season 16 · Table of Contents</div>
+    <h1 class="title">책의 지도 — <span class="accent">이마고</span></h1>
+    <p class="subtitle">A map of where we've been, and where we're going.</p>
+    <div class="book-meta">
+      <span><span class="dot"></span>하빌 헨드릭스 · 헬렌 라켈리 헌트</span>
+      <span><span class="dot"></span>22장 · 약 342쪽</span>
+      <span><span class="dot"></span>시그마프레스</span>
+    </div>
+  </header>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <div class="summary-grid">
+      <div class="summary-stat">
+        <div class="summary-stat-label">Completed</div>
+        <div class="summary-stat-value" id="statCompleted">—</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat-label">In Progress</div>
+        <div class="summary-stat-value" id="statCurrent">—</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat-label">Pages Read</div>
+        <div class="summary-stat-value" id="statPages">— <span class="small">/ 342</span></div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat-label">Sessions</div>
+        <div class="summary-stat-value" id="statSessions">—</div>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="legend-item">
+      <span class="legend-dot done"></span>읽었어
+    </span>
+    <span class="legend-item">
+      <span class="legend-dot current"></span>지금 읽는 중
+    </span>
+    <span class="legend-item">
+      <span class="legend-dot future"></span>아직
+    </span>
+  </div>
+
+  <!-- 본문은 JS로 동적 생성 -->
+  <div id="contentsList">
+    <div class="loading-skeleton"></div>
+    <div class="loading-skeleton"></div>
+    <div class="loading-skeleton"></div>
+  </div>
+
+  <footer>
+    <div class="reading">READING · ALOUD · TOGETHER</div>
+    <p>
+      모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』<br>
+      <a href="welcome_16.html">환영 페이지 →</a> &nbsp;·&nbsp;
+      <a href="my_journal_16.html">나의 기록 →</a> &nbsp;·&nbsp;
+      <a href="journal_16.html">전체 일지 →</a> &nbsp;·&nbsp;
+      <a href="journal_edit_16.html" style="opacity: 0.6;">관리자 →</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
+const TOTAL_PAGES = 342;
+
+let sessions = [];
+let contents = [];
+
+async function loadAll() {
+  try {
+    const res = await fetch(`${GAS_URL}?action=list_all`);
+    const data = await res.json();
+    sessions = data.sessions || [];
+    contents = data.contents || [];
+    renderSummary();
+    renderContents();
+  } catch (err) {
+    console.error(err);
+    document.getElementById('contentsList').innerHTML = `
+      <div style="text-align: center; padding: 40px; color: var(--ink-muted); font-style: italic;">
+        불러오기 실패. 잠시 후 새로고침해 줘.
+      </div>`;
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// 시간 헬퍼: 한국 시간 기준 모임 종료 시각 판단
+// ════════════════════════════════════════════════════════
+// session.date는 여러 형태로 올 수 있음 (Sheets 자동 변환 등)
+function extractKSTDate(dateValue) {
+  if (!dateValue) return null;
+  // "YYYY-MM-DD" 단순 형태 (T가 없음) — 그대로 사용
+  if (typeof dateValue === 'string' && !dateValue.includes('T')) {
+    const m = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return { y: Number(m[1]), m: Number(m[2]), d: Number(m[3]) };
+  }
+  // ISO 문자열이거나 Date 객체 — KST 변환
+  const d = new Date(dateValue);
+  if (isNaN(d.getTime())) return null;
+  const kstMs = d.getTime() + 9 * 60 * 60 * 1000;
+  const kst = new Date(kstMs);
+  return {
+    y: kst.getUTCFullYear(),
+    m: kst.getUTCMonth() + 1,
+    d: kst.getUTCDate()
+  };
+}
+
+function isSessionFinished(session) {
+  const ymd = extractKSTDate(session.date);
+  if (!ymd) return false;
+  // 모임 종료: 모임 날짜 07:00 KST
+  const endUtcMs = Date.UTC(ymd.y, ymd.m - 1, ymd.d, 7 - 9, 0, 0);
+  return Date.now() >= endUtcMs;
+}
+
+function isSessionStarted(session) {
+  const ymd = extractKSTDate(session.date);
+  if (!ymd) return false;
+  // 모임 시작: 모임 날짜 06:00 KST
+  const startUtcMs = Date.UTC(ymd.y, ymd.m - 1, ymd.d, 6 - 9, 0, 0);
+  return Date.now() >= startUtcMs;
+}
+
+// ════════════════════════════════════════════════════════
+// 챕터별 진행 상태 계산
+//
+// 상태:
+//   done      - 마침 (시간상 모임 끝났고, 페이지도 챕터 끝까지 도달)
+//   current   - 진행 중 (모임 시작했고, 아직 끝나지 않았거나 페이지 미달)
+//   scheduled - 예정 (회차 입력은 됐지만 모임 시작 전)
+//   future    - 아직 (회차 자체가 입력되지 않음)
+// ════════════════════════════════════════════════════════
+function computeChapterStatus(chapter) {
+  // 서론(front): 로마 숫자 페이지라 본문·후기 페이지와 비교 불가
+  //   → 섹션 라벨로만 판정한다.
+  if (chapter.section_type === 'front') {
+    const relevantSessions = sessions.filter(s => s.section === 'front');
+    if (relevantSessions.length === 0) {
+      return { status: 'future', daysLabel: '' };
+    }
+    const days = relevantSessions.map(s => Number(s.day)).filter(d => !isNaN(d)).sort((a,b) => a-b);
+    const allFinished = relevantSessions.every(isSessionFinished);
+    const anyStarted = relevantSessions.some(isSessionStarted);
+
+    let status;
+    if (allFinished) status = 'done';
+    else if (anyStarted) status = 'current';
+    else status = 'scheduled';
+
+    const daysLabel = days.length === 1 ? `Day ${days[0]}` : `Day ${days[0]} – ${days[days.length-1]}`;
+    return { status, daysLabel };
+  }
+
+  // 본문(main) · 후기(back) 챕터
+  //   둘 다 같은 아라비아 페이지 번호 체계라서, 회차의 섹션 라벨이 무엇이든
+  //   페이지 범위가 챕터와 겹치면 그 회차에서 다룬 걸로 본다.
+  //   (한 회차에서 본문 끝장과 후기를 같이 읽는 날에 양쪽 다 자동으로 처리됨)
+  const chStart = Number(chapter.page_start);
+  const chEnd = Number(chapter.page_end);
+
+  const relevantSessions = sessions.filter(s => {
+    if (s.section !== 'main' && s.section !== 'back') return false;
+    const sStart = parseInt(s.start_page, 10);
+    const sEnd = parseInt(s.end_page, 10) || sStart;
+    if (isNaN(sStart)) return false;
+    return sStart <= chEnd && sEnd >= chStart;
+  });
+
+  if (relevantSessions.length === 0) {
+    return { status: 'future', daysLabel: '' };
+  }
+
+  const maxEndPage = Math.max(...relevantSessions.map(s => {
+    return parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0;
+  }));
+  const reachedEnd = maxEndPage >= chEnd;
+
+  // 챕터 끝에 도달한 회차들 중 가장 늦은 것이 시간상 끝났는지
+  const lastReachingSession = relevantSessions
+    .filter(s => (parseInt(s.end_page, 10) || 0) >= chEnd)
+    .sort((a, b) => Number(b.day) - Number(a.day))[0];
+
+  const lastFinished = lastReachingSession ? isSessionFinished(lastReachingSession) : false;
+  const anyStarted = relevantSessions.some(isSessionStarted);
+
+  let status;
+  if (reachedEnd && lastFinished) {
+    status = 'done';
+  } else if (anyStarted) {
+    status = 'current';
+  } else {
+    status = 'scheduled';
+  }
+
+  const days = relevantSessions.map(s => Number(s.day)).filter(d => !isNaN(d)).sort((a,b) => a-b);
+  let daysLabel = '';
+  if (days.length === 1) daysLabel = `Day ${days[0]}`;
+  else if (days.length > 1) daysLabel = `Day ${days[0]} – ${days[days.length-1]}`;
+
+  return { status, daysLabel };
+}
+
+// ════════════════════════════════════════════════════════
+// SUMMARY 렌더링
+// ════════════════════════════════════════════════════════
+function renderSummary() {
+  const mainChapters = contents.filter(c => c.section_type === 'main');
+
+  let done = 0;
+  let currentCh = null;
+  let nextCh = null;          // 진행 중이 없으면 다음에 읽을 챕터
+
+  mainChapters.forEach(ch => {
+    const { status } = computeChapterStatus(ch);
+    if (status === 'done') {
+      done++;
+    } else if (status === 'current' && !currentCh) {
+      currentCh = ch;
+    } else if ((status === 'future' || status === 'scheduled') && !nextCh && !currentCh) {
+      // 진행 중이 없을 때 가장 빠른 다음 챕터
+      nextCh = ch;
+    }
+  });
+
+  // 페이지 진도: 시간상 끝난 회차만 계산에 반영
+  const finishedMainSessions = sessions.filter(s =>
+    s.section === 'main' && isSessionFinished(s)
+  );
+  const maxMainPage = finishedMainSessions.length > 0
+    ? Math.max(...finishedMainSessions.map(s =>
+        parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0))
+    : 0;
+
+  const hasFinishedFront = sessions.some(s => s.section === 'front' && isSessionFinished(s));
+  let pagesRead = maxMainPage + (hasFinishedFront ? 17 : 0);
+
+  const hasFinishedBack = sessions.some(s => s.section === 'back' && isSessionFinished(s));
+  if (hasFinishedBack) {
+    const backEnds = sessions.filter(s => s.section === 'back' && isSessionFinished(s))
+      .map(s => parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0);
+    pagesRead = Math.max(pagesRead, Math.max(...backEnds) + 17);
+  }
+
+  // Sessions 카운트도 시간상 끝난 것만
+  const finishedSessions = sessions.filter(isSessionFinished);
+
+  document.getElementById('statCompleted').innerHTML =
+    `${done} <span class="small">/ ${mainChapters.length} ch.</span>`;
+
+  // In Progress 표시: 우선순위 (진행 중 챕터 > 다음 챕터 > 시작 전/완독)
+  let inProgressHtml;
+  let inProgressSub = '';
+  if (currentCh) {
+    inProgressHtml = `Ch. ${currentCh.num}`;
+    inProgressSub = '진행 중';
+  } else if (done === mainChapters.length && mainChapters.length > 0) {
+    inProgressHtml = '✨';
+    inProgressSub = '완독';
+  } else if (nextCh) {
+    inProgressHtml = `Ch. ${nextCh.num}`;
+    inProgressSub = '다음 챕터';
+  } else if (finishedSessions.length > 0) {
+    inProgressHtml = '—';
+    inProgressSub = '서론 마침';
+  } else {
+    inProgressHtml = '—';
+    inProgressSub = '시작 전';
+  }
+  document.getElementById('statCurrent').innerHTML = inProgressHtml;
+
+  // statCurrent 아래에 작은 라벨도 추가
+  let subEl = document.getElementById('statCurrentSub');
+  if (!subEl) {
+    subEl = document.createElement('div');
+    subEl.id = 'statCurrentSub';
+    subEl.style.cssText = 'font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11.5px; color: var(--ink-muted); margin-top: 4px; letter-spacing: 0.02em;';
+    document.getElementById('statCurrent').parentElement.appendChild(subEl);
+  }
+  subEl.textContent = inProgressSub;
+
+  document.getElementById('statPages').innerHTML =
+    `${pagesRead} <span class="small">/ ${TOTAL_PAGES}</span>`;
+  document.getElementById('statSessions').textContent = finishedSessions.length;
+
+  const pct = Math.min(100, Math.round((pagesRead / TOTAL_PAGES) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+// ════════════════════════════════════════════════════════
+// 챕터 카드 렌더링
+// ════════════════════════════════════════════════════════
+function renderContents() {
+  if (contents.length === 0) {
+    document.getElementById('contentsList').innerHTML = `
+      <div style="text-align: center; padding: 40px; color: var(--ink-muted); font-style: italic;">
+        목차 데이터가 없어. 진행자에게 문의해 줘.
+      </div>`;
+    return;
+  }
+
+  // 섹션별로 그루핑
+  const front = contents.filter(c => c.section_type === 'front');
+  const main = contents.filter(c => c.section_type === 'main');
+  const back = contents.filter(c => c.section_type === 'back');
+
+  const html = `
+    ${front.length > 0 ? renderPart('PART · 시작 글', '책의 들머리', 'v – xxi · 17쪽', front, 'front') : ''}
+    ${main.length > 0 ? renderPart('PART · 본문', '스물두 개의 사례', `p. 1 – 314 · ${main.length} chapters`, main, 'main') : ''}
+    ${back.length > 0 ? renderPart('PART · 끝맺음', '책의 마무리', 'p. 315 – 325 · 11쪽', back, 'back') : ''}
+  `;
+
+  document.getElementById('contentsList').innerHTML = html;
+}
+
+function renderPart(label, title, meta, chapters, sectionType) {
+  const chaptersHtml = chapters.map(ch => renderChapter(ch, sectionType)).join('');
+  return `
+    <div class="part">
+      <div class="part-label">${escapeHtml(label)}</div>
+      <div class="part-title">
+        <span>${escapeHtml(title)}</span>
+        <span class="meta">${escapeHtml(meta)}</span>
+      </div>
+      <div class="chapters">${chaptersHtml}</div>
+    </div>
+  `;
+}
+
+function renderChapter(chapter, sectionType) {
+  const { status, daysLabel } = computeChapterStatus(chapter);
+
+  // 챕터 번호 표시
+  let numDisplay = '';
+  if (sectionType === 'main') {
+    numDisplay = `<div class="chapter-num">${String(chapter.num).padStart(2, '0')}</div>`;
+  } else if (sectionType === 'front') {
+    numDisplay = `<div class="chapter-num special">序</div>`;
+  } else {
+    // back: 후기는 跋, 감사의 글은 謝
+    const symbol = chapter.title.includes('감사') ? '謝' : '跋';
+    numDisplay = `<div class="chapter-num special">${symbol}</div>`;
+  }
+
+  // 페이지 정보
+  const pageInfo = chapter.section_type === 'main'
+    ? `p. ${chapter.page_start} – ${chapter.page_end}`
+    : `p. ${chapter.page_start} – ${chapter.page_end}`;
+
+  // 분량 계산 (대략)
+  const pStart = chapter.page_start;
+  const pEnd = chapter.page_end;
+  let pageCount = '';
+  if (typeof pStart === 'number' && typeof pEnd === 'number') {
+    pageCount = `${pEnd - pStart + 1}쪽`;
+  } else {
+    // 로마 숫자는 단순 계산이 어려우니 챕터마다 다름
+    const rs = romanToNum(pStart);
+    const re = romanToNum(pEnd);
+    if (rs && re) pageCount = `${re - rs + 1}쪽`;
+  }
+
+  // 상태 pill
+  let pillHtml = '';
+  if (status === 'done') {
+    pillHtml = '<span class="status-pill done">✓ 마침</span>';
+  } else if (status === 'current') {
+    pillHtml = '<span class="status-pill current">⟶ 진행 중</span>';
+  } else if (status === 'scheduled') {
+    pillHtml = '<span class="status-pill scheduled">⌛ 예정</span>';
+  } else {
+    pillHtml = '<span class="status-pill future">아직</span>';
+  }
+
+  return `
+    <article class="chapter ${status}">
+      ${numDisplay}
+      <div class="chapter-body">
+        <div class="chapter-title">${escapeHtml(chapter.title)}</div>
+        <div class="chapter-info">
+          <span>${escapeHtml(pageInfo)}</span>
+          ${pageCount ? `<span class="sep">·</span><span>${escapeHtml(pageCount)}</span>` : ''}
+          ${daysLabel ? `<span class="sep">·</span><span class="days">${escapeHtml(daysLabel)}</span>` : ''}
+        </div>
+      </div>
+      <div class="chapter-status">${pillHtml}</div>
+    </article>
+  `;
+}
+
+// 로마 숫자 → 아라비아 (대략)
+function romanToNum(s) {
+  if (!s) return null;
+  s = String(s).toLowerCase().trim();
+  const map = { i: 1, v: 5, x: 10, l: 50, c: 100 };
+  let result = 0;
+  for (let i = 0; i < s.length; i++) {
+    const cur = map[s[i]];
+    const next = map[s[i + 1]];
+    if (cur === undefined) return null;
+    if (next && cur < next) result -= cur;
+    else result += cur;
+  }
+  return result || null;
+}
+
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+loadAll();
+
+// 시간 기반 상태가 자동 전환되도록 — 5분마다 + 탭 활성화 시
+setInterval(() => {
+  if (contents.length > 0) {
+    renderSummary();
+    renderContents();
+  }
+}, 5 * 60 * 1000);
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && contents.length > 0) {
+    renderSummary();
+    renderContents();
+  }
+});
+</script>
+
+</body>
+</html>

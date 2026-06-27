@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나의 기록 — 이마고</title>
+<meta name="description" content="시즌 16 『이마고』 낭독 모임에서 한 사람이 남긴 모든 기록.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="나의 기록 — 이마고">
+<meta property="og:description" content="시즌 16 『이마고』 낭독 모임 — 나의 모든 기록을 한 곳에서.">
+<meta property="og:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://bookclub.questionschool.net/my_journal_16.html">
+<meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bookclub.questionschool.net/images/og_image.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- PDF 다운로드 라이브러리 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+  :root {
+    --cream: #ecf4f9;
+    --cream-deep: #d8e7f0;
+    --cream-soft: #f5fafd;
+    --ink: #1a2837;
+    --ink-soft: #2f4759;
+    --ink-muted: #5e7185;
+    --ink-faint: #8a9bab;
+    --gold: #2a8499;
+    --gold-deep: #1c6577;
+    --gold-soft: #5fabbd;
+    --line: #c5d4de;
+    --line-soft: #dde7ed;
+    --accent: #155b80;
+    --accent-soft: #2a7aa3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(at 15% 10%, rgba(42, 132, 153, 0.06) 0px, transparent 50%),
+      radial-gradient(at 85% 90%, rgba(21, 91, 128, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 60px 28px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 40px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line-soft);
+    flex-wrap: wrap;
+  }
+
+  .nav a {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    padding-bottom: 6px;
+  }
+
+  .nav a:hover { color: var(--accent); }
+  .nav a.current { color: var(--accent); border-bottom: 1px solid var(--accent); }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 20px 0 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: clamp(26px, 4.5vw, 32px);
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  h1 .accent { color: var(--accent); }
+
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-muted);
+  }
+
+  /* MEMBER PICKER */
+  .picker {
+    background: rgba(245, 250, 253, 0.6);
+    border: 1px solid var(--line);
+    padding: 26px 28px;
+    margin-bottom: 40px;
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .picker::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 28px;
+    width: 50px;
+    height: 2px;
+    background: var(--gold);
+  }
+
+  .picker-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .picker h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+
+  .member-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .member-pill {
+    padding: 7px 18px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .member-pill:hover {
+    border-color: var(--gold);
+    color: var(--ink);
+    background: rgba(42, 132, 153, 0.05);
+  }
+
+  .member-pill.current {
+    background: rgba(21, 91, 128, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .member-pill .count {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-muted);
+  }
+
+  .member-pill.current .count { color: var(--accent); }
+
+  /* SELECTED VIEW */
+  .selected-header {
+    text-align: center;
+    padding: 30px 0 24px;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  /* 정렬 토글 */
+  .sort-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .sort-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+
+  .sort-btn {
+    padding: 5px 14px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 12.5px;
+    color: var(--ink-muted);
+    transition: all 0.2s;
+  }
+
+  .sort-btn:hover {
+    border-color: var(--gold);
+    color: var(--ink-soft);
+  }
+
+  .sort-btn.current {
+    background: rgba(21, 91, 128, 0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .selected-name {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 36px);
+    color: var(--accent);
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .selected-meta {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .member-download-btn {
+    margin-top: 16px;
+    padding: 8px 20px;
+    background: rgba(245, 250, 253, 0.6);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    cursor: pointer;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .member-download-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .member-download-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ENTRY (한 회차에 남긴 기록) */
+  .entries {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .entry {
+    background: rgba(245, 250, 253, 0.55);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--gold);
+    padding: 24px 28px;
+    border-radius: 2px;
+    animation: fadeUp 0.6s ease-out backwards;
+    position: relative;
+  }
+
+  .entry-download-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  .entry-download-btn {
+    width: 30px;
+    height: 30px;
+    background: rgba(245, 250, 253, 0.7);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    cursor: pointer;
+    color: var(--ink-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0;
+    line-height: 1;
+    opacity: 0.5;
+  }
+
+  .entry:hover .entry-download-btn {
+    opacity: 1;
+  }
+
+  .entry-download-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: #fff;
+    transform: scale(1.05);
+  }
+
+  .entry-download-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .entry-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px dashed var(--line);
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .entry-day {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+  }
+
+  .entry-day a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+  }
+
+  .entry-day a:hover { border-bottom-color: var(--gold-deep); }
+
+  .entry-date {
+    font-family: 'Gowun Batang', serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .entry-pages {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  .entry-quote {
+    margin-bottom: 16px;
+    padding: 16px 20px;
+    background: linear-gradient(to right, rgba(42, 132, 153, 0.06), transparent);
+    border-left: 2px solid var(--gold-soft);
+    position: relative;
+  }
+
+  .entry-quote::before {
+    content: '"';
+    position: absolute;
+    top: 0;
+    left: 8px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    color: var(--gold-soft);
+    line-height: 1;
+    opacity: 0.5;
+  }
+
+  .entry-quote-text {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 15.5px;
+    line-height: 1.9;
+    color: var(--ink);
+    padding-left: 16px;
+    font-style: italic;
+    word-break: keep-all;
+    white-space: pre-wrap;
+  }
+
+  .entry-quote-page {
+    display: block;
+    margin-top: 6px;
+    padding-left: 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--gold-deep);
+  }
+
+  .entry-quote-source {
+    margin-top: 10px;
+    padding-top: 8px;
+    padding-left: 16px;
+    border-top: 1px dotted rgba(42, 132, 153, 0.25);
+    font-family: 'Gowun Batang', serif;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    text-align: right;
+    line-height: 1.5;
+    word-break: keep-all;
+  }
+
+  .entry-mind {
+    font-family: 'Gowun Batang', serif;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 2px;
+    border-left: 2px solid var(--accent-soft);
+    word-break: keep-all;
+    white-space: pre-wrap;
+  }
+
+  .entry-mind-label,
+  .entry-quote-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  /* EMPTY / LOADING */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    border: 1px dashed var(--line);
+    border-radius: 2px;
+    color: var(--ink-muted);
+    font-family: 'Gowun Batang', serif;
+    font-size: 14px;
+    font-style: italic;
+    background: rgba(245, 250, 253, 0.4);
+  }
+
+  .empty-state strong {
+    display: block;
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    color: var(--accent);
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .loading-skeleton {
+    background: linear-gradient(90deg, rgba(245,250,253,0.3) 0%, rgba(245,250,253,0.8) 50%, rgba(245,250,253,0.3) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.8s infinite;
+    height: 140px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding-top: 50px;
+    margin-top: 60px;
+    border-top: 1px solid var(--line);
+  }
+
+  footer .reading {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  footer p {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  footer a:hover { border-bottom-color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 40px 18px 60px; }
+    .picker { padding: 20px 18px; }
+    .entry { padding: 18px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="journal_16.html">📖 일지</a>
+    <a href="my_journal_16.html" class="current">✿ 나의 기록</a>
+    <a href="contents_16.html">📋 목차</a>
+    <a href="welcome_16.html">✦ 환영</a>
+  </nav>
+
+  <!-- HEADER -->
+  <header>
+    <div class="eyebrow">Season 16 · My Journal</div>
+    <h1>나의 기록 — <span class="accent">이마고</span></h1>
+    <p class="subtitle">A collection of one heart, day by day.</p>
+  </header>
+
+  <!-- MEMBER PICKER -->
+  <div class="picker">
+    <div class="picker-label">Choose Your Voice</div>
+    <h2>누구의 기록을 모아 볼까?</h2>
+    <div class="member-grid" id="memberGrid">
+      <span class="empty-state" style="padding: 16px;">불러오는 중…</span>
+    </div>
+  </div>
+
+  <!-- SELECTED CONTENT -->
+  <div id="selectedView" style="display: none;">
+    <div class="selected-header">
+      <div class="selected-name" id="selectedName">—</div>
+      <div class="selected-meta" id="selectedMeta">—</div>
+      <button class="member-download-btn" id="memberDownloadMdBtn" onclick="downloadMemberMarkdown()" style="display:none; margin-right: 6px;">
+        <span style="font-size: 13px;">📝</span>
+        <span>내 기록 .md로 저장</span>
+      </button>
+      <button class="member-download-btn" id="memberDownloadBtn" onclick="downloadMemberPdf()" style="display:none;">
+        <span style="font-size: 13px;">📄</span>
+        <span>내 기록 PDF로 저장</span>
+      </button>
+    </div>
+
+    <div class="sort-toggle" id="sortToggle" style="display: none;">
+      <span class="sort-label">정렬</span>
+      <button class="sort-btn current" data-sort="newest" onclick="changeSort('newest')">최근 기록부터</button>
+      <button class="sort-btn" data-sort="oldest" onclick="changeSort('oldest')">오래된 기록부터</button>
+    </div>
+
+    <div id="entriesList">
+      <div class="loading-skeleton"></div>
+      <div class="loading-skeleton"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="reading">READING · ALOUD · TOGETHER</div>
+    <p>
+      모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』<br>
+      <a href="welcome_16.html">환영 페이지 →</a> &nbsp;·&nbsp;
+      <a href="journal_16.html">전체 일지 →</a> &nbsp;·&nbsp;
+      <a href="contents_16.html">책의 지도 →</a> &nbsp;·&nbsp;
+      <a href="journal_edit_16.html" style="opacity: 0.6;">관리자 →</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// 설정
+// ════════════════════════════════════════════════════════
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
+const WEEKDAYS = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+const SECTION_LABELS = { front: '서론', main: '본문', back: '후기' };
+
+const BOOK_AUTHOR = '헨드릭스·헌트';
+const BOOK_TITLE = '이마고 : 당신이 원하는 사랑 만들기';
+
+const DEFAULT_MEMBERS = [
+  '농담', '마성', '목마가렛', '밝은열정', '보나',
+  '여운', '연경', '자연', '자유', '지평', '프란체스코'
+];
+
+// ════════════════════════════════════════════════════════
+// 상태
+// ════════════════════════════════════════════════════════
+let allSessions = [];
+let contents = [];
+let memberCounts = {};   // alias → 기록 수
+let selectedAlias = null;
+let currentSort = 'newest';  // 'newest' (최근부터, 기본) | 'oldest' (오래된 것부터)
+
+// ════════════════════════════════════════════════════════
+// 진입점
+// ════════════════════════════════════════════════════════
+async function init() {
+  if (!GAS_URL || GAS_URL.startsWith('PASTE_')) {
+    document.getElementById('memberGrid').innerHTML = `
+      <span class="empty-state" style="padding: 16px;">
+        ⚙️ Google Apps Script 연동이 필요해.
+      </span>`;
+    renderMembers(DEFAULT_MEMBERS, {});
+    return;
+  }
+
+  try {
+    const [sessionsRes, contentsRes] = await Promise.all([
+      fetch(`${GAS_URL}?action=list_all`),
+      fetch(`${GAS_URL}?action=list_contents`)
+    ]);
+    const data = await sessionsRes.json();
+    const contentsData = await contentsRes.json();
+    allSessions = data.sessions || [];
+    contents = contentsData.contents || [];
+    const members = (data.members && data.members.length) ? data.members : DEFAULT_MEMBERS;
+
+    // 멤버별 기록 수 계산 (시즌 멤버 외 사람도 포함)
+    const counts = {};
+    const allAliases = new Set(members);
+    allSessions.forEach(s => {
+      (s.reflections || []).forEach(r => {
+        if (r.alias) {
+          counts[r.alias] = (counts[r.alias] || 0) + 1;
+          allAliases.add(r.alias);
+        }
+      });
+    });
+    memberCounts = counts;
+
+    // 멤버는 시즌 멤버 먼저(가나다 순), 그 외 사람은 뒤에
+    const seasonSet = new Set(members);
+    const extras = [...allAliases].filter(a => !seasonSet.has(a)).sort();
+    renderMembers([...members, ...extras], counts);
+
+    // URL로 들어왔으면 선택
+    const params = new URLSearchParams(location.search);
+    const aliasParam = params.get('alias');
+    if (aliasParam) {
+      selectMember(aliasParam);
+    } else {
+      // localStorage에 저장된 본인 별칭 있으면 자동
+      const saved = localStorage.getItem('journal15_alias');
+      if (saved && allAliases.has(saved)) {
+        selectMember(saved);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    document.getElementById('memberGrid').innerHTML = `
+      <span class="empty-state" style="padding: 16px;">불러오기 실패.</span>`;
+    renderMembers(DEFAULT_MEMBERS, {});
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// 멤버 그리드
+// ════════════════════════════════════════════════════════
+function renderMembers(list, counts) {
+  const el = document.getElementById('memberGrid');
+  el.innerHTML = list.map(alias => {
+    const count = counts[alias] || 0;
+    return `
+      <a class="member-pill ${alias === selectedAlias ? 'current' : ''}"
+         href="?alias=${encodeURIComponent(alias)}"
+         onclick="selectMember('${escapeAttr(alias)}'); return false;">
+        ${escapeHtml(alias)}
+        ${count > 0 ? `<span class="count">${count}</span>` : ''}
+      </a>
+    `;
+  }).join('');
+}
+
+// ════════════════════════════════════════════════════════
+// 멤버 선택
+// ════════════════════════════════════════════════════════
+function selectMember(alias) {
+  selectedAlias = alias;
+
+  // URL 업데이트 (브라우저 히스토리)
+  const newUrl = `${location.pathname}?alias=${encodeURIComponent(alias)}`;
+  history.replaceState(null, '', newUrl);
+
+  // 멤버 그리드 강조 갱신
+  document.querySelectorAll('.member-pill').forEach(p => {
+    p.classList.remove('current');
+    if (decodeURIComponent(p.getAttribute('href').replace('?alias=', '')) === alias) {
+      p.classList.add('current');
+    }
+  });
+
+  renderSelected();
+}
+
+// 정렬 토글
+function changeSort(direction) {
+  if (currentSort === direction) return;
+  currentSort = direction;
+  renderSelected();
+}
+
+// ════════════════════════════════════════════════════════
+// 선택된 멤버의 기록
+// ════════════════════════════════════════════════════════
+function renderSelected() {
+  const view = document.getElementById('selectedView');
+  view.style.display = 'block';
+  document.getElementById('selectedName').textContent = selectedAlias;
+
+  // allSessions에서 해당 별칭이 남긴 모든 기록 추출
+  const entries = [];
+  let attendanceCount = 0;
+  let firstDate = null;
+
+  allSessions.forEach(s => {
+    // 참석 카운트
+    if ((s.attendees || []).some(a => a.alias === selectedAlias)) {
+      attendanceCount++;
+      if (!firstDate || (s.date && new Date(s.date) < new Date(firstDate))) {
+        firstDate = s.date;
+      }
+    }
+
+    // 기록
+    (s.reflections || []).forEach(r => {
+      if (r.alias === selectedAlias) {
+        entries.push({
+          ...r,
+          day: s.day,
+          date: s.date,
+          section: s.section,
+          start_page: s.start_page,
+          end_page: s.end_page
+        });
+      }
+    });
+  });
+
+  // 정렬 방향에 따라 (1차: day, 2차: timestamp)
+  if (currentSort === 'oldest') {
+    entries.sort((a, b) => {
+      const dayDiff = (Number(a.day) || 0) - (Number(b.day) || 0);
+      if (dayDiff !== 0) return dayDiff;
+      const ta = a.timestamp || '', tb = b.timestamp || '';
+      return ta < tb ? -1 : ta > tb ? 1 : 0;
+    });
+  } else {
+    entries.sort((a, b) => {
+      const dayDiff = (Number(b.day) || 0) - (Number(a.day) || 0);
+      if (dayDiff !== 0) return dayDiff;
+      const ta = a.timestamp || '', tb = b.timestamp || '';
+      return tb < ta ? -1 : tb > ta ? 1 : 0;
+    });
+  }
+
+  // 메타
+  const metaParts = [];
+  metaParts.push(`기록 ${entries.length}개`);
+  if (attendanceCount > 0) metaParts.push(`참석 ${attendanceCount}회`);
+  document.getElementById('selectedMeta').textContent = metaParts.join(' · ');
+
+  // 다운로드 버튼: 기록이 1개 이상일 때만 표시
+  const dlBtn = document.getElementById('memberDownloadBtn');
+  if (dlBtn) {
+    dlBtn.style.display = entries.length > 0 ? 'inline-flex' : 'none';
+  }
+
+  // .md 다운로드 버튼: 기록이 1개 이상일 때만 표시
+  const dlMdBtn = document.getElementById('memberDownloadMdBtn');
+  if (dlMdBtn) {
+    dlMdBtn.style.display = entries.length > 0 ? 'inline-flex' : 'none';
+  }
+
+  // 정렬 토글: 기록이 2개 이상일 때만 표시 (1개면 정렬할 게 없음)
+  const sortToggle = document.getElementById('sortToggle');
+  if (sortToggle) {
+    sortToggle.style.display = entries.length >= 2 ? 'flex' : 'none';
+    sortToggle.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.classList.toggle('current', btn.dataset.sort === currentSort);
+    });
+  }
+
+  // entries를 함수 밖에서 접근 가능하게 전역에 저장
+  window._currentMemberEntries = entries;
+
+  // 엔트리 렌더
+  const listEl = document.getElementById('entriesList');
+  if (entries.length === 0) {
+    listEl.innerHTML = `
+      <div class="empty-state">
+        <strong>${escapeHtml(selectedAlias)}</strong>
+        아직 ${escapeHtml(selectedAlias)}이(가) 남긴 기록이 없어.<br>
+        <a href="journal_16.html" style="color: var(--accent); border-bottom: 1px solid var(--accent);">일지 페이지로 가서 첫 한 줄 남기기 →</a>
+      </div>`;
+    return;
+  }
+
+  listEl.innerHTML = entries.map(e => renderEntry(e)).join('');
+}
+
+function renderEntry(e) {
+  const dateInfo = formatSessionDate(e.date);
+  const section = SECTION_LABELS[e.section] || '';
+  const entryId = `entry-${e.day}-${encodeURIComponent(e.timestamp || '')}`;
+
+  return `
+    <article class="entry" id="${entryId}" data-day="${e.day}" data-timestamp="${escapeAttr(e.timestamp || '')}">
+      <div class="entry-head">
+        <div>
+          <div class="entry-day">
+            <a href="journal_16.html#session-${e.day}">Day ${escapeHtml(e.day)}</a>
+          </div>
+          <div class="entry-date">${dateInfo.date} ${dateInfo.weekday}</div>
+        </div>
+        <div class="entry-pages">
+          ${section ? `${section} · ` : ''}p. ${escapeHtml(e.start_page)} ~ ${escapeHtml(e.end_page || '?')}
+        </div>
+      </div>
+
+      ${e.quote_text ? `
+        <div>
+          <span class="entry-quote-label">📜 마음에 남은 문장</span>
+          <div class="entry-quote">
+            <div class="entry-quote-text">${escapeHtml(cleanText(e.quote_text))}</div>
+            <div class="entry-quote-source">
+              — ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ` · p. ${escapeHtml(e.quote_page)}` : ''}
+            </div>
+          </div>
+        </div>` : ''}
+
+      ${e.my_mind ? `
+        <div>
+          <span class="entry-mind-label">✿ 남기고 싶은 나의 마음</span>
+          <div class="entry-mind">${escapeHtml(cleanText(e.my_mind))}</div>
+        </div>` : ''}
+
+      <div class="entry-download-row">
+        <button class="entry-download-btn" onclick="downloadEntryImage('${entryId}')" title="이 기록을 이미지로 저장">
+          <span style="font-size: 12px;">⬇</span>
+        </button>
+      </div>
+    </article>
+  `;
+}
+
+// ════════════════════════════════════════════════════════
+// 유틸
+// ════════════════════════════════════════════════════════
+function formatSessionDate(iso) {
+  if (!iso) return { date: '', weekday: '' };
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return { date: String(iso), weekday: '' };
+  return {
+    date: `${d.getMonth() + 1}월 ${d.getDate()}일`,
+    weekday: WEEKDAYS[d.getDay()]
+  };
+}
+
+function escapeHtml(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function escapeAttr(s) {
+  return escapeHtml(s).replace(/'/g, '\\\'');
+}
+
+// 사용자 텍스트의 앞뒤 공백·빈 줄을 정리하고
+// 가운데에 3줄 이상 연속된 빈 줄은 1줄(=빈 줄 1개)로 정리
+function cleanText(s) {
+  if (s === null || s === undefined) return '';
+  return String(s)
+    .replace(/\r\n/g, '\n')
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+// ════════════════════════════════════════════════════════
+// 다운로드 — 멤버 기록 전체를 PDF로 (블록 단위 페이지 분할)
+// ════════════════════════════════════════════════════════
+
+// 헤더 블록 (HOUR OF THE HEART, 이마고, 별칭의 독서와 마음 기록...)
+function buildMemberHeaderBlock(alias, entries) {
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 50px 56px 24px; max-width: 700px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
+      <div style="text-align: center; padding-bottom: 24px; border-bottom: 1px solid #c5d4de;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 12px;">HOUR OF THE HEART</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 28px; color: #155b80; margin-bottom: 8px;">이마고</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 17px; color: #1a2837; margin-bottom: 14px;"><span style="color: #155b80; font-weight: 700;">${escapeHtml(alias)}</span>의 독서와 마음 기록</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 13px; color: #5e7185; margin-bottom: 2px;">당신이 원하는 사랑 만들기</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185;">Connection in the Here and Now</div>
+        <div style="font-family: 'Gowun Batang', serif; font-size: 12px; color: #5e7185; margin-top: 14px;">책과 마음 읽기 ${entries.length}개</div>
+      </div>
+    </div>
+  `;
+}
+
+// 한 엔트리 블록
+function buildMemberEntryBlock(e) {
+  const dateInfo = formatSessionDate(e.date);
+  const section = SECTION_LABELS[e.section] || '';
+  const pageRange = e.end_page ? `p. ${e.start_page} ~ p. ${e.end_page}` : `p. ${e.start_page}`;
+
+  let card = '<div style="background: #f5fafd; border: 1px solid #dde7ed; border-left: 3px solid #2a8499; padding: 22px 26px; border-radius: 2px;">';
+
+  card += '<div style="display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px dashed #c5d4de; flex-wrap: wrap;">';
+  card += `<div><div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; letter-spacing: 0.2em; color: #1c6577; text-transform: uppercase;">Day ${escapeHtml(e.day)}</div>`;
+  card += `<div style="font-family: 'Gowun Batang', serif; font-size: 14px; color: #2f4759; margin-top: 2px;">${dateInfo.date} ${dateInfo.weekday}</div></div>`;
+  card += `<div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185;">${section ? section + ' · ' : ''}${escapeHtml(pageRange)}</div>`;
+  card += '</div>';
+
+  if (e.quote_text) {
+    card += '<div style="margin-bottom: 14px;">';
+    card += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #1c6577; text-transform: uppercase; margin-bottom: 8px;">📜 마음에 남은 문장</div>';
+    card += '<div style="padding: 14px 18px; background: #ffffff; border: 1px solid #dde7ed; border-left: 2px solid #5fabbd;">';
+    card += `<div style="font-family: 'Nanum Myeongjo', serif; font-size: 15px; line-height: 1.9; color: #1a2837; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.quote_text))}</div>`;
+    card += `<div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(42,132,153,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #5e7185; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ' · p. ' + escapeHtml(e.quote_page) : ''}</div>`;
+    card += '</div></div>';
+  }
+
+  if (e.my_mind) {
+    card += '<div>';
+    card += '<div style="font-family: \'Cormorant Garamond\', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #1c6577; text-transform: uppercase; margin-bottom: 8px;">✿ 남기고 싶은 나의 마음</div>';
+    card += `<div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.9; color: #2f4759; padding: 12px 16px; background: #ffffff; border: 1px solid #dde7ed; border-radius: 2px; border-left: 2px solid #2a7aa3; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.my_mind))}</div>`;
+    card += '</div>';
+  }
+
+  card += '</div>';
+
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 12px 56px; max-width: 700px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
+      ${card}
+    </div>
+  `;
+}
+
+// 워터마크 블록
+function buildMemberWatermarkBlock() {
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ffffff; padding: 20px 56px 32px; max-width: 700px; box-sizing: border-box;">
+      <div style="padding-top: 20px; border-top: 1px solid #c5d4de; text-align: center;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 0.25em; color: #1c6577; font-size: 11px; margin-bottom: 6px;">READING · ALOUD · TOGETHER</div>
+        <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #5e7185;">모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10px; color: #8a9bab; margin-top: 4px;">bookclub.questionschool.net</div>
+      </div>
+    </div>
+  `;
+}
+
+async function captureElement(html, bgColor) {
+  bgColor = bgColor || '#ffffff';
+  const wrapper = document.createElement('div');
+  wrapper.style.position = 'fixed';
+  wrapper.style.left = '-9999px';
+  wrapper.style.top = '0';
+  wrapper.style.width = '700px';
+  wrapper.innerHTML = html;
+  document.body.appendChild(wrapper);
+
+  if (document.fonts && document.fonts.ready) {
+    try { await document.fonts.ready; } catch (e) {}
+  }
+  await new Promise(r => setTimeout(r, 200));
+
+  const canvas = await html2canvas(wrapper.firstElementChild, {
+    scale: 2,
+    backgroundColor: bgColor,
+    logging: false,
+    useCORS: true
+  });
+
+  document.body.removeChild(wrapper);
+  return canvas;
+}
+
+// ─────────────── Entry 카드 PNG 다운로드 (한 사람의 한 기록) ───────────────
+
+function buildPrintableEntry(e, alias) {
+  const dateInfo = formatSessionDate(e.date);
+  const sectionLabel = SECTION_LABELS[e.section] || '';
+  const pageInfo = e.end_page ? `p. ${e.start_page} ~ p. ${e.end_page}` : `p. ${e.start_page}`;
+
+  // 챕터 매칭 (본문 회차일 때만)
+  let chapterNum = '';
+  let chapterTitle = '';
+  if (e.section === 'main' && contents.length > 0) {
+    const startNum = parseInt(e.start_page, 10);
+    const endNum = parseInt(e.end_page, 10) || startNum;
+    if (!isNaN(startNum)) {
+      const matches = contents.filter(c =>
+        c.section_type === 'main' &&
+        Number(c.page_start) <= endNum &&
+        Number(c.page_end) >= startNum
+      );
+      if (matches.length === 1) {
+        chapterNum = `Chapter ${matches[0].num}`;
+        chapterTitle = matches[0].title || '';
+      } else if (matches.length > 1) {
+        chapterNum = `Chapter ${matches[0].num} → ${matches[matches.length - 1].num}`;
+      }
+    }
+  }
+
+  // 헤더 본문 구성: "Chapter 1. 늙은 치료사의 하루. p. 1 ~ p. 14"
+  // 또는 서론/후기: "서론. p. v ~ p. xxi"
+  let headerParts = [];
+  if (chapterNum) headerParts.push(chapterNum);
+  else if (sectionLabel) headerParts.push(sectionLabel);
+  if (chapterTitle) headerParts.push(chapterTitle);
+  headerParts.push(pageInfo);
+  const headerText = headerParts.join('. ');
+
+  let inner = '';
+
+  if (e.quote_text) {
+    inner += `
+      <div style="margin-bottom: 18px;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #1c6577; text-transform: uppercase; margin-bottom: 8px;">📜 마음에 남은 문장</div>
+        <div style="padding: 14px 18px; background: linear-gradient(to right, rgba(42, 132, 153, 0.06), transparent); border-left: 2px solid #5fabbd;">
+          <div style="font-family: 'Nanum Myeongjo', serif; font-size: 15px; line-height: 1.9; color: #1a2837; font-style: italic; padding-left: 14px; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.quote_text))}</div>
+          <div style="margin-top: 10px; padding-top: 8px; padding-left: 14px; border-top: 1px dotted rgba(42,132,153,0.25); font-family: 'Gowun Batang', serif; font-size: 11.5px; color: #5e7185; text-align: right; line-height: 1.5; word-break: keep-all;">— ${escapeHtml(BOOK_AUTHOR)} 『${escapeHtml(BOOK_TITLE)}』${e.quote_page ? ' · p. ' + escapeHtml(e.quote_page) : ''}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (e.my_mind) {
+    inner += `
+      <div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 11px; letter-spacing: 0.18em; color: #1c6577; text-transform: uppercase; margin-bottom: 8px;">✿ 남기고 싶은 나의 마음</div>
+        <div style="font-family: 'Gowun Batang', serif; font-size: 14.5px; line-height: 1.95; color: #1a2837; padding: 14px 18px; background: rgba(255, 255, 255, 0.5); border-radius: 2px; border-left: 2px solid #2a7aa3; white-space: pre-wrap; word-break: keep-all;">${escapeHtml(cleanText(e.my_mind))}</div>
+      </div>
+    `;
+  }
+
+  // 우측 하단 서명: 별칭 · 시간
+  const time = e.timestamp ? formatTimeShort(e.timestamp) : '';
+  inner += `
+    <div style="margin-top: 18px; padding-top: 12px; border-top: 1px dotted rgba(42,132,153,0.25); text-align: right;">
+      <span style="font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 14px; color: #155b80;">${escapeHtml(alias)}</span>
+      ${time ? `<span style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; color: #8a9bab; margin-left: 10px;">${escapeHtml(time)}</span>` : ''}
+    </div>
+  `;
+
+  return `
+    <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #ecf4f9; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #1a2837; line-height: 1.7;">
+      <!-- 헤더 -->
+      <div style="text-align: center; padding-bottom: 22px; margin-bottom: 26px; border-bottom: 1px solid #c5d4de;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.25em; color: #1c6577; text-transform: uppercase; margin-bottom: 10px;">HOUR OF THE HEART</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 22px; color: #1a2837;"><span style="color: #155b80;">이마고</span> — 오늘의 기록</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 13px; color: #5e7185; margin-top: 6px;">Connection in the Here and Now</div>
+      </div>
+
+      <!-- 회차 정보 -->
+      <div style="text-align: center; margin-bottom: 22px;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 12px; letter-spacing: 0.2em; color: #1c6577; text-transform: uppercase; margin-bottom: 4px;">Day ${String(e.day).padStart(2,'0')}</div>
+        <div style="font-family: 'Nanum Myeongjo', serif; font-size: 16px; color: #2f4759;">${escapeHtml(headerText)}</div>
+      </div>
+
+      <!-- 메인 카드 -->
+      <div style="background: rgba(245, 250, 253, 0.55); border: 1px solid #dde7ed; border-left: 3px solid #2a8499; padding: 26px 30px; border-radius: 2px;">
+        ${inner}
+      </div>
+
+      <!-- 워터마크 -->
+      <div style="margin-top: 28px; padding-top: 18px; border-top: 1px solid #c5d4de; text-align: center;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: 0.25em; color: #1c6577; font-size: 11px; margin-bottom: 6px;">READING · ALOUD · TOGETHER</div>
+        <div style="font-family: 'Gowun Batang', serif; font-size: 11px; color: #5e7185;">모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』</div>
+        <div style="font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 10px; color: #8a9bab; margin-top: 4px;">bookclub.questionschool.net</div>
+      </div>
+    </div>
+  `;
+}
+
+function formatTimeShort(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  const mo = d.getMonth() + 1;
+  const da = d.getDate();
+  const h = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  return `${mo}/${da} ${h}:${mi}`;
+}
+
+async function downloadEntryImage(entryId) {
+  const el = document.getElementById(entryId);
+  if (!el) return;
+  const day = Number(el.dataset.day);
+  const timestamp = el.dataset.timestamp;
+
+  // 해당 entry 찾기
+  const entry = (window._currentMemberEntries || []).find(e =>
+    Number(e.day) === day && e.timestamp === timestamp
+  );
+  if (!entry) return;
+
+  const btn = el.querySelector('.entry-download-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '…'; }
+
+  try {
+    const html = buildPrintableEntry(entry, selectedAlias);
+    const canvas = await captureElement(html, '#ecf4f9');
+
+    canvas.toBlob((blob) => {
+      if (!blob) throw new Error('이미지 생성 실패');
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `마음의시간_Day${String(day).padStart(2,'0')}_${selectedAlias}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 'image/png');
+  } catch (err) {
+    console.error(err);
+    alert('이미지 저장 실패: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '⬇'; }
+  }
+}
+
+// ─────────────── 멤버 Markdown 다운로드 (시즌 전체) ───────────────
+
+function buildMemberMarkdown(alias, entries) {
+  const lines = [];
+  lines.push(`# 이마고 — ${alias}의 독서와 마음 기록`);
+  lines.push('');
+  lines.push(`> *Hour of the Heart · Connection in the Here and Now*`);
+  lines.push(`>`);
+  lines.push(`> 책과 마음 읽기 ${entries.length}개`);
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+
+  entries.forEach((e, idx) => {
+    const dateInfo = formatSessionDate(e.date);
+    const sectionLabel = SECTION_LABELS[e.section] || '';
+    const pageInfo = e.end_page ? `p. ${e.start_page} ~ p. ${e.end_page}` : `p. ${e.start_page}`;
+
+    // 챕터 매칭 (본문 회차일 때만) — buildPrintableEntry와 동일한 로직
+    let chapterNum = '';
+    let chapterTitle = '';
+    if (e.section === 'main' && contents.length > 0) {
+      const startNum = parseInt(e.start_page, 10);
+      const endNum = parseInt(e.end_page, 10) || startNum;
+      if (!isNaN(startNum)) {
+        const matches = contents.filter(c =>
+          c.section_type === 'main' &&
+          Number(c.page_start) <= endNum &&
+          Number(c.page_end) >= startNum
+        );
+        if (matches.length === 1) {
+          chapterNum = `Chapter ${matches[0].num}`;
+          chapterTitle = matches[0].title || '';
+        } else if (matches.length > 1) {
+          chapterNum = `Chapter ${matches[0].num} → ${matches[matches.length - 1].num}`;
+        }
+      }
+    }
+
+    // 챕터 라인
+    const headerParts = [];
+    if (chapterNum) headerParts.push(chapterNum);
+    else if (sectionLabel) headerParts.push(sectionLabel);
+    if (chapterTitle) headerParts.push(chapterTitle);
+    const chapterLine = headerParts.join('. ');
+
+    lines.push(`## Day ${String(e.day).padStart(2,'0')} · ${dateInfo.date} ${dateInfo.weekday}`);
+    lines.push('');
+    if (chapterLine) {
+      lines.push(`**${chapterLine}**  `);
+    }
+    lines.push(pageInfo);
+    lines.push('');
+
+    if (e.quote_text) {
+      lines.push(`### 📜 마음에 남은 문장`);
+      lines.push('');
+      const quoteLines = cleanText(e.quote_text).split('\n');
+      quoteLines.forEach(ql => lines.push(`> ${ql}`));
+      lines.push('>');
+      lines.push(`> — ${BOOK_AUTHOR} 『${BOOK_TITLE}』${e.quote_page ? ` · p. ${e.quote_page}` : ''}`);
+      lines.push('');
+    }
+
+    if (e.my_mind) {
+      lines.push(`### ✿ 남기고 싶은 나의 마음`);
+      lines.push('');
+      lines.push(cleanText(e.my_mind));
+      lines.push('');
+    }
+
+    if (idx < entries.length - 1) {
+      lines.push('---');
+      lines.push('');
+    }
+  });
+
+  lines.push('');
+  lines.push('---');
+  lines.push('');
+  lines.push(`*READING · ALOUD · TOGETHER*  `);
+  lines.push(`*모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』*  `);
+  lines.push(`*bookclub.questionschool.net*`);
+  lines.push('');
+
+  return lines.join('\n');
+}
+
+function downloadMemberMarkdown() {
+  const rawEntries = window._currentMemberEntries || [];
+  if (rawEntries.length === 0 || !selectedAlias) {
+    alert('아직 기록이 없어.');
+    return;
+  }
+
+  // PDF와 동일하게 오래된 기록부터 정렬 (시간 흐름대로 읽기 좋게)
+  const entries = [...rawEntries].sort((a, b) =>
+    (Number(a.day) || 0) - (Number(b.day) || 0)
+  );
+
+  const btn = document.getElementById('memberDownloadMdBtn');
+  const originalHtml = btn ? btn.innerHTML : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span><span>저장 중…</span>';
+  }
+
+  try {
+    const md = buildMemberMarkdown(selectedAlias, entries);
+    const today = getTodayStr();
+    const filename = `마음의시간_${selectedAlias}_기록_${today}.md`;
+
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error(err);
+    alert('마크다운 저장 실패: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerHTML = originalHtml; }
+  }
+}
+
+// ─────────────── 멤버 PDF 다운로드 (시즌 전체) ───────────────
+
+async function downloadMemberPdf() {
+  const rawEntries = window._currentMemberEntries || [];
+  if (rawEntries.length === 0 || !selectedAlias) {
+    alert('아직 기록이 없어.');
+    return;
+  }
+
+  // PDF는 항상 오래된 기록부터 정렬 (시간 흐름대로 읽기 좋게)
+  const entries = [...rawEntries].sort((a, b) =>
+    (Number(a.day) || 0) - (Number(b.day) || 0)
+  );
+
+  const btn = document.getElementById('memberDownloadBtn');
+  const originalHtml = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span>⏳</span><span>PDF 만드는 중…</span>';
+
+  try {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageWidthMm = 210;
+    const pageHeightMm = 297;
+    const continuedPageTopMm = 14;        // 새 페이지 시작 시 위쪽 여유
+    const usableHeightMm = pageHeightMm - 14;
+
+    // 블록 목록
+    const blocks = [];
+    blocks.push({ kind: 'header', html: buildMemberHeaderBlock(selectedAlias, entries) });
+    entries.forEach(e => {
+      blocks.push({ kind: 'entry', html: buildMemberEntryBlock(e) });
+    });
+    blocks.push({ kind: 'watermark', html: buildMemberWatermarkBlock() });
+
+    // 캡쳐
+    const captured = [];
+    for (let i = 0; i < blocks.length; i++) {
+      const b = blocks[i];
+      btn.innerHTML = `<span>⏳</span><span>${i+1}/${blocks.length} 처리 중…</span>`;
+      const canvas = await captureElement(b.html);
+      const heightMm = (canvas.height * pageWidthMm) / canvas.width;
+      captured.push({
+        kind: b.kind,
+        canvas,
+        heightMm,
+        imgData: canvas.toDataURL('image/jpeg', 0.92)
+      });
+    }
+
+    // 배치
+    let currentY = 0;
+    let isFirstPage = true;
+
+    for (const block of captured) {
+      if (block.kind === 'watermark') {
+        if (currentY + block.heightMm > usableHeightMm) {
+          pdf.addPage();
+          currentY = continuedPageTopMm;
+        }
+        const watermarkY = pageHeightMm - block.heightMm - 4;
+        pdf.addImage(block.imgData, 'JPEG', 0, Math.max(currentY, watermarkY), pageWidthMm, block.heightMm);
+        currentY = pageHeightMm;
+        continue;
+      }
+
+      if (!isFirstPage && currentY + block.heightMm > usableHeightMm) {
+        pdf.addPage();
+        currentY = continuedPageTopMm;
+      }
+      isFirstPage = false;
+
+      // 페이지보다 큰 단일 블록은 슬라이스 (드물 거지만)
+      if (block.heightMm > usableHeightMm) {
+        if (currentY > 0) {
+          pdf.addPage();
+          currentY = continuedPageTopMm;
+        }
+        let yOffset = 0;
+        while (yOffset < block.heightMm) {
+          if (yOffset > 0) pdf.addPage();
+          pdf.addImage(block.imgData, 'JPEG', 0, currentY - yOffset, pageWidthMm, block.heightMm);
+          yOffset += pageHeightMm;
+        }
+        currentY = pageHeightMm;
+        continue;
+      }
+
+      pdf.addImage(block.imgData, 'JPEG', 0, currentY, pageWidthMm, block.heightMm);
+      currentY += block.heightMm;
+    }
+
+    const today = getTodayStr();
+    pdf.save(`마음의시간_${selectedAlias}_기록_${today}.pdf`);
+  } catch (err) {
+    console.error(err);
+    alert('PDF 저장 실패: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalHtml;
+  }
+}
+
+function getTodayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+}
+
+
+// ════════════════════════════════════════════════════════
+init();
+</script>
+
+</body>
+</html>
