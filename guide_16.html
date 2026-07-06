@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>낭독모임 페이지 사용법 · 이마고</title>
+<meta name="description" content="낭만북클럽 저널링 페이지를 처음 만나는 너에게 — 쓰기, 보기, 다운로드까지 하나씩 안내해줄게.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="낭독모임 페이지 사용법 · 이마고">
+<meta property="og:description" content="낭만북클럽 저널링 페이지를 처음 만나는 너에게 — 쓰기, 보기, 다운로드까지 하나씩 안내해줄게.">
+<meta property="og:image" content="https://bookclub.questionschool.net/images/og_image_16.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://bookclub.questionschool.net/guide_16.html">
+<meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="낭독모임 페이지 사용법 · 이마고">
+<meta name="twitter:description" content="낭만북클럽 저널링 페이지를 처음 만나는 너에게 — 쓰기, 보기, 다운로드까지 하나씩 안내해줄게.">
+<meta name="twitter:image" content="https://bookclub.questionschool.net/images/og_image_16.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream: #ecf4f9;
+    --cream-deep: #d8e7f0;
+    --ink: #1a2837;
+    --ink-soft: #2f4759;
+    --ink-muted: #5e7185;
+    --ink-faint: #8a9bab;
+    --gold: #2a8499;
+    --gold-deep: #1c6577;
+    --line: #c5d4de;
+    --line-soft: #dde7ed;
+    --accent: #155b80;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    font-weight: 400;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(at 15% 10%, rgba(42, 132, 153, 0.06) 0px, transparent 50%),
+      radial-gradient(at 85% 90%, rgba(21, 91, 128, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 60px 28px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 40px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line-soft);
+    flex-wrap: wrap;
+  }
+  .nav a {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    padding-bottom: 6px;
+    transition: color 0.2s;
+  }
+  .nav a:hover { color: var(--accent); }
+  .nav a.current { color: var(--accent); border-bottom: 1px solid var(--accent); }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 30px 0 40px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 44px;
+  }
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: clamp(26px, 4.5vw, 34px);
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+    color: var(--ink);
+    margin-bottom: 14px;
+  }
+  h1 .accent { color: var(--accent); }
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-muted);
+    margin-bottom: 8px;
+  }
+  .subtitle-kr {
+    font-family: 'Gowun Batang', serif;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* SECTION */
+  section { margin-bottom: 68px; }
+
+  .section-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3vw, 24px);
+    color: var(--ink);
+    margin-bottom: 28px;
+    letter-spacing: -0.005em;
+    position: relative;
+    padding-bottom: 14px;
+  }
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 36px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  h3 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 16.5px;
+    color: var(--ink);
+    margin-top: 30px;
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-family: 'Gowun Batang', serif;
+    font-size: 15.5px;
+    line-height: 1.95;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+    word-break: keep-all;
+  }
+  p strong { color: var(--ink); font-weight: 700; }
+
+  /* 페이지 소개 카드 */
+  .page-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-top: 6px;
+  }
+  .page-card {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 22px 22px 20px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+    display: block;
+    border-left: 3px solid var(--gold);
+  }
+  .page-card:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(21, 91, 128, 0.08);
+    border-left-color: var(--accent);
+  }
+  .page-card-icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+    display: block;
+    line-height: 1;
+  }
+  .page-card-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .page-card-sub {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13.5px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+
+  /* 스텝 리스트 */
+  .steps {
+    counter-reset: step;
+    margin: 18px 0 22px;
+    padding-left: 0;
+    list-style: none;
+  }
+  .steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 44px;
+    margin-bottom: 14px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    word-break: keep-all;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 28px;
+    height: 28px;
+    background: var(--accent);
+    color: var(--cream);
+    border-radius: 50%;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    letter-spacing: 0;
+  }
+
+  /* 두 종류 입력 카드 (담아두고 싶은 문장 · 나의 마음) */
+  .input-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 18px 0 22px;
+  }
+  .input-preview-card {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    padding: 18px;
+    border-left: 2px solid var(--gold);
+  }
+  .input-preview-card.mind {
+    border-left-color: var(--accent);
+  }
+  .input-preview-title {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 14.5px;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+  .input-preview-sub {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+
+  /* 상태 pill 데모 */
+  .status-demo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 16px 0 8px;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 13px;
+    border-radius: 100px;
+    border: 1px solid;
+  }
+  .status-pill.done {
+    color: #4a7a3a;
+    background: rgba(107, 142, 90, 0.1);
+    border-color: rgba(107, 142, 90, 0.3);
+  }
+  .status-pill.current {
+    color: var(--accent);
+    background: rgba(21, 91, 128, 0.08);
+    border-color: rgba(21, 91, 128, 0.3);
+    font-weight: 700;
+  }
+  .status-pill.scheduled {
+    color: var(--gold-deep);
+    background: rgba(42, 132, 153, 0.08);
+    border-color: rgba(42, 132, 153, 0.3);
+  }
+  .status-pill.future {
+    color: var(--ink-muted);
+    background: rgba(94, 113, 133, 0.08);
+    border-color: var(--line);
+  }
+  .status-pill.side {
+    color: var(--ink-muted);
+    background: rgba(94, 113, 133, 0.08);
+    border-color: var(--line);
+  }
+  .status-pill.ref {
+    color: var(--ink-faint);
+    background: rgba(138, 155, 171, 0.06);
+    border-color: rgba(138, 155, 171, 0.3);
+  }
+  .status-desc {
+    display: block;
+    font-family: 'Gowun Batang', serif;
+    font-size: 13.5px;
+    color: var(--ink-muted);
+    margin-top: 8px;
+    line-height: 1.75;
+  }
+  .status-desc strong {
+    color: var(--ink-soft);
+    font-weight: 700;
+  }
+
+  /* 다운로드 버튼 데모 */
+  .btn-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: rgba(245, 250, 253, 0.7);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin-right: 8px;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Tip 박스 */
+  .tip {
+    background: rgba(42, 132, 153, 0.05);
+    border: 1px solid rgba(42, 132, 153, 0.2);
+    border-left: 3px solid var(--gold);
+    border-radius: 2px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .tip-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .tip p {
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 0;
+    color: var(--ink-soft);
+  }
+  .tip p + p { margin-top: 8px; }
+
+  /* Q & A */
+  .qa {
+    margin-top: 8px;
+    padding: 20px 22px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    margin-bottom: 12px;
+  }
+  .qa-question {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .qa-question .q-mark {
+    display: inline-block;
+    color: var(--accent);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    margin-right: 6px;
+  }
+  .qa-answer {
+    font-family: 'Gowun Batang', serif;
+    font-size: 14.5px;
+    line-height: 1.85;
+    color: var(--ink-soft);
+    padding-left: 20px;
+    border-left: 2px solid var(--line-soft);
+  }
+  .qa-answer .a-mark {
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    margin-right: 6px;
+  }
+
+  /* 인용구 (마지막 편지 톤) */
+  .closing-quote {
+    margin: 24px 0 10px;
+    padding: 24px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+    font-family: 'Cormorant Garamond', 'Noto Serif KR', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--accent);
+    line-height: 1.75;
+    font-weight: 500;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding-top: 56px;
+    margin-top: 60px;
+    border-top: 1px solid var(--line);
+  }
+  footer .reading {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  footer p {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-bottom: 6px;
+  }
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  footer a:hover { border-bottom-color: var(--accent); }
+
+  @media (max-width: 620px) {
+    .wrap { padding: 40px 18px 80px; }
+    .nav { gap: 16px; }
+    .page-cards { grid-template-columns: 1fr; }
+    .input-preview { grid-template-columns: 1fr; }
+    h1 { font-size: 24px; }
+    p { font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="journal_16.html">📖 오늘 기록</a>
+    <a href="my_journal_16.html">✿ 나의 기록</a>
+    <a href="contents_16.html">📋 진행 상황</a>
+    <a href="welcome_16.html">✦ 환영</a>
+  </nav>
+
+  <!-- HEADER -->
+  <header>
+    <div class="eyebrow">A Guide for New Companions</div>
+    <h1>낭독모임 페이지, <span class="accent">이렇게</span> 써</h1>
+    <p class="subtitle">Reading · Aloud · Together</p>
+    <p class="subtitle-kr">낭만북클럽에 처음 발을 들이는 너에게 — 페이지를 어떻게 쓰는지, 하나씩 천천히 안내해줄게.</p>
+  </header>
+
+  <!-- I. 네 개의 페이지 -->
+  <section>
+    <span class="section-num">I · Four Pages</span>
+    <h2>먼저, 네 개의 페이지가 있어</h2>
+    <p>낭만북클럽 사이트에는 네 개의 방이 있어. 위쪽 메뉴로 자유롭게 오갈 수 있으니까 편하게 둘러봐.</p>
+
+    <div class="page-cards">
+      <a href="journal_16.html" class="page-card">
+        <span class="page-card-icon">📖</span>
+        <div class="page-card-title">오늘 기록</div>
+        <div class="page-card-sub">매일의 낭독 기록과 마음을 남기는 자리. 여기가 우리 모임의 중심이야.</div>
+      </a>
+      <a href="my_journal_16.html" class="page-card">
+        <span class="page-card-icon">✿</span>
+        <div class="page-card-title">나의 기록</div>
+        <div class="page-card-sub">내가 남긴 기록만 모아 보는 곳. 시즌이 끝날 즈음 나만의 독서 노트가 돼.</div>
+      </a>
+      <a href="contents_16.html" class="page-card">
+        <span class="page-card-icon">📋</span>
+        <div class="page-card-title">진행 상황</div>
+        <div class="page-card-sub">이마고 책의 목차 전체와 어디까지 함께 읽었는지 지도처럼 볼 수 있어.</div>
+      </a>
+      <a href="welcome_16.html" class="page-card">
+        <span class="page-card-icon">✦</span>
+        <div class="page-card-title">환영 페이지</div>
+        <div class="page-card-sub">시즌 16 안내와 참여 방법, 시작 전 준비할 것들이 담긴 자리.</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- II. 오늘 기록 남기기 -->
+  <section>
+    <span class="section-num">II · Leave Your Mark</span>
+    <h2>오늘의 기록을 남겨보자</h2>
+    <p>낭독 모임이 끝나면 <strong>오늘 기록</strong> 페이지에 마음을 남겨봐. 두 가지 방식이 있어. 둘 다 남겨도 좋고, 하나만 남겨도 좋아.</p>
+
+    <div class="input-preview">
+      <div class="input-preview-card">
+        <div class="input-preview-title">📜 담아두고 싶은 문장</div>
+        <div class="input-preview-sub">책에서 마음에 남은 문장을 그대로. 페이지 번호도 같이 남겨두면 나중에 다시 찾기 쉬워.</div>
+      </div>
+      <div class="input-preview-card mind">
+        <div class="input-preview-title">✿ 기록해두고 싶은 나의 마음</div>
+        <div class="input-preview-sub">책을 읽으며 떠오른 마음, 이야기 나누며 만난 감정. 무엇이든 좋아.</div>
+      </div>
+    </div>
+
+    <h3>쓰는 순서</h3>
+    <ol class="steps">
+      <li>페이지 상단의 입력 영역에서 <strong>너의 별칭</strong>을 골라. 없으면 새로 추가할 수 있어.</li>
+      <li>문장 또는 마음, 아니면 둘 다 적어. 페이지 번호도 잊지 말고.</li>
+      <li>오른쪽 아래 <strong>남기기 →</strong> 버튼을 눌러. 잘 저장됐다는 메시지가 뜰 거야.</li>
+    </ol>
+
+    <div class="tip">
+      <span class="tip-label">✦ 알아두면 편해</span>
+      <p><strong>당일 안에는 언제든 수정·삭제할 수 있어.</strong> 남긴 기록 위에 마우스를 올리면 오른쪽 아래에 ✏️ 연필과 🗑 휴지통 아이콘이 나타나. 하루가 지나면 아이콘이 사라지니 신중하게.</p>
+      <p>별칭은 자동으로 기억돼. 다음 날 다시 들어와도 너의 별칭이 미리 선택되어 있을 거야.</p>
+    </div>
+  </section>
+
+  <!-- III. 나의 기록 모아보기 -->
+  <section>
+    <span class="section-num">III · Your Own Journal</span>
+    <h2>나의 기록만 모아서 보고 싶다면</h2>
+    <p><strong>나의 기록</strong> 페이지에 가서 별칭을 선택하면, 시즌 16 동안 네가 남긴 모든 기록이 한 자리에 시간순으로 펼쳐져.</p>
+    <p>매일 매일 하나씩 쌓이는 것이 나중에 보면 나만의 작은 독서 노트가 돼. 시즌이 끝날 즈음 한 번 처음부터 다시 훑어보는 것도 좋아. 나의 여정이 어떻게 흘러왔는지 보일 거야.</p>
+
+    <div class="tip">
+      <span class="tip-label">✦ 다른 사람의 여정도 살짝 엿볼 수 있어</span>
+      <p>오늘 기록 페이지에서 누군가의 별칭을 클릭하면 그 사람의 나의 기록 페이지로 이동해. 낭독 동료들이 어떤 마음을 지나왔는지 살짝 만나볼 수 있어.</p>
+    </div>
+  </section>
+
+  <!-- IV. 진행 상황 -->
+  <section>
+    <span class="section-num">IV · Map of Reading</span>
+    <h2>지금 어디쯤 왔는지 궁금하면</h2>
+    <p><strong>진행 상황</strong> 페이지는 이마고 책의 목차 전체를 지도처럼 보여줘. 앞부분 서문부터 본문 13장 · 이마고 실습 18 · 끝맺음까지 — 낭독 대상 35개 항목과 그 외 항목들이 모두 있어.</p>
+    <p>각 항목 오른쪽에는 상태를 알려주는 pill 표시가 있어.</p>
+
+    <div class="status-demo">
+      <span class="status-pill done">✓ 읽었음</span>
+      <span class="status-pill current">⟶ 읽는 중</span>
+      <span class="status-pill scheduled">⌛ 다음 시간</span>
+      <span class="status-pill future">읽기 전</span>
+    </div>
+    <div class="status-desc">
+      <strong>낭독 대상 항목</strong>은 위 네 가지 상태로 표시돼. 오늘 함께 읽는 챕터가 <strong>읽는 중</strong>으로 보일 거야.
+    </div>
+
+    <div class="status-demo" style="margin-top: 20px;">
+      <span class="status-pill side">개별독서</span>
+      <span class="status-pill ref">참고자료</span>
+    </div>
+    <div class="status-desc">
+      <strong>개별독서</strong>는 낭독 대상은 아니지만 관심 있을 때 개인적으로 읽어봐도 좋은 서문들이야. <strong>참고자료</strong>는 본문 뒤의 미주·참고문헌 같은 부속 자료. 낭독 여정 밖에 있는 항목들이니 편하게 참고만 해.
+    </div>
+
+    <div class="tip">
+      <span class="tip-label">✦ 챕터 연결 매핑</span>
+      <p>본문 장과 이마고 실습 사이에는 연결 관계가 있어. 예를 들어 <strong>제9장</strong>에는 <strong>↔ 실습 10, 11, 12</strong> 같은 표시가 있고, 반대로 <strong>실습 10</strong>에는 <strong>↔ 제9장</strong>이 표시돼. 나중에 실습을 하나 다시 보고 싶을 때, 어느 장과 짝인지 찾기 좋아.</p>
+    </div>
+  </section>
+
+  <!-- V. 다운로드 -->
+  <section>
+    <span class="section-num">V · Save &amp; Keep</span>
+    <h2>기록을 오래 간직하고 싶을 때</h2>
+    <p>기록들은 사이트에도 남지만, 파일로 받아서 개인적으로 보관할 수도 있어. 세 가지 방법이 있어.</p>
+
+    <h3>한 사람의 기록 하나만 이미지로</h3>
+    <p>기록 카드 오른쪽 아래 <strong>↓ 화살표</strong>를 눌러봐. 그 카드 한 장이 예쁜 PNG 이미지로 저장돼. 마음에 남는 문장 하나를 이미지로 저장해두고 싶을 때 편해.</p>
+
+    <h3>오늘 회차 전체를 하나의 파일로</h3>
+    <p>회차 카드 맨 아래에 두 개의 버튼이 있어:</p>
+    <div style="margin: 14px 0 18px;">
+      <span class="btn-demo">📝 오늘 전체 .md 저장</span>
+      <span class="btn-demo">📄 오늘 전체 .pdf 저장</span>
+    </div>
+    <p><strong>.md</strong>는 텍스트 편집기로 열 수 있는 마크다운 파일. Obsidian이나 Bear 같은 노트 앱에 그대로 붙여넣기 좋아. <strong>.pdf</strong>는 그날의 모든 기록이 담긴 문서 하나로, 인쇄나 공유에 좋아.</p>
+
+    <h3>내 전체 여정을 하나의 파일로</h3>
+    <p><strong>나의 기록</strong> 페이지에서도 같은 방식으로 저장할 수 있어. 시즌 마지막 날에 시즌 전체를 한 번에 저장해두면, 시즌 16 동안의 나의 여정이 하나의 파일로 남게 돼.</p>
+  </section>
+
+  <!-- VI. FAQ -->
+  <section>
+    <span class="section-num">VI · Frequently Whispered</span>
+    <h2>이런 것들이 궁금할지도 몰라</h2>
+
+    <div class="qa">
+      <div class="qa-question"><span class="q-mark">Q.</span>책을 미리 안 읽었는데도 참여할 수 있어?</div>
+      <div class="qa-answer"><span class="a-mark">A.</span>물론이야. 매일 새벽에 함께 정한 페이지만큼 낭독하니까, 그 자리에서 함께 따라가면 돼. 미리 안 읽어도 걱정하지 마.</div>
+    </div>
+
+    <div class="qa">
+      <div class="qa-question"><span class="q-mark">Q.</span>하루 못 나오면 어떡해?</div>
+      <div class="qa-answer"><span class="a-mark">A.</span>괜찮아. 결석한 날의 이야기는 오늘 기록 페이지에서 다른 동료들의 기록으로 만나볼 수 있어. 진행 상황 페이지에서 어디까지 읽었는지 확인하고 다음 모임에 다시 만나면 돼.</div>
+    </div>
+
+    <div class="qa">
+      <div class="qa-question"><span class="q-mark">Q.</span>별칭을 바꾸고 싶은데?</div>
+      <div class="qa-answer"><span class="a-mark">A.</span>오늘 기록 페이지의 별칭 드롭다운에서 <strong>+ 추가 (직접 입력)</strong>를 누르면 새 별칭을 만들 수 있어. 매일 다른 별칭을 써도 돼. 다만 나의 기록 페이지에서 모아 보려면 같은 별칭으로 남기는 게 좋아.</div>
+    </div>
+
+    <div class="qa">
+      <div class="qa-question"><span class="q-mark">Q.</span>Zoom 링크가 안 열려.</div>
+      <div class="qa-answer"><span class="a-mark">A.</span>낭독 시간(한국 시간 새벽 <strong>5:30 ~ 7:00</strong>)에만 링크가 작동해. 그 외 시간에 눌러도 열리지 않고 "지금은 낭독시간이 아닙니다" 안내가 뜰 거야. 낭독 시간에 다시 와줘.</div>
+    </div>
+
+    <div class="qa">
+      <div class="qa-question"><span class="q-mark">Q.</span>기록을 잘못 남겼는데 수정할 수 없어.</div>
+      <div class="qa-answer"><span class="a-mark">A.</span>당일이 지나면 본인도 수정·삭제할 수 없어. 카톡방으로 진행자(농담, 지평)에게 알려주면 대신 수정해줄 수 있어.</div>
+    </div>
+
+    <div class="qa">
+      <div class="qa-question"><span class="q-mark">Q.</span>다른 사람의 기록을 다운로드 받아도 돼?</div>
+      <div class="qa-answer"><span class="a-mark">A.</span>기록 카드의 ↓ 아이콘은 누구의 기록에서도 눌러서 저장할 수 있어. 다만 다른 사람의 마음이 담긴 기록이니, 개인적으로 소중히 간직하는 용도로 써줘. 시즌 밖에서 공개적으로 공유하는 건 남긴 사람에게 먼저 물어보고.</div>
+    </div>
+  </section>
+
+  <!-- 닫는 인사 -->
+  <div class="closing-quote">
+    첫 새벽은 언제나 낯설고 설레.<br>
+    천천히, 편안하게 함께 시작해보자.
+  </div>
+
+  <p style="text-align: center; margin-top: 24px; font-family: 'Gowun Batang', serif; font-size: 14px; color: var(--ink-muted);">
+    사용하다가 헷갈리는 부분이 있으면 언제든 카톡방에 물어봐. 함께 알아가면 돼.
+  </p>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="reading">READING · ALOUD · TOGETHER</div>
+    <p>모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』</p>
+    <p>
+      <a href="journal_16.html">오늘 기록 →</a> &nbsp;·&nbsp;
+      <a href="my_journal_16.html">나의 기록 →</a> &nbsp;·&nbsp;
+      <a href="contents_16.html">진행 상황 →</a> &nbsp;·&nbsp;
+      <a href="welcome_16.html">환영 페이지 →</a>
+    </p>
+  </footer>
+
+</div>
+
+</body>
+</html>
