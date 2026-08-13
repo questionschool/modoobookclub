@@ -1052,18 +1052,43 @@ function renderFinishEstimate(remainPages, remainCount, pagesRead, finishedSessi
     return;
   }
 
-  const pace = pagesRead / dayCount;                 // 하루 평균 쪽수
+  const pace = pagesRead / dayCount;                 // 낭독일 하루 평균 쪽수
   const estDays = Math.max(1, Math.ceil(remainPages / pace));
   const maxDay = Math.max(0, ...finishedSessions.map(s => Number(s.day)).filter(d => !isNaN(d)));
 
-  // 예상 완독 날짜 (매일 낭독 기준, KST)
-  const finish = new Date(Date.now() + estDays * 24 * 60 * 60 * 1000 + 9 * 60 * 60 * 1000);
-  const dateStr = `${finish.getUTCMonth() + 1}월 ${finish.getUTCDate()}일`;
+  // 예상 완독 날짜 (KST) — 주말(토·일)과 법정 공휴일은 낭독이 없으므로 건너뛴다
+  const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  let cursor = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  let counted = 0;
+  while (counted < estDays) {
+    cursor = new Date(cursor.getTime() + 24 * 60 * 60 * 1000);
+    if (isReadingDay(cursor)) counted++;
+  }
+  const DOW = ['일', '월', '화', '수', '목', '금', '토'];
+  const dateStr = `${cursor.getUTCMonth() + 1}월 ${cursor.getUTCDate()}일 (${DOW[cursor.getUTCDay()]})`;
 
   el.innerHTML =
     `아직 안 읽은 글 <b>${remainCount}편 · ${remainPages}쪽</b> — ` +
-    `하루 평균 ${pace.toFixed(1)}쪽 페이스라면 <b>약 ${estDays}일 더</b>` +
-    `<span class="est-sub">예상 완독 ${dateStr}${maxDay ? ` · Day ${maxDay + estDays} 무렵` : ''}</span>`;
+    `하루 평균 ${pace.toFixed(1)}쪽 페이스라면 <b>낭독일 기준 약 ${estDays}일 더</b>` +
+    `<span class="est-sub">예상 완독 ${dateStr}${maxDay ? ` · Day ${maxDay + estDays} 무렵` : ''} · 주말·공휴일 제외</span>`;
+}
+
+// ── 낭독이 없는 날: 주말(토·일) + 법정 공휴일 ──
+// 시즌 중 해당되는 공휴일을 여기에 추가해 줘 (KST, YYYY-MM-DD)
+const NO_READING_HOLIDAYS = [
+  '2026-08-17',   // 광복절 대체공휴일
+  '2026-09-24', '2026-09-25', '2026-09-28',   // 추석 연휴 + 대체공휴일
+  '2026-10-05',   // 개천절 대체공휴일
+  '2026-10-09'    // 한글날
+];
+
+function isReadingDay(kstMidnight) {
+  const dow = kstMidnight.getUTCDay();
+  if (dow === 0 || dow === 6) return false;   // 일 · 토
+  const key = `${kstMidnight.getUTCFullYear()}-` +
+    `${String(kstMidnight.getUTCMonth() + 1).padStart(2, '0')}-` +
+    `${String(kstMidnight.getUTCDate()).padStart(2, '0')}`;
+  return !NO_READING_HOLIDAYS.includes(key);
 }
 
 // IMAGO_TOC 항목을 한글 라벨로 변환 (In Progress 표시용)
