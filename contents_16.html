@@ -739,7 +739,7 @@
       </div>
       <div class="summary-stat">
         <div class="summary-stat-label">Pages Read</div>
-        <div class="summary-stat-value" id="statPages">— <span class="small">/ 342</span></div>
+        <div class="summary-stat-value" id="statPages">— <span class="small">/ 454</span></div>
       </div>
       <div class="summary-stat">
         <div class="summary-stat-label">Sessions</div>
@@ -787,7 +787,7 @@
 
 <script>
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
-const TOTAL_PAGES = 416;   // 이마고 낭독 대상 35개 항목의 총 페이지 수
+const TOTAL_PAGES = 454;   // 이마고 낭독 대상 38개 항목의 총 페이지 수 (서문 3편 p.35–72 포함)
 
 let sessions = [];
 let contents = [];
@@ -1087,9 +1087,9 @@ const IMAGO_TOC = [
   { partKey: 'prologue', kr: '조 로빈슨 씨께 특별히 감사드리는 글',                  en: '',                                        mode: 'side' },
   { partKey: 'prologue', kr: '감사의 글',                                       en: '',                                        mode: 'side' },
   { partKey: 'prologue', kr: '30주년(2019년)에 쓰는 서문',                       en: '',                                        mode: 'read',  pageStart: 25, pageEnd: 34 },
-  { partKey: 'prologue', kr: '20주년(2008년)에 쓰는 서문',                       en: '',                                        mode: 'side', sideDone: true },
-  { partKey: 'prologue', kr: '2001년 판에 쓰는 서문',                            en: '',                                        mode: 'side', sideDone: true },
-  { partKey: 'prologue', kr: '1988년 판에 쓰는 서문',                            en: '',                                        mode: 'side', sideDone: true },
+  { partKey: 'prologue', kr: '20주년(2008년)에 쓰는 서문',                       en: '',                                        mode: 'read',  pageStart: 35, pageEnd: 54 },
+  { partKey: 'prologue', kr: '2001년 판에 쓰는 서문',                            en: '',                                        mode: 'read',  pageStart: 55, pageEnd: 66 },
+  { partKey: 'prologue', kr: '1988년 판에 쓰는 서문',                            en: '',                                        mode: 'read',  pageStart: 67, pageEnd: 72 },
 
   // ── 제1부 · 무의식적인 파트너십 ──
   { partKey: 'part1', ch: 1, kr: '당신이 사랑에 빠지게 되는 진짜 이유',  en: 'THE MYSTERY OF ATTRACTION',   mode: 'read', pageStart: 79,  pageEnd: 98,  linked: '실습 1' },
