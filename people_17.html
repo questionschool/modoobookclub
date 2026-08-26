@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>원청 — 등장인물</title>
+<meta name="description" content="시즌 17 『원청』 등장인물 정리 — 이름이 낯선 인물들을 먼저 익히고 새벽으로 갑니다.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="원청 — 등장인물">
+<meta property="og:description" content="시즌 17 『원청』 등장인물 정리.">
+<meta property="og:image" content="https://bookclub.questionschool.net/images/og_image_17.png">
+<meta property="og:url" content="https://bookclub.questionschool.net/people_17.html">
+<meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
+<meta property="og:locale" content="ko_KR">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream: #f7f4ee;
+    --cream-deep: #eae4d8;
+    --cream-soft: #fcfaf6;
+    --ink: #242020;
+    --ink-soft: #453d38;
+    --ink-muted: #756b63;
+    --ink-faint: #a49a90;
+    --gold: #8c7a5c;
+    --gold-deep: #6d5e43;
+    --line: #ddd5c8;
+    --line-soft: #ebe5da;
+    --accent: #9c3229;
+    --accent-soft: #b8564a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Gowun Batang', serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.85;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wrap { max-width: 800px; margin: 0 auto; padding: 0 22px 80px; }
+
+  /* HEADER */
+  header { text-align: center; padding: 46px 0 30px; }
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 12.5px; letter-spacing: .34em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px;
+  }
+  h1.title { font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 29px; line-height: 1.4; }
+  h1.title .accent { color: var(--accent); }
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 15px; color: var(--ink-muted); margin-top: 8px; letter-spacing: .1em;
+  }
+  .header-note {
+    margin-top: 18px; font-size: 14.5px; color: var(--ink-soft); line-height: 1.9;
+  }
+
+  /* 스포일러 스위치 */
+  .switch-bar {
+    margin: 26px 0 0; padding: 18px 20px;
+    border: 1px solid var(--line); background: var(--cream-soft);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 14px; justify-content: space-between;
+  }
+  .switch-text { flex: 1; min-width: 220px; }
+  .switch-title {
+    font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 15.5px; margin-bottom: 2px;
+  }
+  .switch-desc { font-size: 13px; color: var(--ink-muted); line-height: 1.7; }
+  .switch-btn {
+    font-family: 'Gowun Batang', serif; font-size: 14px;
+    padding: 10px 20px; cursor: pointer; white-space: nowrap;
+    border: 1px solid var(--ink-faint); background: var(--cream);
+    color: var(--ink-soft); transition: all .25s ease;
+  }
+  .switch-btn:hover { border-color: var(--accent); color: var(--accent); }
+  body.spoilers-on .switch-btn { background: var(--accent); border-color: var(--accent); color: var(--cream-soft); }
+  body.spoilers-on .switch-bar { border-color: var(--accent-soft); }
+
+  /* 관계도 */
+  .map { margin-top: 34px; }
+  .map svg { width: 100%; height: auto; display: block; }
+  .map-caption {
+    text-align: center; font-size: 12.5px; color: var(--ink-faint); margin-top: 6px;
+    font-family: 'Cormorant Garamond', serif; font-style: italic; letter-spacing: .04em;
+  }
+  .n-box { fill: var(--cream-soft); stroke: var(--line); }
+  .n-box.lead { stroke: var(--accent); }
+  .n-name { font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 14px; fill: var(--ink); }
+  .n-name.lead { fill: var(--accent); }
+  .n-sub { font-family: 'Gowun Batang', serif; font-size: 11px; fill: var(--ink-faint); }
+  .edge { stroke: var(--line); stroke-width: 1.2; fill: none; }
+  .edge.dash { stroke-dasharray: 4 3; }
+  .e-label { font-family: 'Gowun Batang', serif; font-size: 11px; fill: var(--ink-muted); }
+  .e-label.hot { fill: var(--accent); }
+  .only-safe { display: inline; }
+  .only-spoiler { display: none; }
+  body.spoilers-on .only-safe { display: none; }
+  body.spoilers-on .only-spoiler { display: inline; }
+
+  /* SECTION */
+  section { padding-top: 46px; }
+  .section-num {
+    display: block; font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold-deep); margin-bottom: 10px;
+  }
+  h2 { font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 22px; margin-bottom: 12px; }
+  .lead { color: var(--ink-soft); font-size: 15px; margin-bottom: 20px; }
+
+  .group-head {
+    margin: 30px 0 14px; padding-bottom: 7px; border-bottom: 1px solid var(--line);
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 12.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-deep);
+  }
+
+  /* 인물 카드 */
+  .p {
+    padding: 18px 0; border-bottom: 1px solid var(--line-soft);
+  }
+  .p:last-child { border-bottom: none; }
+  .p-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+  .p-name { font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 18px; color: var(--accent); }
+  .p-hanja { font-family: 'Nanum Myeongjo', serif; font-size: 14px; color: var(--ink-faint); letter-spacing: .08em; }
+  .p-role {
+    margin-left: auto; font-size: 12.5px; color: var(--ink-faint);
+    font-family: 'Cormorant Garamond', serif; font-style: italic; white-space: nowrap;
+  }
+  .p-kr {
+    font-family: 'Gowun Batang', serif; font-size: 12.5px; color: var(--gold-deep);
+    border: 1px solid var(--line); padding: 1px 8px; letter-spacing: .02em;
+  }
+  .p-line { font-size: 14px; color: var(--ink-muted); margin-bottom: 8px; }
+  .p-body { font-size: 15px; color: var(--ink-soft); }
+  .p-body em { color: var(--ink); font-style: normal; }
+
+  .p-spoiler {
+    display: none;
+    margin-top: 12px; padding: 13px 16px;
+    border-left: 3px solid var(--accent); background: rgba(156,50,41,.05);
+    font-size: 14.5px; color: var(--ink-soft);
+  }
+  .p-spoiler::before {
+    content: '뒤에 밝혀지는 것';
+    display: block; font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 5px;
+  }
+  body.spoilers-on .p-spoiler { display: block; }
+
+  .spoiler-section { display: none; }
+  body.spoilers-on .spoiler-section { display: block; }
+
+  .hidden-hint {
+    margin-top: 40px; padding: 22px; text-align: center;
+    border: 1px dashed var(--line); color: var(--ink-faint); font-size: 14px; line-height: 1.9;
+  }
+  body.spoilers-on .hidden-hint { display: none; }
+
+  /* 지명 카드 */
+  .places { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 6px; }
+  .place {
+    border: 1px solid var(--line); background: var(--cream-soft); padding: 16px 15px;
+  }
+  .place-name { font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 16px; margin-bottom: 4px; }
+  .place-name span { font-size: 12.5px; color: var(--ink-faint); font-weight: 400; margin-left: 5px; }
+  .place-desc { font-size: 13.5px; color: var(--ink-soft); line-height: 1.8; }
+
+  /* 주석 */
+  .note-card { margin-top: 26px; padding: 20px 22px; border: 1px solid var(--line); background: var(--cream-soft); }
+  .note-card p { font-size: 14px; color: var(--ink-soft); margin-bottom: 10px; }
+  .note-card p:last-child { margin-bottom: 0; }
+  .note-card strong { color: var(--accent); }
+
+  .ornament { text-align: center; color: var(--gold); letter-spacing: .5em; margin: 40px 0; font-size: 13px; }
+
+  footer {
+    text-align: center; padding-top: 34px; border-top: 1px solid var(--line);
+    margin-top: 50px; font-size: 13.5px; color: var(--ink-muted); line-height: 2;
+  }
+  footer a { color: var(--ink-muted); text-decoration: none; border-bottom: 1px solid transparent; }
+  footer a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .reading {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    letter-spacing: .3em; color: var(--accent); font-size: 12px; margin-bottom: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 0 15px 60px; }
+    h1.title { font-size: 23px; }
+    .places { grid-template-columns: 1fr; }
+    .p-role { margin-left: 0; width: 100%; }
+    .switch-bar { padding: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+
+  <header>
+    <div class="eyebrow">Season 17 · Dramatis Personae</div>
+    <h1 class="title"><span class="accent">원청</span> 文城 — 등장인물</h1>
+    <p class="subtitle">文城 · City of Fiction</p>
+    <p class="header-note">
+      진행자 참고용 페이지입니다. 어느 메뉴에도 걸려 있지 않고, 주소를 아는 사람만 볼 수 있습니다.<br>
+      한자 이름 아래에 한국 한자음을 함께 적어 두었습니다.
+    </p>
+  </header>
+
+  <div class="switch-bar">
+    <div class="switch-text">
+      <div class="switch-title">스포일러 감추기 — 켜져 있음</div>
+      <div class="switch-desc">
+        기본은 <b>1부 초반까지 드러난 것만</b> 보여줍니다.
+        뒤에 밝혀지는 관계와 결말은 감춰져 있어요. 진행자용으로 전체를 보려면 오른쪽 단추를 눌러 주세요.
+      </div>
+    </div>
+    <button type="button" class="switch-btn" id="spoilerBtn" onclick="toggleSpoiler()">전체 보기 →</button>
+  </div>
+
+  <!-- 관계도 -->
+  <div class="map">
+    <svg viewBox="0 0 760 460" role="img" aria-label="원청 주요 인물 관계도">
+      <!-- edges -->
+      <line class="edge" x1="300" y1="60" x2="460" y2="60"/>
+      <line class="edge" x1="235" y1="84" x2="235" y2="155"/>
+      <line class="edge" x1="235" y1="211" x2="235" y2="290"/>
+      <line class="edge" x1="300" y1="180" x2="400" y2="180"/>
+      <path class="edge" d="M300 168 C 400 120, 520 120, 620 168"/>
+      <line class="edge" x1="480" y1="211" x2="480" y2="380"/>
+      <line class="edge" x1="393" y1="205" x2="303" y2="292"/>
+      <line class="edge dash" x1="300" y1="315" x2="620" y2="315"/>
+      <line class="edge" x1="682" y1="211" x2="682" y2="290"/>
+      <line class="edge" x1="120" y1="182" x2="170" y2="182"/>
+
+      <!-- edge labels -->
+      <text class="e-label hot" x="380" y="50" text-anchor="middle">
+        <tspan class="only-safe">남매라고 말함</tspan><tspan class="only-spoiler">실은 부부</tspan>
+      </text>
+      <text class="e-label" x="243" y="125">혼인</text>
+      <text class="e-label" x="243" y="257">아버지</text>
+      <text class="e-label" x="350" y="172" text-anchor="middle">목기사 동업</text>
+      <text class="e-label" x="460" y="127" text-anchor="middle">시진의 유지</text>
+      <text class="e-label" x="488" y="352">아들</text>
+      <text class="e-label" x="355" y="243">길러 준 어머니</text>
+      <text class="e-label" x="390" y="307" text-anchor="middle">정혼</text>
+      <text class="e-label" x="690" y="257">아들</text>
+      <text class="e-label" x="145" y="174" text-anchor="middle">소작인</text>
+
+      <!-- nodes -->
+      <g>
+        <rect class="n-box lead" x="170" y="36" width="130" height="48" rx="2"/>
+        <text class="n-name lead" x="235" y="59" text-anchor="middle">샤오메이</text>
+        <text class="n-sub" x="235" y="75" text-anchor="middle">小美</text>
+      </g>
+      <g>
+        <rect class="n-box" x="460" y="36" width="130" height="48" rx="2"/>
+        <text class="n-name" x="525" y="59" text-anchor="middle">아창</text>
+        <text class="n-sub" x="525" y="75" text-anchor="middle">阿强</text>
+      </g>
+      <g>
+        <rect class="n-box" x="10" y="157" width="110" height="50" rx="2"/>
+        <text class="n-name" x="65" y="180" text-anchor="middle">톈다</text>
+        <text class="n-sub" x="65" y="196" text-anchor="middle">田大 · 고향</text>
+      </g>
+      <g>
+        <rect class="n-box lead" x="170" y="155" width="130" height="56" rx="2"/>
+        <text class="n-name lead" x="235" y="179" text-anchor="middle">린샹푸</text>
+        <text class="n-sub" x="235" y="196" text-anchor="middle">林祥福 · 북방의 목수</text>
+      </g>
+      <g>
+        <rect class="n-box" x="400" y="155" width="160" height="56" rx="2"/>
+        <text class="n-name" x="480" y="179" text-anchor="middle">천융량 · 리메이롄</text>
+        <text class="n-sub" x="480" y="196" text-anchor="middle">陳永良 · 李美蓮</text>
+      </g>
+      <g>
+        <rect class="n-box" x="620" y="155" width="125" height="56" rx="2"/>
+        <text class="n-name" x="682" y="179" text-anchor="middle">구이민</text>
+        <text class="n-sub" x="682" y="196" text-anchor="middle">顧益民 · 상회 회장</text>
+      </g>
+      <g>
+        <rect class="n-box" x="170" y="290" width="130" height="50" rx="2"/>
+        <text class="n-name" x="235" y="313" text-anchor="middle">린바이자</text>
+        <text class="n-sub" x="235" y="329" text-anchor="middle">林百家 · 딸</text>
+      </g>
+      <g>
+        <rect class="n-box" x="620" y="290" width="125" height="50" rx="2"/>
+        <text class="n-name" x="682" y="313" text-anchor="middle">구퉁녠</text>
+        <text class="n-sub" x="682" y="329" text-anchor="middle">顧同年 · 아들</text>
+      </g>
+      <g>
+        <rect class="n-box" x="400" y="380" width="160" height="50" rx="2"/>
+        <text class="n-name" x="480" y="403" text-anchor="middle">천야오우</text>
+        <text class="n-sub" x="480" y="419" text-anchor="middle">陳耀武 · 장남</text>
+      </g>
+    </svg>
+    <p class="map-caption">주요 인물 관계 — 왼쪽은 황허 이북의 고향, 오른쪽은 강남의 시진(溪鎭)</p>
+  </div>
+
+  <!-- I. 처음부터 만나는 사람들 -->
+  <section>
+    <span class="section-num">I · From the First Pages</span>
+    <h2>처음 스무 장 안에 만나는 사람들</h2>
+    <p class="lead">1회차부터 4회차 사이에 차례로 등장합니다. 이 정도만 알고 시작해도 충분합니다.</p>
+
+    <div class="group-head">북방에서 내려온 사람</div>
+
+    <div class="p">
+      <div class="p-head">
+        <span class="p-name">린샹푸</span><span class="p-hanja">林祥福</span><span class="p-kr">임상복</span>
+        <span class="p-role">1~2장 · 주인공</span>
+      </div>
+      <p class="p-line">황허 이북 부잣집의 외아들이자 솜씨 좋은 목수.</p>
+      <p class="p-body">
+        아버지는 마을에서 유일한 수재(秀才), 어머니는 이웃 현 거인(擧人)의 딸이었습니다.
+        다섯 살에 아버지를, 열아홉에 어머니를 여의고 밭 400여 무와 방 여섯 칸짜리 집,
+        선장본 100여 권을 물려받았습니다. 과묵하고 겸손하며 우직한 사람입니다.
+        소설은 그가 <em>갓난 딸을 가슴에 안고 눈 속에서 집집마다 젖을 구걸하는 장면</em>으로 시작합니다.
+      </p>
+      <div class="p-spoiler">
+        남하 석 달 만에 '원청'이라는 곳이 없다는 것을 스스로 깨닫습니다(18장). 그럼에도 시진에 눌러앉아 17년을 삽니다.
+        마지막에는 납치된 구이민의 몸값을 들고 홀로 토비를 찾아갔다가 장이푸의 칼에 왼쪽 귀뿌리를 찔려 죽습니다(1부 65장 · 21회차) —
+        구이민이 이미 구출되어 살아 있다는 것을 모른 채로.
+      </div>
+    </div>
+
+    <div class="p">
+      <div class="p-head">
+        <span class="p-name">톈다</span><span class="p-hanja">田大</span><span class="p-kr">전대</span>
+        <span class="p-role">2장 · 고향의 소작인</span>
+      </div>
+      <p class="p-line">린샹푸 집안의 밭을 관리하는 관리인이자 소작인. 톈씨 다섯 형제의 맏이.</p>
+      <p class="p-body">
+        신분은 낮지만 이 소설에서 '의(義)'를 가장 압축해 보여주는 인물입니다. 형제는 톈다·톈얼·톈싼·톈쓰·톈우.
+      </p>
+      <div class="p-spoiler">
+        24장에서 다 해진 옷에 나뭇가지를 지팡이 삼은 채 시진에 나타납니다. 목기사에 붙은 구인 방문의 글씨체를 알아보고
+        주인을 찾아낸 것입니다. 짚신 네 켤레가 닳도록 2년 넘게 걸어왔고, 집문서와 2년치 수확을 바꾼 금괴 두 개를 품고 있었습니다.
+        마지막에는 주인을 모시러 오는 길에 병으로 죽어, 린샹푸와 한 관에 함께 실려 북으로 돌아갑니다(75장).
+      </div>
+    </div>
+
+    <div class="group-head">하룻밤 묵기를 청한 두 사람</div>
+
+    <div class="p">
+      <div class="p-head">
+        <span class="p-name">샤오메이</span><span class="p-hanja">小美</span><span class="p-kr">소미</span>
+        <span class="p-role">3장 · 여주인공</span>
+      </div>
+      <p class="p-line">마차 바퀴가 부서져 린샹푸의 집에 묵게 된 여인.</p>
+      <p class="p-body">
+        잔꽃무늬 치파오에 남색 인화포 머릿수건. 말수가 적고 수줍음이 많습니다.
+        아창과 함께 나타나 <em>스스로 남매라고 말합니다.</em>
+        아창이 홀로 떠난 뒤 홀로 남아, 린샹푸 어머니가 죽은 뒤 5년간 멈춰 있던 베틀을 다시 울립니다.
+        그 소리가 두 사람을 맺어 줍니다.
+      </p>
+      <div class="p-spoiler">
+        아창의 누이가 아니라 <em>아내</em>입니다. 본명은 지샤오메이(紀小美) — 한국 한자음으로는 <em>기소미</em>입니다.
+        완무당 시리촌 지씨 집안의 가난한 딸로, 열 살에 시진 선(沈)씨 집안의 민며느리로 들어가 여섯 해를 지낸 뒤 아창과 혼례를 올렸습니다.
+        린샹푸를 두 번 떠납니다 — 처음에는 금괴를 들고, 두 번째에는 아무것도 가져가지 않고.
+        2부는 이 모든 시간을 그녀의 자리에서 다시 씁니다.
+      </div>
+    </div>
+
+    <div class="p">
+      <div class="p-head">
+        <span class="p-name">아창</span><span class="p-hanja">阿强</span><span class="p-kr">아강</span>
+        <span class="p-role">3~4장</span>
+      </div>
+      <p class="p-line">샤오메이와 함께 온, 보랏빛 도는 남색 장삼의 서생 차림 남자.</p>
+      <p class="p-body">
+        말이 몹시 빠릅니다. "장강을 건너 600여 리를 더 가야 하는 강남 수향(水鄉) <em>원청(文城)</em>에서 왔다"고
+        말한 장본인 — 이 소설의 제목이 그의 입에서 나옵니다. 며칠 뒤 홀로 떠납니다.
+      </p>
+      <div class="p-spoiler">
+        본명은 선쭈창(沈祖强) — 한국 한자음으로는 <em>심조강</em>입니다. 시진에서 짜깁기(織補) 가게로 이름난 선(沈)씨 집안의 외아들이고, 샤오메이의 남편입니다. 1부에서 성을 숨기고 있었다는 것이 이름에서 드러납니다.
+        '원청'은 뒤를 밟히지 않으려고 그 자리에서 <em>지어낸 지명</em>입니다. 세상에 없는 곳입니다.
+        그런데 이름만은 진짜로 말해 버렸고, 훗날 그것이 린샹푸가 시진에 닿는 실마리가 됩니다.
+      </div>
+    </div>
+
+    <div class="p">
+      <div class="p-head">
+        <span class="p-name">린바이자</span><span class="p-hanja">林百家</span><span class="p-kr">임백가</span>
+        <span class="p-role">13·20장 · 딸</span>
+      </div>
+      <p class="p-line">린샹푸와 샤오메이의 딸.</p>
+      <p class="p-body">
+        <em>"백 집의 젖을 먹고 자랐다"</em>는 뜻으로 아버지가 직접 지은 이름입니다. 한국 한자음 <em>임백가(林百家)</em>로 읽으면 작명 의도가 더 곧장 들립니다.
+        시진에서 리메이롄이 친딸처럼 길러 냅니다.
+      </p>
+      <div class="p-spoiler">
+        구이민의 장남 구퉁녠과 정혼합니다(28장). 뒤에 상하이 중서여숙(中西女塾)으로 유학을 떠나고,
+        아버지의 죽음도 한참 뒤에야 알게 됩니다. 린샹푸는 딸에게 어머니 이름을 '류펑메이'라고, 지어낸 이름으로 알려 줍니다(50장).
+      </div>
+    </div>
+
+    <div class="group-head">시진에서 만나는 사람들</div>
+
+    <div class="p">
+      <div class="p-head">
+        <span class="p-name">천융량 · 리메이롄</span><span class="p-hanja">陳永良 · 李美蓮</span><span class="p-kr">진영량 · 이미련</span>
+        <span class="p-role">20장 · 부부</span>
+      </div>
+      <p class="p-line">외지에서 흘러와 시진에 자리 잡은 부부. 린샹푸의 가장 가까운 사람들이 됩니다.</p>
+      <p class="p-body">
+        천융량은 날품과 짐꾼으로 떠돌다 구이민의 눈에 들어 시진에 정착한 외지인입니다.
+        열이 오른 아기를 안고 밤중에 다시 찾아온 린샹푸를 <em>말없이 받아들여 온 밤 아이를 돌봅니다.</em>
+        그 밤에 린샹푸가 그 집에 눌러앉습니다. 두 사람은 부서진 문과 창을 고치는 일로 시작해
+        목기사(木器社)를 세우고 13년을 동업합니다. 리메이롄은 린바이자의 사실상의 어머니입니다.
+      </p>
+      <div class="p-spoiler">
+        아들 일로 치자촌으로 이주하지만 인연은 끊기지 않습니다.
+        리메이롄이 헛간에 갇힌 인질이 구이민임을 알아보면서 구출이 시작되고(64장),
+        천융량은 린샹푸를 죽인 그 칼을 간직해 두었다가, 눈이 멀어 선뎬 부두에서 점쟁이 노릇을 하던
+        장이푸를 찾아내 <em>똑같은 자리에 똑같은 칼</em>을 박아 넣습니다(73장).
+      </div>
+    </div>
+
+    <div class="p">
+      <div class="p-head">
+        <span class="p-name">천야오우</span><span class="p-hanja">陳耀武</span><span class="p-kr">진요무</span>
+        <span class="p-role">천융량의 장남</span>
+      </div>
+      <p class="p-line">린바이자와 남매처럼 자란 소년. 동생 천야오원(陳耀文)이 있습니다.</p>
+      <p class="p-body">
+        린바이자와 같은 집에서 자라며, 이 소설에서 가장 파란만장한 소년기를 보내게 됩니다.
+      </p>
+      <div class="p-spoiler">
+        열넷에 토비에게 잡힌 린바이자를 대신해 <em>스스로 인질이 됩니다</em>(30장).
+        인질 생활 중 왼쪽 귀가 잘리고, 토비 '허상'이 그를 업고 달아나 자기 노모의 집에서 살려 냅니다(44장).
+        뒤에 린바이자와의 일로 아버지에게 매질당하고, 그 사건이 두 집안이 갈라지는 계기가 됩니다(48장).
+      </div>
+    </div>
+
+    <div class="p">
+      <div class="p-head">
+        <span class="p-name">구이민</span><span class="p-hanja">顧益民</span><span class="p-kr">고익민</span>
+        <span class="p-role">19~20장 · 시진 상회 회장</span>
+      </div>
+      <p class="p-line">시진의 유지. 전장(錢莊)과 금광을 가진, 여위고 가무잡잡한 사내.</p>
+      <p class="p-body">
+        큰 눈이 시진을 덮쳤을 때 사흘에 걸친 <em>제천(祭天) 의식</em>을 주관합니다.
+        천융량 일가를 시진에 자리 잡게 해 준 사람이기도 합니다.
+      </p>
+      <div class="p-spoiler">
+        토비에 맞서 민단(民團)을 세우고 네 번째 단장이 되지만, 토벌을 나가면서도 팔인교를 타는 허영이 함께 그려집니다 — 위화는 이 인물을 미화하지 않습니다.
+        장이푸에게 납치되어 고문당하고, 천융량 부자에게 구출됩니다. 마지막에는 린샹푸의 시신을 밀랍으로 봉하고
+        2인용 관을 짜서 북쪽으로 보내 주는 사람이 됩니다.
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- II. 읽어 가며 만나는 사람들 -->
+  <section>
+    <span class="section-num">II · Later Arrivals</span>
+    <h2>읽어 가며 만나는 사람들</h2>
+    <p class="lead">이름만 미리 익혀 두면 좋은 인물들입니다. 자세한 사연은 그 대목에서 만나 주세요.</p>
+
+    <div class="p">
+      <div class="p-head"><span class="p-name">구퉁녠</span><span class="p-hanja">顧同年</span><span class="p-kr">고동년</span><span class="p-role">28장</span></div>
+      <p class="p-body">구이민의 장남. 린바이자의 정혼자. 선뎬 기숙학교의 이름난 말썽꾸러기.</p>
+      <div class="p-spoiler">아버지의 은표를 유용해 부잣집 아가씨를 자처한 여자에게 속아 상하이로 갔다가, 배 밑창에 처넣어져 호주로 팔려 갑니다(59장).</div>
+    </div>
+
+    <div class="p">
+      <div class="p-head"><span class="p-name">추이핑</span><span class="p-hanja">翠萍</span><span class="p-kr">취평</span><span class="p-role">53장</span></div>
+      <p class="p-body">몸이 마른 여인. 딸을 상하이로 보낸 뒤 홀로 남은 린샹푸가 의지하게 되는 상대입니다.</p>
+      <div class="p-spoiler">한때 기녀였고 남편은 아편으로 죽었습니다. 린샹푸의 시신 곁을 지키며 낮게 울고 있었고(67장), 그의 유서를 구이민에게 전합니다(74장).</div>
+    </div>
+
+    <div class="p">
+      <div class="p-head"><span class="p-name">주보충</span><span class="p-hanja">朱伯崇</span><span class="p-kr">주백숭</span><span class="p-role">47장</span></div>
+      <p class="p-body">청군과 서북군을 거친 군인. 구이민이 성도에서 초빙한 시진 민단의 초대 단장.</p>
+      <div class="p-spoiler">지원자 머리에 물그릇을 얹고 총을 쏘아 담력을 시험합니다. 남문 방어 중 배에 토포를 맞고 전사합니다(56장).</div>
+    </div>
+
+    <div class="p">
+      <div class="p-head"><span class="p-name">장이푸</span><span class="p-hanja">張一斧</span><span class="p-kr">장일부</span><span class="p-role">55장 · 토비 두목</span></div>
+      <p class="p-body">이 소설에서 가장 순수한 악(惡). 3년간 화물선 57척을 털고 도끼로 선원 89명을 찍어 죽였다고 소개됩니다.</p>
+      <div class="p-spoiler">린샹푸를 죽인 인물입니다. 뒤에 눈을 잃고 부하들에게 버려져, 선뎬 부두에서 '반선장(半仙張)'이라는 점쟁이로 연명하다 천융량의 손에 죽습니다.</div>
+    </div>
+
+    <div class="p">
+      <div class="p-head"><span class="p-name">허상</span><span class="p-hanja">和尚</span><span class="p-kr">화상</span><span class="p-role">44장 · 토비</span></div>
+      <p class="p-body">별명이 '스님'인 토비 두목. 도적이면서도 인간의 의리를 지니고 있어, 장이푸의 악과 정면으로 대비됩니다.</p>
+      <div class="p-spoiler">천야오우를 두 번 살려 냅니다. 뒤에 부하들과 갈라져 나와 천융량의 복수대에 합류하고, 총구를 향해 머리를 조아리며 결의형제를 맺습니다. 장이푸와의 결투에서 왼팔이 잘리고도 서 있다가 과다출혈로 죽습니다(72장).</div>
+    </div>
+
+    <p style="margin-top:22px; font-size:14px; color:var(--ink-faint);">
+      이 밖에 뱃사공 쩡완푸(曾萬福), 서당 훈장 왕(王) 선생, 토비 수상표(水上漂)·표자리(豹子李) 등이 등장합니다.
+    </p>
+  </section>
+
+  <div class="ornament">· · ·</div>
+
+  <!-- III. 지명 -->
+  <section>
+    <span class="section-num">III · Three Names of Places</span>
+    <h2>세 개의 지명</h2>
+    <p class="lead">인물 이름만큼 헷갈리는 것이 지명입니다. 이 셋만 구분해 두면 됩니다.</p>
+    <div class="places">
+      <div class="place">
+        <div class="place-name">시진 <span>溪鎭 · 계진</span></div>
+        <div class="place-desc">린샹푸가 딸을 안고 닿아 17년을 살게 되는 강남의 작은 진(鎭). 이 소설의 무대입니다.</div>
+      </div>
+      <div class="place">
+        <div class="place-name">선뎬 <span>沈店 · 심점</span></div>
+        <div class="place-desc">시진에서 북쪽으로 60리 떨어진, 더 크고 번화한 도시. 시진으로 들어가는 길목입니다.</div>
+      </div>
+      <div class="place">
+        <div class="place-name">원청 <span>文城 · 문성</span></div>
+        <div class="place-desc">린샹푸가 찾아 헤매는 곳. <em>세상에 없는 지명입니다.</em> 왜 없는지는 읽으며 알게 됩니다.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 숨김 안내 -->
+  <div class="hidden-hint">
+    이 아래에 진행자용 전체 정리가 한 편 더 있습니다.<br>
+    반전과 결말을 모두 담고 있어 지금은 감춰 두었습니다.
+  </div>
+
+  <!-- IV. 진행자용 -->
+  <section class="spoiler-section">
+    <span class="section-num">IV · For the Hosts</span>
+    <h2>진행자를 위한 전체 지도</h2>
+    <p class="lead">멤버들에게는 열지 않는 것이 좋습니다. 이 소설의 뼈대를 미리 잡아 두기 위한 정리입니다.</p>
+
+    <div class="group-head">1부와 2부는 이렇게 겹칩니다</div>
+    <p class="p-body" style="margin-bottom:14px;">
+      2부 「또 하나의 이야기」는 1부보다 <em>훨씬 이른 시점</em>에서 시작합니다. 샤오메이가 열 살에 민며느리로 시진에 들어가는 장면부터입니다.
+      그리고 2부의 대부분은 1부 앞부분과 <em>같은 시간을 반대편에서</em> 다시 씁니다.
+    </p>
+    <p class="p-body" style="margin-bottom:14px;">
+      결정적으로, <strong style="color:var(--accent);">2부는 1부보다 17년 일찍 닫힙니다.</strong>
+      샤오메이가 죽는 대설한(大雪寒)은 린샹푸가 시진에서 보낸 17년의 <em>맨 처음</em>이기 때문입니다.
+      마지막 36장 하나만 17년을 건너뛰어 1부의 끝에 접속하고, 그 지점이 두 서사의 유일한 물리적 접점이 됩니다.
+    </p>
+
+    <div class="group-head">1부 19장 — 이 시즌 최대의 복선</div>
+    <p class="p-body" style="margin-bottom:14px;">
+      큰 눈이 시진을 덮치고 구이민이 성황각 앞에서 제천 의식을 주관하는 장면입니다.
+      무릎까지 눈에 잠긴 채 엎드린 100여 명을 린샹푸가 그저 바라보는 대목 — <em>그 안에 샤오메이와 아창이 있습니다.</em>
+      두 사람은 거기서 무릎 꿇은 자세 그대로 얼어 죽습니다.
+    </p>
+    <p class="p-body" style="margin-bottom:14px;">
+      2부 35장(35회차)은 이렇게 씁니다 — <em>"흩날리는 눈 속에 서 있던 린샹푸는 저 멀리 여섯 구의 시신 가운데
+      샤오메이와 아창이 있다는 것을 알지 못했다. 흩날리는 눈이 그의 눈을 흐려놓았다."</em>
+      샤오메이는 죽기 직전 딸을 보았고, 앞니 두 개가 난 것까지 보았습니다. 린샹푸는 그녀를 보지 못했습니다.
+    </p>
+    <p class="p-body" style="margin-bottom:14px;">
+      <strong>1부 19장은 7회차(9월 15일 화)에 읽게 됩니다.</strong> 그날은 그냥 재난 묘사로 지나가고,
+      10월 말 2부에서 같은 장면으로 돌아옵니다. 7회차 나눔 때 이 장면을 한 번 눌러 두면, 두 달 뒤의 회수가 훨씬 강해집니다.
+    </p>
+
+    <div class="group-head">린샹푸의 죽음에 놓인 아이러니</div>
+    <p class="p-body" style="margin-bottom:14px;">
+      린샹푸는 납치된 구이민의 몸값을 들고 홀로 토비를 찾아갑니다. 장이푸는 구이민을 이미 죽였다며
+      그 간으로 만든 음식을 먹였다고 말하고, 격분한 린샹푸는 장이푸의 눈을 찌른 뒤 왼쪽 귀뿌리에 칼이 박혀 죽습니다(65장).
+      그러나 <strong style="color:var(--accent);">구이민은 살아 있었습니다</strong> — 천융량 부자가 이미 구출한 뒤였습니다(64·66장).
+      독자는 알고 인물은 모르는 구조입니다.
+    </p>
+    <p class="p-body" style="margin-bottom:14px;">
+      복수의 형식도 정확히 대칭입니다. 천융량은 그 칼을 간직해 두었다가,
+      눈이 멀어 버려진 장이푸를 <em>같은 자리, 같은 칼</em>로 찌릅니다(73장).
+    </p>
+
+    <div class="group-head">마지막 장면 — 지척의 좌우</div>
+    <p class="p-body" style="margin-bottom:14px;">
+      톈씨 형제가 린샹푸와 톈다를 한 관에 싣고 북으로 떠납니다. 앞길에 전투가 벌어져 서산 기슭 샛길로 우회하는데,
+      정오 무렵 길이 끊긴 자리에서 수레를 세웁니다. 하필 <em>샤오메이와 아창의 무덤 옆</em>입니다.
+      묘비에는 「沈祖强紀小美之墓」.
+    </p>
+    <p class="p-body" style="margin-bottom:14px;">
+      원문은 이렇게 씁니다 — <em>"샤오메이가 잠든 지 17년 만에야, 그녀는 이곳에서 린샹푸를 맞이했다."</em>
+      그리고 형제들은 <strong>그것이 누구의 무덤인지 전혀 모릅니다.</strong> 길이 끊겼기에 멈췄을 뿐이고,
+      "못 지나갈 길이 십여 미터쯤 되니 메고 넘어가자"고 말하며 다시 떠납니다.
+      린샹푸는 시진에 사는 17년 동안 서산에 여러 번 올랐지만, 그 후미진 곳에는 한 번도 가지 않았습니다.
+    </p>
+
+    <div class="group-head">나눔에 쓸 만한 자리</div>
+    <p class="p-body">
+      <b>7회차 · 1부 19장</b> 눈 속에 엎드린 사람들 — 그날은 그냥 지나가게 두기 ·
+      <b>9회차 · 1부 24장</b> 톈다가 글씨체로 주인을 찾아내는 대목 — 의(義)란 무엇인가 ·
+      <b>24회차 · 1부 75장</b> 1부의 끝, 시선이 바뀌기 직전에 한 번 호흡 끊기 ·
+      <b>30회차 · 2부 18~21장</b> 원청이라는 이름이 어떻게 생겨났는지 밝혀지는 자리 ·
+      <b>35회차 · 2부 35~36장</b> 완독 — 19장으로 되돌아가 함께 다시 읽기
+    </p>
+  </section>
+
+  <!-- 주석 -->
+  <div class="note-card">
+    <p><strong>이름 표기에 대하여</strong> — 이 페이지의 한자와 인물 정보는 중국어 원문과 한국어 서평·논문을 대조해 정리했습니다.
+      다만 <b>阿强</b>의 한국어판 표기는 자료마다 <b>아창</b>과 <b>아청</b>으로 갈립니다.
+      장이푸·허상·추이핑·톈다·구퉁녠 등도 푸른숲판 실제 표기를 확인하지 못했습니다. 책을 받으신 뒤 맞춰 주세요.</p>
+    <p><strong>장 번호</strong> — 괄호 안의 장 번호는 중국어 원작 기준이며, 한국어판 장 구분과 일치하는지는 확인하지 못했습니다.</p>
+  </div>
+
+  <footer>
+    <div class="reading">READING · ALOUD · TOGETHER</div>
+    모두의 새벽 + 낭만북클럽 · 시즌 17 『원청』<br>
+    <span style="font-size:12.5px; color:var(--ink-faint);">진행자 참고용 · 사이트 메뉴에 연결되어 있지 않습니다</span>
+  </footer>
+
+</div>
+
+<script>
+function applySpoilerUI(on) {
+  document.getElementById('spoilerBtn').textContent = on ? '← 다시 감추기' : '전체 보기 →';
+  document.querySelector('.switch-title').textContent =
+    on ? '스포일러 감추기 — 꺼져 있음' : '스포일러 감추기 — 켜져 있음';
+  document.querySelector('.switch-desc').innerHTML = on
+    ? '반전과 결말이 모두 드러나 있습니다. 화면을 다른 사람과 함께 보고 있다면 다시 감춰 주세요.'
+    : '기본은 <b>1부 초반까지 드러난 것만</b> 보여줍니다. 뒤에 밝혀지는 관계와 결말은 감춰져 있어요. 전체를 보려면 오른쪽 단추를 눌러 주세요.';
+}
+
+// 이 브라우저에서의 선택을 기억해 둔다 (없어도 동작에는 지장 없음)
+try {
+  if (localStorage.getItem('city_of_fiction_spoilers') === 'on') {
+    document.body.classList.add('spoilers-on');
+    applySpoilerUI(true);
+  }
+} catch (e) { /* 저장소를 쓸 수 없는 환경 — 그냥 넘어간다 */ }
+
+function toggleSpoiler() {
+  const on = document.body.classList.toggle('spoilers-on');
+  try { localStorage.setItem('city_of_fiction_spoilers', on ? 'on' : 'off'); } catch (e) {}
+  applySpoilerUI(on);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>원청 — 목차와 진행 상황</title>
+<meta name="description" content="시즌 17 『원청』 — 1부 75장 + 2부 36장, 서른다섯 번의 새벽으로 걷는 낭독 지도.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="원청 — 목차와 진행 상황">
+<meta property="og:description" content="시즌 17 『원청』 목차와 낭독 진행 상황.">
+<meta property="og:image" content="https://bookclub.questionschool.net/images/og_image_17.png">
+<meta property="og:url" content="https://bookclub.questionschool.net/contents_17.html">
+<meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
+<meta property="og:locale" content="ko_KR">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream: #f7f4ee;
+    --cream-deep: #eae4d8;
+    --cream-soft: #fcfaf6;
+    --ink: #242020;
+    --ink-soft: #453d38;
+    --ink-muted: #756b63;
+    --ink-faint: #a49a90;
+    --gold: #8c7a5c;
+    --gold-deep: #6d5e43;
+    --line: #ddd5c8;
+    --line-soft: #ebe5da;
+    --accent: #9c3229;
+    --accent-soft: #b8564a;
+    --status-done: #6b8e5a;
+    --status-current: #9c3229;
+    --status-future: #cbc3b6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Gowun Batang', serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.85;
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .wrap { max-width: 800px; margin: 0 auto; padding: 0 22px 80px; }
+
+  /* NAV */
+  .nav { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; padding: 20px 0 0; }
+  .nav a {
+    font-size: 13.5px; color: var(--ink-muted); text-decoration: none;
+    padding: 7px 14px; border: 1px solid var(--line); background: var(--cream-soft);
+    transition: all .25s ease;
+  }
+  .nav a:hover { color: var(--accent); border-color: var(--accent-soft); }
+  .nav a.current { color: var(--cream-soft); background: var(--accent); border-color: var(--accent); }
+
+  /* HEADER */
+  header { text-align: center; padding: 46px 0 32px; }
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 12.5px; letter-spacing: .34em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px;
+  }
+  h1.title { font-family: 'Nanum Myeongjo', serif; font-weight: 800; font-size: 29px; line-height: 1.4; }
+  h1.title .accent { color: var(--accent); }
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 15px; color: var(--ink-muted); margin-top: 8px; letter-spacing: .1em;
+  }
+  .book-meta {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 18px;
+    margin-top: 16px; font-size: 13.5px; color: var(--ink-muted);
+  }
+  .book-meta .dot {
+    display: inline-block; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold); margin-right: 7px; vertical-align: middle;
+  }
+
+  /* SUMMARY */
+  .summary { border: 1px solid var(--line); background: var(--cream-soft); padding: 24px 22px 20px; }
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .summary-stat { text-align: center; }
+  .summary-stat-label {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 6px;
+  }
+  .summary-stat-value {
+    font-family: 'Nanum Myeongjo', serif; font-weight: 800;
+    font-size: 24px; color: var(--accent); line-height: 1.25;
+  }
+  .summary-stat-value .small { font-size: 13px; color: var(--ink-faint); font-weight: 400; }
+  .summary-stat-sub {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 11.5px; color: var(--ink-muted); margin-top: 3px;
+  }
+  .progress-bar { height: 6px; background: var(--line-soft); margin-top: 20px; overflow: hidden; }
+  .progress-fill { height: 100%; width: 0; background: var(--accent); transition: width 1s ease; }
+  .finish-estimate {
+    margin-top: 12px; font-size: 13.5px; color: var(--ink-muted); text-align: center; line-height: 1.8;
+  }
+  .finish-estimate b { color: var(--accent); }
+  .est-sub { display: block; font-size: 12.5px; color: var(--ink-faint); margin-top: 2px; }
+
+  /* LEGEND */
+  .legend {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
+    justify-content: center; margin-top: 20px;
+    font-size: 12.5px; color: var(--ink-muted);
+  }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+  .legend-dot.done { background: var(--status-done); }
+  .legend-dot.current { background: var(--status-current); }
+  .legend-dot.future { background: var(--status-future); }
+  .legend-source {
+    width: 100%; text-align: center; font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-size: 11.5px; color: var(--ink-faint); letter-spacing: .04em;
+  }
+
+  /* BLOCK */
+  .block { padding-top: 46px; }
+  .section-num {
+    display: block; font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--gold-deep); margin-bottom: 10px;
+  }
+  .block h2 { font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 22px; margin-bottom: 12px; }
+  .lead { color: var(--ink-soft); font-size: 15px; margin-bottom: 18px; }
+  .lead b { color: var(--accent); }
+
+  /* 파트 헤더 */
+  .part-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+    margin: 28px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line);
+  }
+  .part-name { font-family: 'Nanum Myeongjo', serif; font-weight: 700; font-size: 17px; }
+  .part-name .part-kicker {
+    font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400;
+    font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold-deep); display: block; margin-bottom: 2px;
+  }
+  .part-meta { font-size: 12.5px; color: var(--ink-faint); white-space: nowrap; }
+
+  /* 章 그리드 */
+  .chip-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip {
+    min-width: 34px; padding: 6px 7px; text-align: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 14px;
+    border: 1px solid var(--line); background: var(--cream-soft);
+    color: var(--ink-faint); cursor: default; position: relative;
+    transition: all .2s ease;
+  }
+  .chip.wide { min-width: 96px; font-family: 'Gowun Batang', serif; font-size: 12.5px; }
+  .chip.done { background: rgba(107,142,90,.14); border-color: rgba(107,142,90,.45); color: var(--status-done); }
+  .chip.current {
+    background: var(--accent); border-color: var(--accent); color: var(--cream-soft); font-weight: 700;
+  }
+  .chip.scheduled { border-style: dashed; }
+  .chip:hover { border-color: var(--accent-soft); color: var(--accent); }
+  .chip.current:hover { color: var(--cream-soft); }
+
+  /* 참고 */
+  .note-card { margin-top: 8px; padding: 20px 22px; border: 1px solid var(--line); background: var(--cream-soft); }
+  .note-card p { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 10px; }
+  .note-card p:last-child { margin-bottom: 0; }
+  .note-card strong { color: var(--accent); }
+
+  footer {
+    text-align: center; padding-top: 34px; border-top: 1px solid var(--line);
+    margin-top: 50px; font-size: 13.5px; color: var(--ink-muted); line-height: 2;
+  }
+  footer a { color: var(--ink-muted); text-decoration: none; border-bottom: 1px solid transparent; }
+  footer a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .reading {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    letter-spacing: .3em; color: var(--accent); font-size: 12px; margin-bottom: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 0 15px 60px; }
+    h1.title { font-size: 23px; }
+    .summary { padding: 18px 14px 16px; }
+    .summary-grid { grid-template-columns: 1fr 1fr; gap: 16px 8px; }
+    .summary-stat-value { font-size: 21px; }
+    .chip { min-width: 30px; padding: 5px 5px; font-size: 13px; }
+    .chip.wide { min-width: 84px; font-size: 11.5px; }
+    .sess { grid-template-columns: 40px 1fr auto; gap: 3px 8px; padding: 11px 4px; }
+    .sess-title { font-size: 14.5px; }
+    .sess-day { font-size: 16px; }
+    .sess-right { font-size: 11.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <a href="journal_17.html">📖 오늘 기록</a>
+    <a href="my_journal_17.html">✿ 나의 기록</a>
+    <a href="contents_17.html" class="current">📋 진행 상황</a>
+    <a href="welcome_17.html">✦ 환영</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow">Season 17 · Table of Contents</div>
+    <h1 class="title"><span class="accent">원청</span> 文城 — 목차와 진행 상황</h1>
+    <p class="subtitle">文城 · City of Fiction</p>
+    <div class="book-meta">
+      <span><span class="dot"></span>위화(余華) 지음 · 문현선 옮김</span>
+      <span><span class="dot"></span>1부 75장 + 2부 36장 · 578쪽</span>
+      <span><span class="dot"></span>푸른숲</span>
+    </div>
+  </header>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <div class="summary-grid">
+      <div class="summary-stat">
+        <div class="summary-stat-label">Chapters</div>
+        <div class="summary-stat-value" id="statCompleted">—</div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat-label">In Progress</div>
+        <div class="summary-stat-value" id="statCurrent">—</div>
+        <div class="summary-stat-sub" id="statCurrentSub"></div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat-label">Pages Read</div>
+        <div class="summary-stat-value" id="statPages">— <span class="small">/ 578</span></div>
+      </div>
+      <div class="summary-stat">
+        <div class="summary-stat-label">Sessions</div>
+        <div class="summary-stat-value" id="statSessions">—</div>
+      </div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="finish-estimate" id="finishEstimate"></div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="legend-item"><span class="legend-dot done"></span>읽었음</span>
+    <span class="legend-item"><span class="legend-dot current"></span>읽는 중</span>
+    <span class="legend-item"><span class="legend-dot future"></span>읽기 전</span>
+    <span class="legend-source" id="legendSource"></span>
+  </div>
+
+  <!-- 章 그리드 -->
+  <section class="block">
+    <div id="chapterGrid"></div>
+  </section>
+
+  <!-- 참고 -->
+  <section class="block">
+    <div class="note-card">
+      <p><strong>쉬는 날</strong> — 주말은 늘 쉽니다. 이 시즌에는 추석 연휴(9/24 목, 9/25 금), 개천절 대체공휴일(10/5 월), 한글날(10/9 금)에 쉽니다.</p>
+      <p><strong>쪽수</strong> — 한국어판 서문 3쪽 + 1부 391쪽 + 2부 184쪽 = 낭독 대상 578쪽입니다. (책 전체는 588쪽)</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="reading">READING · ALOUD · TOGETHER</div>
+    <p>
+      모두의 새벽 + 낭만북클럽 · 시즌 17 『원청』<br>
+      <a href="welcome_17.html">환영 페이지 →</a> &nbsp;·&nbsp;
+      <a href="journal_17.html">오늘 기록 →</a> &nbsp;·&nbsp;
+      <a href="my_journal_17.html">나의 기록 →</a> &nbsp;·&nbsp;
+      <a href="journal_edit_17.html" style="opacity: .6;">관리자 →</a>
+    </p>
+  </footer>
+
+</div>
+<script>
+const CITY_OF_FICTION_TOC = [{"id": "pre", "part": "preface", "label": "한국어판 서문", "n": null, "s": 5, "e": 7}, {"id": "p1-1", "part": "part1", "label": "1", "n": 1, "s": 11, "e": 15}, {"id": "p1-2", "part": "part1", "label": "2", "n": 2, "s": 16, "e": 23}, {"id": "p1-3", "part": "part1", "label": "3", "n": 3, "s": 24, "e": 29}, {"id": "p1-4", "part": "part1", "label": "4", "n": 4, "s": 30, "e": 32}, {"id": "p1-5", "part": "part1", "label": "5", "n": 5, "s": 33, "e": 40}, {"id": "p1-6", "part": "part1", "label": "6", "n": 6, "s": 41, "e": 43}, {"id": "p1-7", "part": "part1", "label": "7", "n": 7, "s": 44, "e": 50}, {"id": "p1-8", "part": "part1", "label": "8", "n": 8, "s": 51, "e": 53}, {"id": "p1-9", "part": "part1", "label": "9", "n": 9, "s": 54, "e": 62}, {"id": "p1-10", "part": "part1", "label": "10", "n": 10, "s": 63, "e": 67}, {"id": "p1-11", "part": "part1", "label": "11", "n": 11, "s": 68, "e": 75}, {"id": "p1-12", "part": "part1", "label": "12", "n": 12, "s": 76, "e": 82}, {"id": "p1-13", "part": "part1", "label": "13", "n": 13, "s": 83, "e": 87}, {"id": "p1-14", "part": "part1", "label": "14", "n": 14, "s": 88, "e": 91}, {"id": "p1-15", "part": "part1", "label": "15", "n": 15, "s": 92, "e": 96}, {"id": "p1-16", "part": "part1", "label": "16", "n": 16, "s": 97, "e": 103}, {"id": "p1-17", "part": "part1", "label": "17", "n": 17, "s": 104, "e": 107}, {"id": "p1-18", "part": "part1", "label": "18", "n": 18, "s": 108, "e": 111}, {"id": "p1-19", "part": "part1", "label": "19", "n": 19, "s": 112, "e": 118}, {"id": "p1-20", "part": "part1", "label": "20", "n": 20, "s": 119, "e": 126}, {"id": "p1-21", "part": "part1", "label": "21", "n": 21, "s": 127, "e": 130}, {"id": "p1-22", "part": "part1", "label": "22", "n": 22, "s": 131, "e": 135}, {"id": "p1-23", "part": "part1", "label": "23", "n": 23, "s": 136, "e": 141}, {"id": "p1-24", "part": "part1", "label": "24", "n": 24, "s": 142, "e": 147}, {"id": "p1-25", "part": "part1", "label": "25", "n": 25, "s": 148, "e": 150}, {"id": "p1-26", "part": "part1", "label": "26", "n": 26, "s": 151, "e": 154}, {"id": "p1-27", "part": "part1", "label": "27", "n": 27, "s": 155, "e": 158}, {"id": "p1-28", "part": "part1", "label": "28", "n": 28, "s": 159, "e": 160}, {"id": "p1-29", "part": "part1", "label": "29", "n": 29, "s": 161, "e": 163}, {"id": "p1-30", "part": "part1", "label": "30", "n": 30, "s": 164, "e": 166}, {"id": "p1-31", "part": "part1", "label": "31", "n": 31, "s": 167, "e": 170}, {"id": "p1-32", "part": "part1", "label": "32", "n": 32, "s": 171, "e": 175}, {"id": "p1-33", "part": "part1", "label": "33", "n": 33, "s": 176, "e": 182}, {"id": "p1-34", "part": "part1", "label": "34", "n": 34, "s": 183, "e": 187}, {"id": "p1-35", "part": "part1", "label": "35", "n": 35, "s": 188, "e": 191}, {"id": "p1-36", "part": "part1", "label": "36", "n": 36, "s": 192, "e": 198}, {"id": "p1-37", "part": "part1", "label": "37", "n": 37, "s": 199, "e": 203}, {"id": "p1-38", "part": "part1", "label": "38", "n": 38, "s": 204, "e": 207}, {"id": "p1-39", "part": "part1", "label": "39", "n": 39, "s": 208, "e": 211}, {"id": "p1-40", "part": "part1", "label": "40", "n": 40, "s": 212, "e": 214}, {"id": "p1-41", "part": "part1", "label": "41", "n": 41, "s": 215, "e": 218}, {"id": "p1-42", "part": "part1", "label": "42", "n": 42, "s": 219, "e": 223}, {"id": "p1-43", "part": "part1", "label": "43", "n": 43, "s": 224, "e": 228}, {"id": "p1-44", "part": "part1", "label": "44", "n": 44, "s": 229, "e": 233}, {"id": "p1-45", "part": "part1", "label": "45", "n": 45, "s": 234, "e": 242}, {"id": "p1-46", "part": "part1", "label": "46", "n": 46, "s": 243, "e": 248}, {"id": "p1-47", "part": "part1", "label": "47", "n": 47, "s": 249, "e": 255}, {"id": "p1-48", "part": "part1", "label": "48", "n": 48, "s": 256, "e": 262}, {"id": "p1-49", "part": "part1", "label": "49", "n": 49, "s": 263, "e": 268}, {"id": "p1-50", "part": "part1", "label": "50", "n": 50, "s": 269, "e": 271}, {"id": "p1-51", "part": "part1", "label": "51", "n": 51, "s": 272, "e": 274}, {"id": "p1-52", "part": "part1", "label": "52", "n": 52, "s": 275, "e": 279}, {"id": "p1-53", "part": "part1", "label": "53", "n": 53, "s": 280, "e": 283}, {"id": "p1-54", "part": "part1", "label": "54", "n": 54, "s": 284, "e": 287}, {"id": "p1-55", "part": "part1", "label": "55", "n": 55, "s": 288, "e": 289}, {"id": "p1-56", "part": "part1", "label": "56", "n": 56, "s": 290, "e": 303}, {"id": "p1-57", "part": "part1", "label": "57", "n": 57, "s": 304, "e": 305}, {"id": "p1-58", "part": "part1", "label": "58", "n": 58, "s": 306, "e": 308}, {"id": "p1-59", "part": "part1", "label": "59", "n": 59, "s": 309, "e": 314}, {"id": "p1-60", "part": "part1", "label": "60", "n": 60, "s": 315, "e": 318}, {"id": "p1-61", "part": "part1", "label": "61", "n": 61, "s": 319, "e": 322}, {"id": "p1-62", "part": "part1", "label": "62", "n": 62, "s": 323, "e": 325}, {"id": "p1-63", "part": "part1", "label": "63", "n": 63, "s": 326, "e": 330}, {"id": "p1-64", "part": "part1", "label": "64", "n": 64, "s": 331, "e": 333}, {"id": "p1-65", "part": "part1", "label": "65", "n": 65, "s": 334, "e": 344}, {"id": "p1-66", "part": "part1", "label": "66", "n": 66, "s": 345, "e": 350}, {"id": "p1-67", "part": "part1", "label": "67", "n": 67, "s": 351, "e": 353}, {"id": "p1-68", "part": "part1", "label": "68", "n": 68, "s": 354, "e": 358}, {"id": "p1-69", "part": "part1", "label": "69", "n": 69, "s": 359, "e": 369}, {"id": "p1-70", "part": "part1", "label": "70", "n": 70, "s": 370, "e": 372}, {"id": "p1-71", "part": "part1", "label": "71", "n": 71, "s": 373, "e": 376}, {"id": "p1-72", "part": "part1", "label": "72", "n": 72, "s": 377, "e": 381}, {"id": "p1-73", "part": "part1", "label": "73", "n": 73, "s": 382, "e": 387}, {"id": "p1-74", "part": "part1", "label": "74", "n": 74, "s": 388, "e": 391}, {"id": "p1-75", "part": "part1", "label": "75", "n": 75, "s": 392, "e": 401}, {"id": "p2-1", "part": "part2", "label": "1", "n": 1, "s": 404, "e": 408}, {"id": "p2-2", "part": "part2", "label": "2", "n": 2, "s": 409, "e": 412}, {"id": "p2-3", "part": "part2", "label": "3", "n": 3, "s": 413, "e": 415}, {"id": "p2-4", "part": "part2", "label": "4", "n": 4, "s": 416, "e": 419}, {"id": "p2-5", "part": "part2", "label": "5", "n": 5, "s": 420, "e": 423}, {"id": "p2-6", "part": "part2", "label": "6", "n": 6, "s": 424, "e": 429}, {"id": "p2-7", "part": "part2", "label": "7", "n": 7, "s": 430, "e": 432}, {"id": "p2-8", "part": "part2", "label": "8", "n": 8, "s": 433, "e": 437}, {"id": "p2-9", "part": "part2", "label": "9", "n": 9, "s": 438, "e": 445}, {"id": "p2-10", "part": "part2", "label": "10", "n": 10, "s": 446, "e": 448}, {"id": "p2-11", "part": "part2", "label": "11", "n": 11, "s": 449, "e": 451}, {"id": "p2-12", "part": "part2", "label": "12", "n": 12, "s": 452, "e": 456}, {"id": "p2-13", "part": "part2", "label": "13", "n": 13, "s": 457, "e": 460}, {"id": "p2-14", "part": "part2", "label": "14", "n": 14, "s": 461, "e": 467}, {"id": "p2-15", "part": "part2", "label": "15", "n": 15, "s": 468, "e": 471}, {"id": "p2-16", "part": "part2", "label": "16", "n": 16, "s": 472, "e": 475}, {"id": "p2-17", "part": "part2", "label": "17", "n": 17, "s": 476, "e": 488}, {"id": "p2-18", "part": "part2", "label": "18", "n": 18, "s": 489, "e": 492}, {"id": "p2-19", "part": "part2", "label": "19", "n": 19, "s": 493, "e": 495}, {"id": "p2-20", "part": "part2", "label": "20", "n": 20, "s": 496, "e": 500}, {"id": "p2-21", "part": "part2", "label": "21", "n": 21, "s": 501, "e": 507}, {"id": "p2-22", "part": "part2", "label": "22", "n": 22, "s": 508, "e": 513}, {"id": "p2-23", "part": "part2", "label": "23", "n": 23, "s": 514, "e": 519}, {"id": "p2-24", "part": "part2", "label": "24", "n": 24, "s": 520, "e": 523}, {"id": "p2-25", "part": "part2", "label": "25", "n": 25, "s": 524, "e": 527}, {"id": "p2-26", "part": "part2", "label": "26", "n": 26, "s": 528, "e": 532}, {"id": "p2-27", "part": "part2", "label": "27", "n": 27, "s": 533, "e": 538}, {"id": "p2-28", "part": "part2", "label": "28", "n": 28, "s": 539, "e": 543}, {"id": "p2-29", "part": "part2", "label": "29", "n": 29, "s": 544, "e": 549}, {"id": "p2-30", "part": "part2", "label": "30", "n": 30, "s": 550, "e": 555}, {"id": "p2-31", "part": "part2", "label": "31", "n": 31, "s": 556, "e": 559}, {"id": "p2-32", "part": "part2", "label": "32", "n": 32, "s": 560, "e": 562}, {"id": "p2-33", "part": "part2", "label": "33", "n": 33, "s": 563, "e": 567}, {"id": "p2-34", "part": "part2", "label": "34", "n": 34, "s": 568, "e": 574}, {"id": "p2-35", "part": "part2", "label": "35", "n": 35, "s": 575, "e": 578}, {"id": "p2-36", "part": "part2", "label": "36", "n": 36, "s": 579, "e": 587}];
+const PLAN = [{"day": 1, "date": "2026-09-07", "part": "part1", "label": "한국어판 서문 + 1~2장", "s": 5, "e": 23, "pages": 16, "items": ["pre", "p1-1", "p1-2"]}, {"day": 2, "date": "2026-09-08", "part": "part1", "label": "3~6장", "s": 24, "e": 43, "pages": 20, "items": ["p1-3", "p1-4", "p1-5", "p1-6"]}, {"day": 3, "date": "2026-09-09", "part": "part1", "label": "7~9장", "s": 44, "e": 62, "pages": 19, "items": ["p1-7", "p1-8", "p1-9"]}, {"day": 4, "date": "2026-09-10", "part": "part1", "label": "10~11장", "s": 63, "e": 75, "pages": 13, "items": ["p1-10", "p1-11"]}, {"day": 5, "date": "2026-09-11", "part": "part1", "label": "12~14장", "s": 76, "e": 91, "pages": 16, "items": ["p1-12", "p1-13", "p1-14"]}, {"day": 6, "date": "2026-09-14", "part": "part1", "label": "15~17장", "s": 92, "e": 107, "pages": 16, "items": ["p1-15", "p1-16", "p1-17"]}, {"day": 7, "date": "2026-09-15", "part": "part1", "label": "18~20장", "s": 108, "e": 126, "pages": 19, "items": ["p1-18", "p1-19", "p1-20"]}, {"day": 8, "date": "2026-09-16", "part": "part1", "label": "21~23장", "s": 127, "e": 141, "pages": 15, "items": ["p1-21", "p1-22", "p1-23"]}, {"day": 9, "date": "2026-09-17", "part": "part1", "label": "24~27장", "s": 142, "e": 158, "pages": 17, "items": ["p1-24", "p1-25", "p1-26", "p1-27"]}, {"day": 10, "date": "2026-09-18", "part": "part1", "label": "28~32장", "s": 159, "e": 175, "pages": 17, "items": ["p1-28", "p1-29", "p1-30", "p1-31", "p1-32"]}, {"day": 11, "date": "2026-09-21", "part": "part1", "label": "33~35장", "s": 176, "e": 191, "pages": 16, "items": ["p1-33", "p1-34", "p1-35"]}, {"day": 12, "date": "2026-09-22", "part": "part1", "label": "36~38장", "s": 192, "e": 207, "pages": 16, "items": ["p1-36", "p1-37", "p1-38"]}, {"day": 13, "date": "2026-09-23", "part": "part1", "label": "39~42장", "s": 208, "e": 223, "pages": 16, "items": ["p1-39", "p1-40", "p1-41", "p1-42"]}, {"day": 14, "date": "2026-09-28", "part": "part1", "label": "43~45장", "s": 224, "e": 242, "pages": 19, "items": ["p1-43", "p1-44", "p1-45"]}, {"day": 15, "date": "2026-09-29", "part": "part1", "label": "46~47장", "s": 243, "e": 255, "pages": 13, "items": ["p1-46", "p1-47"]}, {"day": 16, "date": "2026-09-30", "part": "part1", "label": "48~50장", "s": 256, "e": 271, "pages": 16, "items": ["p1-48", "p1-49", "p1-50"]}, {"day": 17, "date": "2026-10-01", "part": "part1", "label": "51~54장", "s": 272, "e": 287, "pages": 16, "items": ["p1-51", "p1-52", "p1-53", "p1-54"]}, {"day": 18, "date": "2026-10-02", "part": "part1", "label": "55~56장", "s": 288, "e": 303, "pages": 16, "items": ["p1-55", "p1-56"]}, {"day": 19, "date": "2026-10-06", "part": "part1", "label": "57~60장", "s": 304, "e": 318, "pages": 15, "items": ["p1-57", "p1-58", "p1-59", "p1-60"]}, {"day": 20, "date": "2026-10-07", "part": "part1", "label": "61~64장", "s": 319, "e": 333, "pages": 15, "items": ["p1-61", "p1-62", "p1-63", "p1-64"]}, {"day": 21, "date": "2026-10-08", "part": "part1", "label": "65~66장", "s": 334, "e": 350, "pages": 17, "items": ["p1-65", "p1-66"]}, {"day": 22, "date": "2026-10-12", "part": "part1", "label": "67~69장", "s": 351, "e": 369, "pages": 19, "items": ["p1-67", "p1-68", "p1-69"]}, {"day": 23, "date": "2026-10-13", "part": "part1", "label": "70~73장", "s": 370, "e": 387, "pages": 18, "items": ["p1-70", "p1-71", "p1-72", "p1-73"]}, {"day": 24, "date": "2026-10-14", "part": "part1", "label": "74~75장", "s": 388, "e": 401, "pages": 14, "items": ["p1-74", "p1-75"]}, {"day": 25, "date": "2026-10-15", "part": "part2", "label": "1~4장", "s": 404, "e": 419, "pages": 16, "items": ["p2-1", "p2-2", "p2-3", "p2-4"]}, {"day": 26, "date": "2026-10-16", "part": "part2", "label": "5~8장", "s": 420, "e": 437, "pages": 18, "items": ["p2-5", "p2-6", "p2-7", "p2-8"]}, {"day": 27, "date": "2026-10-19", "part": "part2", "label": "9~12장", "s": 438, "e": 456, "pages": 19, "items": ["p2-9", "p2-10", "p2-11", "p2-12"]}, {"day": 28, "date": "2026-10-20", "part": "part2", "label": "13~15장", "s": 457, "e": 471, "pages": 15, "items": ["p2-13", "p2-14", "p2-15"]}, {"day": 29, "date": "2026-10-21", "part": "part2", "label": "16~17장", "s": 472, "e": 488, "pages": 17, "items": ["p2-16", "p2-17"]}, {"day": 30, "date": "2026-10-22", "part": "part2", "label": "18~21장", "s": 489, "e": 507, "pages": 19, "items": ["p2-18", "p2-19", "p2-20", "p2-21"]}, {"day": 31, "date": "2026-10-23", "part": "part2", "label": "22~24장", "s": 508, "e": 523, "pages": 16, "items": ["p2-22", "p2-23", "p2-24"]}, {"day": 32, "date": "2026-10-26", "part": "part2", "label": "25~27장", "s": 524, "e": 538, "pages": 15, "items": ["p2-25", "p2-26", "p2-27"]}, {"day": 33, "date": "2026-10-27", "part": "part2", "label": "28~30장", "s": 539, "e": 555, "pages": 17, "items": ["p2-28", "p2-29", "p2-30"]}, {"day": 34, "date": "2026-10-28", "part": "part2", "label": "31~34장", "s": 556, "e": 574, "pages": 19, "items": ["p2-31", "p2-32", "p2-33", "p2-34"]}, {"day": 35, "date": "2026-10-29", "part": "part2", "label": "35~36장", "s": 575, "e": 587, "pages": 13, "items": ["p2-35", "p2-36"]}];
+// ════════════════════════════════════════════════════════
+// 시즌 17 『원청』 — 목차와 진행 상황
+//
+// 상태 판정 우선순위
+//   1) GAS의 실제 회차 기록(sessions)이 있으면 그것을 기준으로 (페이지 범위 겹침)
+//   2) 없으면 아래 PLAN의 계획 날짜를 기준으로 (한국 시간, 07:00 컷오프)
+// ════════════════════════════════════════════════════════
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
+const TOTAL_PAGES = 578;
+
+const PART_INFO = {
+  preface: { kicker: 'Preface', name: '한국어판 서문', note: '모든 사람의 가슴에는 원청이 있다' },
+  part1:   { kicker: 'Part I',  name: '원청',          note: '린샹푸의 시선' },
+  part2:   { kicker: 'Part II', name: '또 하나의 이야기', note: '샤오메이의 시선' }
+};
+
+// 낭독이 없는 날 (KST) — 주말은 코드로 자동 처리
+const NO_READING_HOLIDAYS = {
+  '2026-09-24': '추석 연휴',
+  '2026-09-25': '추석',
+  '2026-10-05': '개천절 대체공휴일',
+  '2026-10-09': '한글날'
+};
+
+const DOW = ['일','월','화','수','목','금','토'];
+let sessions = [];
+let usingLiveData = false;
+
+// ── 시간 헬퍼 (KST) ───────────────────────────────────
+function kstNowParts() {
+  const k = new Date(Date.now() + 9 * 3600 * 1000);
+  return { y: k.getUTCFullYear(), m: k.getUTCMonth() + 1, d: k.getUTCDate(), h: k.getUTCHours() };
+}
+function dateKeyToUTC(key) {
+  const m = String(key).match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return null;
+  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+}
+function extractKSTDate(v) {
+  if (!v) return null;
+  if (typeof v === 'string' && !v.includes('T')) {
+    const m = v.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return { y: +m[1], m: +m[2], d: +m[3] };
+  }
+  const d = new Date(v);
+  if (isNaN(d.getTime())) return null;
+  const k = new Date(d.getTime() + 9 * 3600 * 1000);
+  return { y: k.getUTCFullYear(), m: k.getUTCMonth() + 1, d: k.getUTCDate() };
+}
+// 모임 종료(07:00 KST) 지났는가
+function isPastEnd(ymd) {
+  if (!ymd) return false;
+  return Date.now() >= Date.UTC(ymd.y, ymd.m - 1, ymd.d, 7 - 9, 0, 0);
+}
+// 모임 시작(06:00 KST) 지났는가
+function isPastStart(ymd) {
+  if (!ymd) return false;
+  return Date.now() >= Date.UTC(ymd.y, ymd.m - 1, ymd.d, 6 - 9, 0, 0);
+}
+
+// ── 데이터 로딩 ───────────────────────────────────────
+async function loadAll() {
+  try {
+    const res = await fetch(`${GAS_URL}?action=list_all&season=17`);
+    const data = await res.json();
+    sessions = (data.sessions || []).filter(s => s && s.date);
+    usingLiveData = sessions.length > 0;
+  } catch (err) {
+    console.warn('회차 기록을 불러오지 못했어 — 계획 일정으로 표시할게.', err);
+    sessions = [];
+    usingLiveData = false;
+  }
+  render();
+}
+
+// ── 장(章) 상태 계산 ──────────────────────────────────
+// return { status: 'done' | 'current' | 'scheduled' | 'future', dayLabel }
+function statusOfItem(item) {
+  if (usingLiveData) {
+    const relevant = sessions.filter(s => {
+      const a = parseInt(s.start_page, 10);
+      const b = parseInt(s.end_page, 10) || a;
+      if (isNaN(a)) return false;
+      return a <= item.e && b >= item.s;
+    });
+    if (relevant.length) {
+      const maxEnd = Math.max(...relevant.map(s => parseInt(s.end_page, 10) || parseInt(s.start_page, 10) || 0));
+      const reached = maxEnd >= item.e;
+      const closing = relevant
+        .filter(s => (parseInt(s.end_page, 10) || 0) >= item.e)
+        .sort((x, y) => Number(y.day) - Number(x.day))[0];
+      const finished = closing ? isPastEnd(extractKSTDate(closing.date)) : false;
+      const started = relevant.some(s => isPastStart(extractKSTDate(s.date)));
+      const days = relevant.map(s => Number(s.day)).filter(n => !isNaN(n)).sort((a, b) => a - b);
+      const dayLabel = days.length ? (days.length === 1 ? `Day ${days[0]}` : `Day ${days[0]}–${days[days.length - 1]}`) : '';
+      let status = 'scheduled';
+      if (reached && finished) status = 'done';
+      else if (started) status = 'current';
+      return { status, dayLabel };
+    }
+    // 실제 기록에 아직 없는 장 — 계획으로 보완
+  }
+  const pl = PLAN.find(p => p.items.includes(item.id));
+  if (!pl) return { status: 'future', dayLabel: '' };
+  const ymd = extractKSTDate(pl.date);
+  let status = 'scheduled';
+  if (isPastEnd(ymd)) status = 'done';
+  else if (isPastStart(ymd)) status = 'current';
+  return { status, dayLabel: `Day ${pl.day}` };
+}
+
+function statusOfSession(pl) {
+  const sts = pl.items.map(id => statusOfItem(CITY_OF_FICTION_TOC.find(t => t.id === id)).status);
+  if (sts.every(s => s === 'done')) return 'done';
+  if (sts.some(s => s === 'current' || s === 'done')) return 'current';
+  return 'scheduled';
+}
+
+// ── 렌더 ──────────────────────────────────────────────
+function render() {
+  const statuses = new Map();
+  CITY_OF_FICTION_TOC.forEach(t => statuses.set(t.id, statusOfItem(t)));
+
+  // 요약
+  const chapters = CITY_OF_FICTION_TOC.filter(t => t.part !== 'preface');
+  let doneCh = 0, pagesRead = 0, currentItem = null, nextItem = null;
+  CITY_OF_FICTION_TOC.forEach(t => {
+    const st = statuses.get(t.id).status;
+    const pg = t.e - t.s + 1;
+    if (st === 'done') {
+      pagesRead += pg;
+      if (t.part !== 'preface') doneCh++;
+    } else if (st === 'current' && !currentItem) {
+      currentItem = t;
+    } else if (!nextItem && !currentItem && (st === 'scheduled' || st === 'future')) {
+      nextItem = t;
+    }
+  });
+
+  const doneSessions = PLAN.filter(p => statusOfSession(p) === 'done').length;
+
+  document.getElementById('statCompleted').innerHTML =
+    `${doneCh} <span class="small">/ ${chapters.length} 장</span>`;
+  document.getElementById('statPages').innerHTML =
+    `${pagesRead} <span class="small">/ ${TOTAL_PAGES}</span>`;
+  document.getElementById('statSessions').innerHTML =
+    `${doneSessions} <span class="small">/ ${PLAN.length}</span>`;
+
+  const cur = currentItem || nextItem;
+  const curEl = document.getElementById('statCurrent');
+  const subEl = document.getElementById('statCurrentSub');
+  if (doneCh === chapters.length && chapters.length) {
+    curEl.textContent = '✦';
+    subEl.textContent = '완독';
+  } else if (cur) {
+    curEl.textContent = itemLabel(cur);
+    subEl.textContent = currentItem ? '읽는 중' : '다음 차례';
+  } else {
+    curEl.textContent = '서문';
+    subEl.textContent = '시작 전';
+  }
+
+  const pct = Math.min(100, Math.round(pagesRead / TOTAL_PAGES * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+  renderFinishEstimate(pagesRead, doneSessions);
+
+  document.getElementById('legendSource').textContent = usingLiveData
+    ? '진행자가 입력한 실제 회차 기록 기준'
+    : '계획 일정 기준 — 회차 기록이 입력되면 실제 진도로 바뀝니다';
+
+  renderChapterGrid(statuses);
+}
+
+function itemLabel(t) {
+  if (t.part === 'preface') return '서문';
+  return (t.part === 'part1' ? '1부 ' : '2부 ') + t.n + '장';
+}
+
+function renderFinishEstimate(pagesRead, doneSessions) {
+  const el = document.getElementById('finishEstimate');
+  const last = PLAN[PLAN.length - 1];
+  const lastD = dateKeyToUTC(last.date);
+  const finishStr = `${lastD.getUTCMonth() + 1}월 ${lastD.getUTCDate()}일 (${DOW[lastD.getUTCDay()]})`;
+
+  if (doneSessions >= PLAN.length) {
+    el.innerHTML = '✦ 578쪽을 모두 건너왔습니다 — <b>완독</b>';
+    return;
+  }
+  const todayPl = PLAN.find(p => statusOfSession(p) === 'current');
+  const nextPl = PLAN.find(p => statusOfSession(p) === 'scheduled');
+  const remainPages = TOTAL_PAGES - pagesRead;
+  const remainSessions = PLAN.length - doneSessions;
+
+  if (todayPl) {
+    el.innerHTML =
+      `오늘은 <b>${todayPl.day}회차</b> — ${partName(todayPl.part)} <b>${todayPl.label}</b> (p.${todayPl.s}~${todayPl.e})` +
+      `<span class="est-sub">남은 분량 ${remainPages}쪽 · ${remainSessions}회 · 완독 예정 ${finishStr}</span>`;
+  } else if (nextPl) {
+    const d = dateKeyToUTC(nextPl.date);
+    el.innerHTML =
+      `다음 낭독은 <b>${d.getUTCMonth() + 1}월 ${d.getUTCDate()}일 (${DOW[d.getUTCDay()]})</b> — ` +
+      `${nextPl.day}회차 ${partName(nextPl.part)} ${nextPl.label} (p.${nextPl.s}~${nextPl.e})` +
+      `<span class="est-sub">남은 분량 ${remainPages}쪽 · ${remainSessions}회 · 완독 예정 ${finishStr}</span>`;
+  } else {
+    el.innerHTML = `<span class="est-sub">완독 예정 ${finishStr}</span>`;
+  }
+}
+
+function partName(key) {
+  return key === 'part1' ? '1부' : key === 'part2' ? '2부' : '서문';
+}
+
+function renderChapterGrid(statuses) {
+  const host = document.getElementById('chapterGrid');
+  let html = '';
+  ['preface', 'part1', 'part2'].forEach(key => {
+    const items = CITY_OF_FICTION_TOC.filter(t => t.part === key);
+    if (!items.length) return;
+    const info = PART_INFO[key];
+    const pages = items.reduce((s, t) => s + (t.e - t.s + 1), 0);
+    const done = items.filter(t => statuses.get(t.id).status === 'done').length;
+    const countLabel = key === 'preface' ? `${pages}쪽` : `${items.length}장 · ${pages}쪽`;
+    html += `<div class="part-head">
+      <div class="part-name"><span class="part-kicker">${info.kicker} · ${info.note}</span>${info.name}</div>
+      <div class="part-meta">${done} / ${items.length} · ${countLabel}</div>
+    </div><div class="chip-grid">`;
+    items.forEach(t => {
+      const st = statuses.get(t.id);
+      const wide = key === 'preface';
+      const label = wide ? '한국어판 서문' : t.n;
+      html += `<div class="chip ${st.status} ${wide ? 'wide' : ''}" title="${itemLabel(t)} · p.${t.s}~${t.e}${st.dayLabel ? ' · ' + st.dayLabel : ''}">${label}</div>`;
+    });
+    html += `</div>`;
+  });
+  host.innerHTML = html;
+}
+
+render();      // 계획 기준으로 즉시 그리기
+loadAll();     // 실제 기록이 있으면 덮어쓰기
+</script>
+</body>
+</html>
