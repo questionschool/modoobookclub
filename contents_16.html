@@ -249,27 +249,6 @@
     background: var(--accent);
   }
 
-  /* 남은 분량 → 예상 소요일 */
-  .finish-estimate {
-    margin-top: 16px;
-    text-align: center;
-    font-family: 'Gowun Batang', serif;
-    font-size: 13px;
-    color: var(--ink-muted);
-    line-height: 1.8;
-    word-break: keep-all;
-  }
-  .finish-estimate b { color: var(--accent); font-weight: 700; }
-  .finish-estimate .est-sub {
-    display: block;
-    font-family: 'Cormorant Garamond', 'Gowun Batang', serif;
-    font-style: italic;
-    font-size: 12px;
-    color: var(--ink-faint);
-    letter-spacing: 0.04em;
-    margin-top: 2px;
-  }
-
   /* LEGEND */
   .legend {
     display: flex;
@@ -712,7 +691,8 @@
     <a href="journal_16.html">📖 오늘 기록</a>
     <a href="my_journal_16.html">✿ 나의 기록</a>
     <a href="contents_16.html" class="current">📋 진행 상황</a>
-    <a href="welcome_16.html">✦ 환영</a>
+    <a href="overview_16.html">✦ 여정</a>
+    <a href="welcome_16.html">환영</a>
   </nav>
 
   <header>
@@ -739,7 +719,7 @@
       </div>
       <div class="summary-stat">
         <div class="summary-stat-label">Pages Read</div>
-        <div class="summary-stat-value" id="statPages">— <span class="small">/ 454</span></div>
+        <div class="summary-stat-value" id="statPages">— <span class="small">/ 342</span></div>
       </div>
       <div class="summary-stat">
         <div class="summary-stat-label">Sessions</div>
@@ -749,7 +729,6 @@
     <div class="progress-bar">
       <div class="progress-fill" id="progressFill"></div>
     </div>
-    <div class="finish-estimate" id="finishEstimate"></div>
   </div>
 
   <!-- LEGEND -->
@@ -787,7 +766,7 @@
 
 <script>
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
-const TOTAL_PAGES = 454;   // 이마고 낭독 대상 38개 항목의 총 페이지 수 (서문 3편 p.35–72 포함)
+const TOTAL_PAGES = 416;   // 이마고 낭독 대상 35개 항목의 총 페이지 수
 
 let sessions = [];
 let contents = [];
@@ -928,38 +907,6 @@ function computeChapterStatus(chapter) {
 }
 
 // ════════════════════════════════════════════════════════
-// 항목 상태 계산 (실습 ↔ 본문 챕터 연동 포함)
-//
-// PART III 실습(E01~E18)은 연결된 본문 챕터와 "함께" 읽는다.
-// → 연결된 챕터가 '읽었음'이면 실습도 자동으로 '읽었음' 처리.
-//   (autoLinked: true 로 표시되어, 페이지 합산 시 함께 읽은 분량으로 계산)
-// ════════════════════════════════════════════════════════
-function computeItemStatus(item) {
-  const part = IMAGO_PARTS[item.partKey];
-  const base = computeChapterStatus({
-    section_type: part.sectionType,
-    page_start: item.pageStart,
-    page_end: item.pageEnd
-  });
-
-  if (item.ex !== undefined && item.linkedCh !== undefined && base.status !== 'done') {
-    const chItem = IMAGO_TOC.find(i => i.ch === item.linkedCh && i.mode === 'read');
-    if (chItem) {
-      const chPart = IMAGO_PARTS[chItem.partKey];
-      const chStatus = computeChapterStatus({
-        section_type: chPart.sectionType,
-        page_start: chItem.pageStart,
-        page_end: chItem.pageEnd
-      });
-      if (chStatus.status === 'done') {
-        return { status: 'done', daysLabel: chStatus.daysLabel, autoLinked: true };
-      }
-    }
-  }
-  return base;
-}
-
-// ════════════════════════════════════════════════════════
 // SUMMARY 렌더링
 // ════════════════════════════════════════════════════════
 function renderSummary() {
@@ -969,28 +916,34 @@ function renderSummary() {
   let done = 0;
   let currentItem = null;
   let nextItem = null;
-  let pagesRead = 0;         // '읽었음' 항목들의 분량 합산 (함께 읽은 실습 포함)
-  let remainPages = 0;       // 아직 안 읽은 낭독 대상 분량
-  let remainCount = 0;
 
   readItems.forEach(item => {
-    const { status } = computeItemStatus(item);
-    const pageCount = item.pageEnd - item.pageStart + 1;
+    const part = IMAGO_PARTS[item.partKey];
+    const chapterLike = {
+      section_type: part.sectionType,
+      page_start: item.pageStart,
+      page_end: item.pageEnd
+    };
+    const { status } = computeChapterStatus(chapterLike);
     if (status === 'done') {
       done++;
-      pagesRead += pageCount;
-    } else {
-      remainPages += pageCount;
-      remainCount++;
-      if (status === 'current' && !currentItem) {
-        currentItem = item;
-      } else if ((status === 'future' || status === 'scheduled') && !nextItem && !currentItem) {
-        nextItem = item;
-      }
+    } else if (status === 'current' && !currentItem) {
+      currentItem = item;
+    } else if ((status === 'future' || status === 'scheduled') && !nextItem && !currentItem) {
+      nextItem = item;
     }
   });
 
+  // 페이지 진도: 시간상 끝난 회차의 페이지 범위를 단순 합산
   const finishedSessions = sessions.filter(isSessionFinished);
+  let pagesRead = 0;
+  finishedSessions.forEach(s => {
+    const sStart = parseInt(s.start_page, 10);
+    const sEnd = parseInt(s.end_page, 10) || sStart;
+    if (!isNaN(sStart)) {
+      pagesRead += sEnd - sStart + 1;
+    }
+  });
 
   document.getElementById('statCompleted').innerHTML =
     `${done} <span class="small">/ ${readItems.length} ch.</span>`;
@@ -1029,66 +982,6 @@ function renderSummary() {
 
   const pct = Math.min(100, Math.round((pagesRead / TOTAL_PAGES) * 100));
   document.getElementById('progressFill').style.width = pct + '%';
-
-  renderFinishEstimate(remainPages, remainCount, pagesRead, finishedSessions);
-}
-
-// ════════════════════════════════════════════════════════
-// 남은 분량 → 예상 소요일 계산
-// (아직 안 읽은 낭독 대상 전부를, 지금까지의 하루 평균 페이스로 나눔)
-// ════════════════════════════════════════════════════════
-function renderFinishEstimate(remainPages, remainCount, pagesRead, finishedSessions) {
-  const el = document.getElementById('finishEstimate');
-  if (!el) return;
-
-  if (remainCount === 0) {
-    el.innerHTML = '✨ 모든 낭독을 마쳤어 — 완독!';
-    return;
-  }
-
-  const dayCount = finishedSessions.length;
-  if (dayCount === 0 || pagesRead === 0) {
-    el.textContent = '';
-    return;
-  }
-
-  const pace = pagesRead / dayCount;                 // 낭독일 하루 평균 쪽수
-  const estDays = Math.max(1, Math.ceil(remainPages / pace));
-  const maxDay = Math.max(0, ...finishedSessions.map(s => Number(s.day)).filter(d => !isNaN(d)));
-
-  // 예상 완독 날짜 (KST) — 주말(토·일)과 법정 공휴일은 낭독이 없으므로 건너뛴다
-  const now = new Date(Date.now() + 9 * 60 * 60 * 1000);
-  let cursor = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-  let counted = 0;
-  while (counted < estDays) {
-    cursor = new Date(cursor.getTime() + 24 * 60 * 60 * 1000);
-    if (isReadingDay(cursor)) counted++;
-  }
-  const DOW = ['일', '월', '화', '수', '목', '금', '토'];
-  const dateStr = `${cursor.getUTCMonth() + 1}월 ${cursor.getUTCDate()}일 (${DOW[cursor.getUTCDay()]})`;
-
-  el.innerHTML =
-    `아직 안 읽은 글 <b>${remainCount}편 · ${remainPages}쪽</b> — ` +
-    `하루 평균 ${pace.toFixed(1)}쪽 페이스라면 <b>낭독일 기준 약 ${estDays}일 더</b>` +
-    `<span class="est-sub">예상 완독 ${dateStr}${maxDay ? ` · Day ${maxDay + estDays} 무렵` : ''} · 주말·공휴일 제외</span>`;
-}
-
-// ── 낭독이 없는 날: 주말(토·일) + 법정 공휴일 ──
-// 시즌 중 해당되는 공휴일을 여기에 추가해 줘 (KST, YYYY-MM-DD)
-const NO_READING_HOLIDAYS = [
-  '2026-08-17',   // 광복절 대체공휴일
-  '2026-09-24', '2026-09-25', '2026-09-28',   // 추석 연휴 + 대체공휴일
-  '2026-10-05',   // 개천절 대체공휴일
-  '2026-10-09'    // 한글날
-];
-
-function isReadingDay(kstMidnight) {
-  const dow = kstMidnight.getUTCDay();
-  if (dow === 0 || dow === 6) return false;   // 일 · 토
-  const key = `${kstMidnight.getUTCFullYear()}-` +
-    `${String(kstMidnight.getUTCMonth() + 1).padStart(2, '0')}-` +
-    `${String(kstMidnight.getUTCDate()).padStart(2, '0')}`;
-  return !NO_READING_HOLIDAYS.includes(key);
 }
 
 // IMAGO_TOC 항목을 한글 라벨로 변환 (In Progress 표시용)
@@ -1112,9 +1005,9 @@ const IMAGO_TOC = [
   { partKey: 'prologue', kr: '조 로빈슨 씨께 특별히 감사드리는 글',                  en: '',                                        mode: 'side' },
   { partKey: 'prologue', kr: '감사의 글',                                       en: '',                                        mode: 'side' },
   { partKey: 'prologue', kr: '30주년(2019년)에 쓰는 서문',                       en: '',                                        mode: 'read',  pageStart: 25, pageEnd: 34 },
-  { partKey: 'prologue', kr: '20주년(2008년)에 쓰는 서문',                       en: '',                                        mode: 'read',  pageStart: 35, pageEnd: 54 },
-  { partKey: 'prologue', kr: '2001년 판에 쓰는 서문',                            en: '',                                        mode: 'read',  pageStart: 55, pageEnd: 66 },
-  { partKey: 'prologue', kr: '1988년 판에 쓰는 서문',                            en: '',                                        mode: 'read',  pageStart: 67, pageEnd: 72 },
+  { partKey: 'prologue', kr: '20주년(2008년)에 쓰는 서문',                       en: '',                                        mode: 'side' },
+  { partKey: 'prologue', kr: '2001년 판에 쓰는 서문',                            en: '',                                        mode: 'side' },
+  { partKey: 'prologue', kr: '1988년 판에 쓰는 서문',                            en: '',                                        mode: 'side' },
 
   // ── 제1부 · 무의식적인 파트너십 ──
   { partKey: 'part1', ch: 1, kr: '당신이 사랑에 빠지게 되는 진짜 이유',  en: 'THE MYSTERY OF ATTRACTION',   mode: 'read', pageStart: 79,  pageEnd: 98,  linked: '실습 1' },
@@ -1134,24 +1027,24 @@ const IMAGO_TOC = [
 
   // ── 제3부 · 이마고 실습과정 ──
   { partKey: 'part3', ch: 13,   kr: "'의식이 깨어 있는 협력관계'로 가는 이마고 실습 10단계", en: 'TEN STEPS TOWARD A CONSCIOUS PARTNERSHIP',  mode: 'read', pageStart: 415, pageEnd: 420 },
-  { partKey: 'part3', ex: 1,  kr: '우리(커플, 부부)의 관계 비전',                          en: 'YOUR RELATIONSHIP VISION',                  mode: 'read', pageStart: 421, pageEnd: 424, linked: '제1장', linkedCh: 1 },
-  { partKey: 'part3', ex: 2,  kr: '어린 시절의 상처',                                    en: 'CHILDHOOD WOUNDS',                          mode: 'read', pageStart: 425, pageEnd: 426, linked: '제2장', linkedCh: 2 },
-  { partKey: 'part3', ex: 3,  kr: '이마고 정밀 검사',                                    en: 'IMAGO WORKUP',                              mode: 'read', pageStart: 427, pageEnd: 429, linked: '제3장', linkedCh: 3 },
-  { partKey: 'part3', ex: 4,  kr: '어린 시절의 좌절 경험',                                en: 'CHILDHOOD FRUSTRATIONS',                    mode: 'read', pageStart: 430, pageEnd: 431, linked: '제2장', linkedCh: 2 },
-  { partKey: 'part3', ex: 5,  kr: '부모-자녀 대화법',                                    en: 'PARENT-CHILD DIALOGUE',                     mode: 'read', pageStart: 432, pageEnd: 437, linked: '제10장', linkedCh: 10 },
-  { partKey: 'part3', ex: 6,  kr: '파트너(배우자)에 대해 알아가기 (파트너의 프로파일)',         en: 'PARTNER PROFILE',                           mode: 'read', pageStart: 438, pageEnd: 440, linked: '제3장', linkedCh: 3 },
-  { partKey: 'part3', ex: 7,  kr: '미해결과제',                                          en: 'UNFINISHED BUSINESS',                       mode: 'read', pageStart: 441, pageEnd: 442, linked: '제2장', linkedCh: 2 },
-  { partKey: 'part3', ex: 8,  kr: '이마고대화법',                                        en: 'THE IMAGO DIALOGUE',                        mode: 'read', pageStart: 443, pageEnd: 450, linked: '제8장', linkedCh: 8 },
-  { partKey: 'part3', ex: 9,  kr: '헌신에 대한 결정 : 탈출구를 차단하기!',                   en: 'THE COMMITMENT DECISION',                   mode: 'read', pageStart: 451, pageEnd: 454, linked: '제7장', linkedCh: 7 },
-  { partKey: 'part3', ex: 10, kr: '서로를 돌보아 주는 행동들',                              en: 'REROMANTICIZING',                           mode: 'read', pageStart: 455, pageEnd: 459, linked: '제9장', linkedCh: 9 },
-  { partKey: 'part3', ex: 11, kr: "파트너를 깜짝 놀라게 해 줄 선물과도 같은 '뜻밖의 돌봄 행동 목록'", en: 'THE SURPRISE LIST',                         mode: 'read', pageStart: 460, pageEnd: 461, linked: '제9장', linkedCh: 9 },
-  { partKey: 'part3', ex: 12, kr: '재미있고 활기를 북돋워 주는 활동들의 목록',                  en: 'THE FUN LIST',                              mode: 'read', pageStart: 462, pageEnd: 463, linked: '제9장', linkedCh: 9 },
-  { partKey: 'part3', ex: 13, kr: '긍정적인 칭찬의 홍수 퍼붓기',                            en: 'POSITIVE FLOODING',                         mode: 'read', pageStart: 464, pageEnd: 466, linked: '제11장', linkedCh: 11 },
-  { partKey: 'part3', ex: 14, kr: '행동수정요청(BCR) 대화법',                              en: 'THE BEHAVIOR CHANGE REQUEST DIALOGUE',      mode: 'read', pageStart: 467, pageEnd: 472, linked: '제10장', linkedCh: 10 },
-  { partKey: 'part3', ex: 15, kr: '파트너(배우자) 안아 주기',                              en: 'THE HOLDING EXERCISE',                      mode: 'read', pageStart: 473, pageEnd: 475, linked: '제11장', linkedCh: 11 },
-  { partKey: 'part3', ex: 16, kr: '당신의 부정성을 소유하고 제거하기',                        en: 'OWNING AND ELIMINATING YOUR NEGATIVITY',    mode: 'read', pageStart: 476, pageEnd: 479, linked: '제11장', linkedCh: 11 },
-  { partKey: 'part3', ex: 17, kr: '부정성 제로 훈련과 다시 연결하기 과정',                    en: 'SELF-INTEGRATION',                          mode: 'read', pageStart: 480, pageEnd: 482, linked: '제11장', linkedCh: 11 },
-  { partKey: 'part3', ex: 18, kr: '사랑을 시각화하기',                                    en: 'VISUALIZATION OF LOVE',                     mode: 'read', pageStart: 483, pageEnd: 484, linked: '제12장', linkedCh: 12 },
+  { partKey: 'part3', ex: 1,  kr: '우리(커플, 부부)의 관계 비전',                          en: 'YOUR RELATIONSHIP VISION',                  mode: 'read', pageStart: 421, pageEnd: 424, linked: '제1장' },
+  { partKey: 'part3', ex: 2,  kr: '어린 시절의 상처',                                    en: 'CHILDHOOD WOUNDS',                          mode: 'read', pageStart: 425, pageEnd: 426, linked: '제2장' },
+  { partKey: 'part3', ex: 3,  kr: '이마고 정밀 검사',                                    en: 'IMAGO WORKUP',                              mode: 'read', pageStart: 427, pageEnd: 429, linked: '제3장' },
+  { partKey: 'part3', ex: 4,  kr: '어린 시절의 좌절 경험',                                en: 'CHILDHOOD FRUSTRATIONS',                    mode: 'read', pageStart: 430, pageEnd: 431, linked: '제2장' },
+  { partKey: 'part3', ex: 5,  kr: '부모-자녀 대화법',                                    en: 'PARENT-CHILD DIALOGUE',                     mode: 'read', pageStart: 432, pageEnd: 437, linked: '제10장' },
+  { partKey: 'part3', ex: 6,  kr: '파트너(배우자)에 대해 알아가기 (파트너의 프로파일)',         en: 'PARTNER PROFILE',                           mode: 'read', pageStart: 438, pageEnd: 440, linked: '제3장' },
+  { partKey: 'part3', ex: 7,  kr: '미해결과제',                                          en: 'UNFINISHED BUSINESS',                       mode: 'read', pageStart: 441, pageEnd: 442, linked: '제2장' },
+  { partKey: 'part3', ex: 8,  kr: '이마고대화법',                                        en: 'THE IMAGO DIALOGUE',                        mode: 'read', pageStart: 443, pageEnd: 450, linked: '제8장' },
+  { partKey: 'part3', ex: 9,  kr: '헌신에 대한 결정 : 탈출구를 차단하기!',                   en: 'THE COMMITMENT DECISION',                   mode: 'read', pageStart: 451, pageEnd: 454, linked: '제7장' },
+  { partKey: 'part3', ex: 10, kr: '서로를 돌보아 주는 행동들',                              en: 'REROMANTICIZING',                           mode: 'read', pageStart: 455, pageEnd: 459, linked: '제9장' },
+  { partKey: 'part3', ex: 11, kr: "파트너를 깜짝 놀라게 해 줄 선물과도 같은 '뜻밖의 돌봄 행동 목록'", en: 'THE SURPRISE LIST',                         mode: 'read', pageStart: 460, pageEnd: 461, linked: '제9장' },
+  { partKey: 'part3', ex: 12, kr: '재미있고 활기를 북돋워 주는 활동들의 목록',                  en: 'THE FUN LIST',                              mode: 'read', pageStart: 462, pageEnd: 463, linked: '제9장' },
+  { partKey: 'part3', ex: 13, kr: '긍정적인 칭찬의 홍수 퍼붓기',                            en: 'POSITIVE FLOODING',                         mode: 'read', pageStart: 464, pageEnd: 466, linked: '제11장' },
+  { partKey: 'part3', ex: 14, kr: '행동수정요청(BCR) 대화법',                              en: 'THE BEHAVIOR CHANGE REQUEST DIALOGUE',      mode: 'read', pageStart: 467, pageEnd: 472, linked: '제10장' },
+  { partKey: 'part3', ex: 15, kr: '파트너(배우자) 안아 주기',                              en: 'THE HOLDING EXERCISE',                      mode: 'read', pageStart: 473, pageEnd: 475, linked: '제11장' },
+  { partKey: 'part3', ex: 16, kr: '당신의 부정성을 소유하고 제거하기',                        en: 'OWNING AND ELIMINATING YOUR NEGATIVITY',    mode: 'read', pageStart: 476, pageEnd: 479, linked: '제11장' },
+  { partKey: 'part3', ex: 17, kr: '부정성 제로 훈련과 다시 연결하기 과정',                    en: 'SELF-INTEGRATION',                          mode: 'read', pageStart: 480, pageEnd: 482, linked: '제11장' },
+  { partKey: 'part3', ex: 18, kr: '사랑을 시각화하기',                                    en: 'VISUALIZATION OF LOVE',                     mode: 'read', pageStart: 483, pageEnd: 484, linked: '제12장' },
 
   // ── 끝맺음 ──
   { partKey: 'epilogue', kr: '당신의 커플(부부)관계를 위해 전문가의 도움이 필요할 때',                   en: 'Seeking Professional Help', mode: 'read', pageStart: 485, pageEnd: 488 },
@@ -1271,14 +1164,19 @@ function renderItem(item, part) {
 
   // mode 별 분기
   if (item.mode === 'read') {
-    // 낭독 대상 — sessions 데이터로 진행 상태 계산 (실습은 연결 챕터와 연동)
-    const { status, daysLabel, autoLinked } = computeItemStatus(item);
+    // 낭독 대상 — sessions 데이터로 진행 상태 계산
+    const chapterLike = {
+      section_type: part.sectionType,
+      page_start: item.pageStart,
+      page_end: item.pageEnd
+    };
+    const { status, daysLabel } = computeChapterStatus(chapterLike);
 
     const pageInfo = `p. ${item.pageStart} – ${item.pageEnd}`;
     const pageCount = `${item.pageEnd - item.pageStart + 1}쪽`;
 
     let pillHtml = '';
-    if (status === 'done')         pillHtml = `<span class="status-pill done" ${autoLinked ? 'title="연결된 본문 챕터와 함께 읽었음"' : ''}>✓ 읽었음</span>`;
+    if (status === 'done')         pillHtml = '<span class="status-pill done">✓ 읽었음</span>';
     else if (status === 'current') pillHtml = '<span class="status-pill current">⟶ 읽는 중</span>';
     else if (status === 'scheduled') pillHtml = '<span class="status-pill scheduled">⌛ 다음 시간</span>';
     else                           pillHtml = '<span class="status-pill future">읽기 전</span>';
@@ -1307,22 +1205,6 @@ function renderItem(item, part) {
   }
 
   // 비낭독: 개별독서 (side) / 참고자료 (ref)
-  // sideDone: 개별독서로 계획했지만 낭독 시간에 함께 읽은 항목 → '읽었음'으로 표기
-  if (item.mode === 'side' && item.sideDone) {
-    return `
-      <article class="chapter done">
-        ${numDisplay}
-        <div class="chapter-body">
-          <div class="chapter-title">${escapeHtml(titleText)}</div>
-          ${enHtml}
-        </div>
-        <div class="chapter-status">
-          <span class="status-pill done" title="개별독서로 계획했지만 함께 읽었음">✓ 읽었음</span>
-        </div>
-      </article>
-    `;
-  }
-
   const sideLabel = item.mode === 'side' ? '개별독서' : '참고자료';
   const sideCls   = item.mode === 'side' ? 'side'     : 'ref';
 

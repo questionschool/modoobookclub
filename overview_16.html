@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>시즌 16 여정 · 이마고 · 낭만북클럽</title>
+<meta name="description" content="시즌 16 『이마고』를 함께한 사람들의 출석과 기록을 한눈에.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="시즌 16 여정 · 이마고 · 낭만북클럽">
+<meta property="og:description" content="시즌 16 『이마고』를 함께한 사람들의 출석과 기록을 한눈에.">
+<meta property="og:image" content="https://bookclub.questionschool.net/images/og_image_16.png">
+<meta property="og:url" content="https://bookclub.questionschool.net/overview_16.html">
+<meta property="og:site_name" content="모두의 새벽 + 낭만북클럽">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="시즌 16 여정 · 이마고 · 낭만북클럽">
+<meta name="twitter:image" content="https://bookclub.questionschool.net/images/og_image_16.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --cream: #ecf4f9;
+    --cream-deep: #d8e7f0;
+    --cream-soft: #f5fafd;
+    --ink: #1a2837;
+    --ink-soft: #2f4759;
+    --ink-muted: #5e7185;
+    --ink-faint: #8a9bab;
+    --gold: #2a8499;
+    --gold-deep: #1c6577;
+    --gold-soft: #5fabbd;
+    --line: #c5d4de;
+    --line-soft: #dde7ed;
+    --accent: #155b80;
+    --accent-soft: #2a7aa3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Noto Serif KR', 'Gowun Batang', serif;
+    font-weight: 400;
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      radial-gradient(at 15% 10%, rgba(42, 132, 153, 0.06) 0px, transparent 50%),
+      radial-gradient(at 85% 90%, rgba(21, 91, 128, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.05 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 28px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 40px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line-soft);
+    flex-wrap: wrap;
+  }
+  .nav a {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.15em;
+    color: var(--ink-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    padding-bottom: 6px;
+    transition: color 0.2s;
+  }
+  .nav a:hover { color: var(--accent); }
+  .nav a.current { color: var(--accent); border-bottom: 1px solid var(--accent); }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 30px 0 44px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 44px;
+  }
+  .eyebrow {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.28em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 800;
+    font-size: clamp(26px, 4.5vw, 34px);
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 14px;
+    word-break: keep-all;
+  }
+  h1 .accent { color: var(--accent); }
+  .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-muted);
+    margin-bottom: 22px;
+  }
+  .season-meta {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-family: 'Gowun Batang', serif;
+  }
+  .season-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .season-meta .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: inline-block;
+  }
+
+  /* SECTION */
+  section { margin-bottom: 68px; }
+  .section-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: clamp(20px, 3vw, 26px);
+    color: var(--ink);
+    margin-bottom: 28px;
+    letter-spacing: -0.005em;
+    position: relative;
+    padding-bottom: 14px;
+  }
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 36px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  /* 통계 카드 4개 */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .stat {
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    padding: 22px 16px 18px;
+    text-align: center;
+    position: relative;
+  }
+  .stat::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .stat-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .stat-value {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-value .small {
+    font-size: 14px;
+    color: var(--ink-muted);
+    font-weight: 400;
+    margin-left: 3px;
+  }
+  .stat-sub {
+    font-family: 'Gowun Batang', serif;
+    font-size: 11.5px;
+    color: var(--ink-muted);
+    margin-top: 8px;
+  }
+
+  /* 참가자별 카드 */
+  .members-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .member-card {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 3px;
+    padding: 20px 22px 18px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: all 0.2s;
+  }
+  .member-card:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(21, 91, 128, 0.08);
+    border-left-color: var(--accent);
+  }
+  .member-card.lead {
+    border-left-color: var(--accent);
+    background: rgba(255, 255, 255, 0.75);
+  }
+  .member-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .member-alias {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--accent);
+  }
+  .member-role {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--gold-deep);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .member-stats {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .member-stats .item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+  .member-stats .num {
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    color: var(--ink);
+    font-size: 14px;
+  }
+  .member-stats .item.reflect .num { color: var(--gold-deep); }
+
+  .member-bar-wrap {
+    margin-top: 12px;
+  }
+  .member-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .member-bar {
+    height: 3px;
+    background: var(--line-soft);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .member-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold-soft), var(--gold));
+    border-radius: 2px;
+  }
+
+  .member-range {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dotted var(--line);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.03em;
+  }
+  .member-arrow {
+    float: right;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--gold);
+    transition: transform 0.2s;
+  }
+  .member-card:hover .member-arrow {
+    transform: translateX(3px);
+    color: var(--accent);
+  }
+
+  /* 매트릭스 */
+  .matrix-legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding: 12px 18px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+  .matrix-legend .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .legend-cell {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    vertical-align: middle;
+  }
+  .legend-cell.both { background: var(--accent); }
+  .legend-cell.attend { background: rgba(42, 132, 153, 0.28); }
+  .legend-cell.absent { background: var(--line-soft); border: 1px solid var(--line); }
+
+  .matrix-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 4px;
+  }
+  .matrix-table {
+    border-collapse: separate;
+    border-spacing: 3px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 12px;
+    width: 100%;
+    min-width: 600px;
+  }
+  .matrix-table th {
+    font-weight: 500;
+    padding: 6px 4px;
+    color: var(--ink-muted);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.4);
+    white-space: nowrap;
+  }
+  .matrix-table th.alias-col {
+    text-align: left;
+    padding-left: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    color: var(--accent);
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0;
+    min-width: 88px;
+  }
+  .matrix-table th.day-header {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+  .matrix-table td.alias-cell {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.6);
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    color: var(--accent);
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 13px;
+    text-align: left;
+    white-space: nowrap;
+    border-right: 1px solid var(--line);
+  }
+  .matrix-table td.alias-cell.lead {
+    color: var(--accent);
+    background: rgba(21, 91, 128, 0.05);
+  }
+  .matrix-table td.alias-cell a {
+    color: inherit;
+    text-decoration: none;
+    border-bottom: 1px dotted transparent;
+    transition: border-color 0.2s;
+  }
+  .matrix-table td.alias-cell a:hover {
+    border-bottom-color: var(--accent);
+  }
+  .matrix-table td.cell {
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+    border-radius: 2px;
+    font-size: 10px;
+    line-height: 1;
+    cursor: help;
+  }
+  .matrix-table td.cell.both {
+    background: var(--accent);
+    color: white;
+  }
+  .matrix-table td.cell.attend {
+    background: rgba(42, 132, 153, 0.28);
+    color: var(--gold-deep);
+  }
+  .matrix-table td.cell.absent {
+    background: var(--line-soft);
+    color: var(--ink-faint);
+  }
+  .matrix-table td.total-cell {
+    background: rgba(255, 255, 255, 0.6);
+    border-left: 1px solid var(--line);
+    padding: 6px 10px;
+    font-family: 'Nanum Myeongjo', serif;
+    font-weight: 700;
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .matrix-note {
+    margin-top: 10px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+    text-align: right;
+  }
+
+  /* 로딩 & 빈 상태 */
+  .loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-muted);
+    font-family: 'Gowun Batang', serif;
+    font-style: italic;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-muted);
+    font-family: 'Gowun Batang', serif;
+    font-style: italic;
+    border: 1px dashed var(--line);
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  /* Closing quote */
+  .closing-quote {
+    margin: 24px 0 10px;
+    padding: 32px 0;
+    text-align: center;
+    font-family: 'Cormorant Garamond', 'Noto Serif KR', serif;
+    font-style: italic;
+    font-size: 17px;
+    color: var(--accent);
+    line-height: 1.85;
+    font-weight: 500;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    word-break: keep-all;
+  }
+  .closing-note {
+    text-align: center;
+    margin-top: 20px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 13.5px;
+    color: var(--ink-muted);
+    line-height: 1.9;
+  }
+
+  footer {
+    text-align: center;
+    padding-top: 56px;
+    margin-top: 60px;
+    border-top: 1px solid var(--line);
+  }
+  footer .reading {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.25em;
+    color: var(--gold-deep);
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  footer p {
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: var(--ink-muted);
+    margin-bottom: 4px;
+  }
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+  footer a:hover { border-bottom-color: var(--accent); }
+
+  @media (max-width: 640px) {
+    .wrap { padding: 40px 18px 80px; }
+    .nav { gap: 16px; }
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat-value { font-size: 24px; }
+    .members-grid { grid-template-columns: 1fr; }
+    .matrix-legend { gap: 12px; font-size: 12px; }
+    .matrix-table td.cell { width: 18px; height: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <nav class="nav">
+    <a href="journal_16.html">📖 오늘 기록</a>
+    <a href="my_journal_16.html">✿ 나의 기록</a>
+    <a href="contents_16.html">📋 진행 상황</a>
+    <a href="overview_16.html" class="current">✦ 여정</a>
+    <a href="welcome_16.html">환영</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow">Season 16 · The Full Journey</div>
+    <h1>이마고와 함께한 <span class="accent" id="hDays">…</span>일의 새벽</h1>
+    <p class="subtitle">Getting the Love You Want · A Guide for Couples</p>
+    <div class="season-meta">
+      <span><span class="dot"></span>하빌 &amp; 헬렌</span>
+      <span><span class="dot"></span>2026. 7. 6 → <span id="hEndDate">…</span></span>
+      <span><span class="dot"></span><span id="hMembers">…</span>명</span>
+    </div>
+  </header>
+
+  <!-- I. 통계 -->
+  <section>
+    <span class="section-num">I · Overview</span>
+    <h2>시즌 16 한눈에</h2>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-label">Sessions</div>
+        <div class="stat-value" id="statSessions">—</div>
+        <div class="stat-sub">함께한 회차</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Members</div>
+        <div class="stat-value" id="statMembers">—</div>
+        <div class="stat-sub">낭독 동료</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Reflections</div>
+        <div class="stat-value" id="statRecords">—</div>
+        <div class="stat-sub">남긴 기록</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">Attendance</div>
+        <div class="stat-value" id="statAttend">—<span class="small">%</span></div>
+        <div class="stat-sub">평균 출석률</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- II. 참가자별 -->
+  <section>
+    <span class="section-num">II · Fellow Travelers</span>
+    <h2>참가자별 여정</h2>
+    <div id="membersGrid" class="members-grid">
+      <div class="loading">불러오는 중…</div>
+    </div>
+  </section>
+
+  <!-- III. 매트릭스 -->
+  <section>
+    <span class="section-num">III · Attendance &amp; Reflections</span>
+    <h2>출석과 기록의 지도</h2>
+
+    <div class="matrix-legend">
+      <span class="legend-item"><span class="legend-cell both"></span>참석 + 기록</span>
+      <span class="legend-item"><span class="legend-cell attend"></span>참석만</span>
+      <span class="legend-item"><span class="legend-cell absent"></span>불참</span>
+    </div>
+
+    <div class="matrix-wrap">
+      <div id="matrix">
+        <div class="loading">불러오는 중…</div>
+      </div>
+    </div>
+    <div class="matrix-note">각 셀에 마우스를 올리면 그 회차의 짧은 안내가 보여.</div>
+  </section>
+
+  <!-- Closing -->
+  <div class="closing-quote">
+    함께 소리 내어 읽은 새벽마다<br>
+    우리는 서로의 목소리에 조금씩 더 가까워졌어.
+  </div>
+  <p class="closing-note">
+    시즌 16의 모든 낭독이 오늘 마무리되었어. 남긴 기록은 그대로 남아 있으니, 언제든 다시 들여다볼 수 있어.
+  </p>
+
+  <footer>
+    <div class="reading">READING · ALOUD · TOGETHER</div>
+    <p>모두의 새벽 + 낭만북클럽 · 『이마고 : 당신이 원하는 사랑 만들기』</p>
+    <p>
+      <a href="journal_16.html">오늘 기록 →</a> &nbsp;·&nbsp;
+      <a href="my_journal_16.html">나의 기록 →</a> &nbsp;·&nbsp;
+      <a href="contents_16.html">진행 상황 →</a> &nbsp;·&nbsp;
+      <a href="prologue_16.html">프롤로그 정리본 →</a> &nbsp;·&nbsp;
+      <a href="welcome_16.html">환영 페이지 →</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
+const DEFAULT_MEMBERS = ['농담', '농부', '라일락', '마성', '목마가렛', '보나', '연경', '자연', '자유', '지평'];
+const LEAD_MEMBERS = new Set(['농담', '지평']);
+const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+// 정렬: 농담 첫째, 지평 마지막, 그 사이 가나다 순
+function sortMembers(list) {
+  const rest = list.filter(m => !LEAD_MEMBERS.has(m)).sort((a, b) => a.localeCompare(b, 'ko'));
+  const ordered = [];
+  if (list.includes('농담')) ordered.push('농담');
+  ordered.push(...rest);
+  if (list.includes('지평')) ordered.push('지평');
+  return ordered;
+}
+
+async function loadAll() {
+  try {
+    const res = await fetch(`${GAS_URL}?action=list_all&season=16`);
+    const data = await res.json();
+    const sessions = (data.sessions || []).slice().sort((a, b) => (Number(a.day)||0) - (Number(b.day)||0));
+    const memberList = (data.members && data.members.length) ? data.members : DEFAULT_MEMBERS;
+    render(sessions, sortMembers(memberList));
+  } catch (err) {
+    console.error(err);
+    document.getElementById('membersGrid').innerHTML = '<div class="empty-state">불러오지 못했어. 잠시 후 새로고침해 줘.</div>';
+    document.getElementById('matrix').innerHTML = '<div class="empty-state">불러오지 못했어.</div>';
+  }
+}
+
+function extractYMD(dateValue) {
+  if (!dateValue) return null;
+  if (typeof dateValue === 'string' && !dateValue.includes('T')) {
+    const m = dateValue.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (m) return { y: +m[1], m: +m[2], d: +m[3] };
+  }
+  const d = new Date(dateValue);
+  if (isNaN(d.getTime())) return null;
+  const kst = new Date(d.getTime() + 9 * 60 * 60 * 1000);
+  return { y: kst.getUTCFullYear(), m: kst.getUTCMonth() + 1, d: kst.getUTCDate() };
+}
+
+function formatShortDate(dateValue) {
+  const ymd = extractYMD(dateValue);
+  if (!ymd) return '';
+  const wd = new Date(ymd.y, ymd.m - 1, ymd.d).getDay();
+  return `${ymd.m}/${ymd.d}(${WEEKDAYS[wd]})`;
+}
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+function render(sessions, members) {
+  const totalSessions = sessions.length;
+  const totalRecords = sessions.reduce((sum, s) => sum + (s.reflections || []).length, 0);
+
+  // 참가자별 집계
+  const perMember = {};
+  members.forEach(alias => {
+    perMember[alias] = {
+      alias,
+      lead: LEAD_MEMBERS.has(alias),
+      attendDays: new Set(),
+      reflectDays: new Set(),
+      quoteCount: 0,
+      mindCount: 0,
+      recordCount: 0,
+      firstDay: null,
+      lastDay: null,
+    };
+  });
+  // 이름이 DEFAULT_MEMBERS에 없어도 attendees/reflections에 나타나면 추가
+  sessions.forEach(s => {
+    (s.attendees || []).forEach(a => {
+      if (!perMember[a.alias]) perMember[a.alias] = { alias: a.alias, lead: LEAD_MEMBERS.has(a.alias), attendDays: new Set(), reflectDays: new Set(), quoteCount: 0, mindCount: 0, recordCount: 0, firstDay: null, lastDay: null };
+    });
+    (s.reflections || []).forEach(r => {
+      if (!perMember[r.alias]) perMember[r.alias] = { alias: r.alias, lead: LEAD_MEMBERS.has(r.alias), attendDays: new Set(), reflectDays: new Set(), quoteCount: 0, mindCount: 0, recordCount: 0, firstDay: null, lastDay: null };
+    });
+  });
+
+  sessions.forEach(s => {
+    const day = Number(s.day);
+    const ymd = extractYMD(s.date);
+    (s.attendees || []).forEach(a => {
+      const rec = perMember[a.alias];
+      if (!rec) return;
+      rec.attendDays.add(day);
+      if (rec.firstDay === null || day < rec.firstDay) rec.firstDay = day;
+      if (rec.lastDay === null || day > rec.lastDay) rec.lastDay = day;
+    });
+    (s.reflections || []).forEach(r => {
+      const rec = perMember[r.alias];
+      if (!rec) return;
+      rec.reflectDays.add(day);
+      rec.recordCount += 1;
+      if (r.quote_text) rec.quoteCount += 1;
+      if (r.my_mind) rec.mindCount += 1;
+      // reflection만 남기고 attendance는 없는 경우도 참여로 인정
+      if (rec.firstDay === null || day < rec.firstDay) rec.firstDay = day;
+      if (rec.lastDay === null || day > rec.lastDay) rec.lastDay = day;
+    });
+  });
+
+  const allMemberList = Object.keys(perMember).filter(a =>
+    perMember[a].attendDays.size > 0 || perMember[a].recordCount > 0 || members.includes(a)
+  );
+  const orderedMembers = sortMembers(allMemberList);
+
+  // 전체 통계 계산
+  const avgAttend = totalSessions > 0
+    ? Math.round(orderedMembers.reduce((sum, a) => sum + perMember[a].attendDays.size, 0) / (orderedMembers.length * totalSessions) * 100)
+    : 0;
+
+  const lastSession = sessions[sessions.length - 1];
+  const lastYmd = lastSession ? extractYMD(lastSession.date) : null;
+
+  // 헤더 채우기
+  document.getElementById('hDays').textContent = totalSessions;
+  document.getElementById('hMembers').textContent = orderedMembers.length;
+  document.getElementById('hEndDate').textContent = lastYmd ? `${lastYmd.y}. ${lastYmd.m}. ${lastYmd.d}` : '진행 중';
+  document.getElementById('statSessions').textContent = totalSessions;
+  document.getElementById('statMembers').textContent = orderedMembers.length;
+  document.getElementById('statRecords').textContent = totalRecords;
+  document.getElementById('statAttend').innerHTML = `${avgAttend}<span class="small">%</span>`;
+
+  // 참가자 카드 렌더
+  const cardsHtml = orderedMembers.map(alias => {
+    const m = perMember[alias];
+    const attendCount = m.attendDays.size;
+    const attendPct = totalSessions > 0 ? Math.round(attendCount / totalSessions * 100) : 0;
+    const rangeText = m.firstDay ? `Day ${String(m.firstDay).padStart(2,'0')} → Day ${String(m.lastDay).padStart(2,'0')}` : '';
+
+    return `
+      <a href="my_journal_16.html?alias=${encodeURIComponent(alias)}" class="member-card${m.lead ? ' lead' : ''}">
+        <div class="member-card-head">
+          <span class="member-alias">${esc(alias)}</span>
+          ${m.lead ? '<span class="member-role">Host</span>' : ''}
+        </div>
+        <div class="member-stats">
+          <span class="item"><span class="num">${attendCount}</span> <span>/ ${totalSessions} 회 출석</span></span>
+          <span class="item reflect"><span class="num">${m.recordCount}</span> <span>기록</span></span>
+        </div>
+        <div class="member-bar-wrap">
+          <div class="member-bar-label">
+            <span>Attendance</span>
+            <span>${attendPct}%</span>
+          </div>
+          <div class="member-bar">
+            <div class="member-bar-fill" style="width: ${attendPct}%;"></div>
+          </div>
+        </div>
+        <div class="member-range">
+          ${esc(rangeText)}
+          <span class="member-arrow">→</span>
+        </div>
+      </a>
+    `;
+  }).join('');
+  document.getElementById('membersGrid').innerHTML = cardsHtml || '<div class="empty-state">아직 참가자 기록이 없어.</div>';
+
+  // 매트릭스 렌더
+  const headerCells = sessions.map(s => {
+    const day = String(s.day).padStart(2, '0');
+    const dt = formatShortDate(s.date);
+    return `<th class="day-header" title="Day ${day} · ${dt}">${day}<br><span style="font-size:9.5px; color:var(--ink-faint); font-family:'Gowun Batang',serif; font-style:normal;">${dt}</span></th>`;
+  }).join('');
+
+  const rowsHtml = orderedMembers.map(alias => {
+    const m = perMember[alias];
+    const cells = sessions.map(s => {
+      const day = Number(s.day);
+      const attended = m.attendDays.has(day);
+      const reflected = m.reflectDays.has(day);
+      let cls, mark, title;
+      if (attended && reflected) { cls = 'both'; mark = '●'; title = `Day ${day} · 참석 + 기록`; }
+      else if (attended) { cls = 'attend'; mark = '·'; title = `Day ${day} · 참석`; }
+      else { cls = 'absent'; mark = ''; title = `Day ${day} · 불참`; }
+      const dt = formatShortDate(s.date);
+      return `<td class="cell ${cls}" title="${esc(alias)} · Day ${String(day).padStart(2,'0')} (${dt}) · ${title.split(' · ')[1]}">${mark}</td>`;
+    }).join('');
+
+    return `
+      <tr>
+        <td class="alias-cell${m.lead ? ' lead' : ''}"><a href="my_journal_16.html?alias=${encodeURIComponent(alias)}">${esc(alias)}</a></td>
+        ${cells}
+        <td class="total-cell">${m.attendDays.size}<span style="color:var(--ink-faint); font-weight:400;">/${totalSessions}</span></td>
+      </tr>
+    `;
+  }).join('');
+
+  const tableHtml = `
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th class="alias-col">Reader</th>
+          ${headerCells}
+          <th style="min-width: 60px;">합계</th>
+        </tr>
+      </thead>
+      <tbody>${rowsHtml}</tbody>
+    </table>
+  `;
+  document.getElementById('matrix').innerHTML = tableHtml;
+}
+
+loadAll();
+</script>
+
+</body>
+</html>
