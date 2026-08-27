@@ -1119,13 +1119,28 @@ function renderPart(partKey, items, meta) {
 
   const itemsHtml = items.map(item => renderItem(item, part)).join('');
 
-  // prologue 파트에는 프롤로그 정리본 링크를 챕터 목록 위에 추가
-  const guideHtml = (partKey === 'prologue') ? `
-    <a href="prologue_16.html" class="prologue-guide-link">
-      <div class="prologue-guide-icon">📖</div>
+  // 파트별 정리본 링크 카드 매핑
+  const PART_GUIDES = {
+    prologue: {
+      href: 'prologue_16.html',
+      icon: '📖',
+      title: '이 아홉 편을 조금 더 깊이 만나기',
+      sub: '프롤로그 정리본 — 다섯 편의 소개글과 네 편의 서문(1988·2001·2008·2019)을 한 페이지에'
+    },
+    part1: {
+      href: 'part1_16.html',
+      icon: '📖',
+      title: '제1부의 다섯 장을 한 흐름으로 만나기',
+      sub: '제1부 정리본 — 오래된 뇌, 어린 시절의 상처, 이마고, 로맨틱한 사랑, 힘겨루기까지 다섯 장의 흐름을 한 페이지에'
+    }
+  };
+  const g = PART_GUIDES[partKey];
+  const guideHtml = g ? `
+    <a href="${g.href}" class="prologue-guide-link">
+      <div class="prologue-guide-icon">${g.icon}</div>
       <div class="prologue-guide-body">
-        <div class="prologue-guide-title">이 아홉 편을 조금 더 깊이 만나기</div>
-        <div class="prologue-guide-sub">프롤로그 정리본 — 다섯 편의 소개글과 네 편의 서문(1988·2001·2008·2019)을 한 페이지에</div>
+        <div class="prologue-guide-title">${g.title}</div>
+        <div class="prologue-guide-sub">${g.sub}</div>
       </div>
       <div class="prologue-guide-arrow">→</div>
     </a>` : '';
