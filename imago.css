@@ -916,24 +916,28 @@
   .reader .chapter,
   .reader .preface { margin-bottom: 0; }
 
-  /* 이전 / 색인 / 다음 */
+  /* 이전 / 색인 / 다음 — 세 칸 동일 크기 */
   .pager {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     align-items: stretch;
     margin: 42px 0 10px;
   }
-  .pager a {
-    display: block;
+  .pager .cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 16px 18px;
     background: rgba(255, 255, 255, 0.55);
     border: 1px solid var(--line-soft);
     border-radius: 3px;
     text-decoration: none;
     transition: border-color 0.2s, background 0.2s;
+    min-width: 0;
   }
-  .pager a:hover { border-color: var(--gold); background: rgba(255, 255, 255, 0.85); }
+  a.cell:hover { border-color: var(--gold); background: rgba(255, 255, 255, 0.85); }
+  .pager .cell.empty { border-style: dashed; background: transparent; }
   .pager .dir {
     display: block;
     font-family: 'Cormorant Garamond', serif;
@@ -953,22 +957,21 @@
     line-height: 1.55;
     word-break: keep-all;
   }
+  .pager .prev-cell { text-align: left; }
+  .pager .home      { text-align: center; }
   .pager .next-cell { text-align: right; }
-  .pager .home {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 16px 20px;
-    font-family: 'Nanum Myeongjo', serif;
-    font-weight: 700;
-    font-size: 13.5px;
-    color: var(--accent);
+  .pager .home .label { color: var(--accent); }
+
+  /* 본문 위쪽의 작은 이동 줄 */
+  .pager.top { margin: 0 0 30px; }
+  .pager.top .cell { padding: 10px 14px; }
+  .pager.top .dir { font-size: 10.5px; margin-bottom: 3px; }
+  .pager.top .label {
+    font-size: 12.5px;
+    line-height: 1.5;
     white-space: nowrap;
-  }
-  .pager .empty {
-    border: 1px dashed var(--line-soft);
-    border-radius: 3px;
-    background: transparent;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   /* 이 글이 속한 부 전체로 */
@@ -1141,10 +1144,14 @@
     .cards { grid-template-columns: 1fr; }
   }
   @media (max-width: 640px) {
-    .pager { grid-template-columns: 1fr; }
-    .pager .next-cell { text-align: left; }
-    .pager .home { order: 3; }
-    .pager .empty { display: none; }
+    .pager:not(.top) { grid-template-columns: 1fr; }
+    .pager:not(.top) .next-cell { text-align: left; }
+    .pager:not(.top) .home { order: 3; }
+    .pager:not(.top) .empty { display: none; }
+    .pager.top { gap: 8px; }
+    .pager.top .cell { padding: 9px 10px; }
+    .pager.top .dir { font-size: 9.5px; letter-spacing: 0.12em; }
+    .pager.top .label { font-size: 11.5px; }
     .part-head .pall { margin-left: 0; width: 100%; }
     .search-box { font-size: 14.5px; padding: 13px 16px; }
   }
