@@ -1,8 +1,6 @@
 /* ─────────────────────────────────────────────────────────────
    이마고 다시 보기 — 공용 스타일시트
-   모두의 새벽 + 낭만북클럽 · 시즌 16 『이마고』
-   part1/2/3_16.html · prologue_16.html 의 스타일을 하나로 합치고
-   색인(imago.html)과 낱개 페이지용 컴포넌트를 더한 것.
+   모두의 새벽 + 낭만북클럽 · 『이마고』
    ───────────────────────────────────────────────────────────── */
 
   :root {
@@ -1160,4 +1158,35 @@
     color: var(--ink-faint);
     line-height: 1.75;
     word-break: keep-all;
+  }
+
+  /* 책 자체의 네비 — 목차 · 프롤로그 · 1~3부 */
+  .nav.book {
+    gap: 18px;
+  }
+  .nav.book a {
+    font-family: 'Nanum Myeongjo', serif;
+    font-style: normal;
+    font-size: 13.5px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    white-space: nowrap;
+  }
+  @media (max-width: 640px) {
+    .nav.book { gap: 12px 14px; }
+    .nav.book a { font-size: 12.5px; }
+  }
+
+  /* 색인 상단 이미지 */
+  .hero-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 0 42px;
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    background: var(--cream-soft);
+  }
+  @media (max-width: 640px) {
+    .hero-img { margin-bottom: 30px; }
   }
