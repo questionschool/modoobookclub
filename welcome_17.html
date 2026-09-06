@@ -37,6 +37,8 @@
     --gold-deep: #6d5e43;    /* 진한 금 */
     --line: #ddd5c8;         /* 옅은 갈회 선 */
     --accent: #9c3229;       /* 인장의 붉은색 - 메인 강조 */
+    --accent-soft: #b8564a;  /* 옅은 인장색 */
+    --cream-soft: #fcfaf6;   /* 밝은 종이 */
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,6 +53,16 @@
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
   }
+
+  /* NAV */
+  .nav { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; padding: 20px 0 0; margin-bottom: 8px; }
+  .nav a {
+    font-size: 13.5px; color: var(--ink-muted); text-decoration: none;
+    padding: 7px 14px; border: 1px solid var(--line); background: var(--cream-soft);
+    transition: all .25s ease;
+  }
+  .nav a:hover { color: var(--accent); border-color: var(--accent-soft); }
+  .nav a.current { color: var(--cream-soft); background: var(--accent); border-color: var(--accent); }
 
   .wrap {
     max-width: 760px;
@@ -1053,6 +1065,15 @@
 </head>
 <body>
 <div class="wrap">
+
+  <nav class="nav">
+    <a href="journal_17.html">📖 오늘 기록</a>
+    <a href="my_journal_17.html">✿ 나의 기록</a>
+    <a href="contents_17.html">📋 진행 상황</a>
+    <a href="author_17.html">✍ 작가</a>
+    <a href="welcome_17.html" class="current">✦ 환영</a>
+    <a href="guide_17.html">✎ 사용법</a>
+  </nav>
 
   <!-- HEADER -->
   <header>
