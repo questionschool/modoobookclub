@@ -168,6 +168,35 @@
   .chip.current:hover { color: var(--cream-soft); }
 
   /* 참고 */
+  /* SESSION LOG */
+  .log-lead { font-size: 14px; color: var(--ink-muted); margin-bottom: 14px; }
+  .log-row {
+    display: grid; grid-template-columns: 56px 1fr; gap: 0 14px;
+    padding: 15px 0; border-top: 1px solid var(--line-soft);
+  }
+  .log-row:first-of-type { border-top: 1px solid var(--line); }
+  .log-row:last-of-type { border-bottom: 1px solid var(--line); }
+  .log-day {
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    font-size: 15px; color: var(--accent); letter-spacing: .04em; padding-top: 2px;
+  }
+  .log-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+  .log-date { font-weight: 700; font-size: 15.5px; }
+  .log-range { font-size: 13.5px; color: var(--ink-muted); }
+  .log-pages { font-size: 12.5px; color: var(--gold); letter-spacing: .02em; }
+  .log-people { margin-top: 7px; font-size: 13.5px; color: var(--ink-soft); line-height: 1.9; }
+  .log-count { color: var(--accent); font-weight: 700; margin-right: 10px; }
+  .log-name { margin-right: 9px; white-space: nowrap; }
+  .log-none { color: var(--ink-faint); font-style: italic; }
+  .log-empty {
+    padding: 26px 22px; border: 1px dashed var(--line); background: var(--cream-soft);
+    color: var(--ink-muted); font-size: 14.5px; text-align: center;
+  }
+  @media (max-width: 520px) {
+    .log-row { grid-template-columns: 46px 1fr; gap: 0 10px; }
+    .log-date { font-size: 14.5px; }
+  }
+
   .note-card { margin-top: 8px; padding: 20px 22px; border: 1px solid var(--line); background: var(--cream-soft); }
   .note-card p { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 10px; }
   .note-card p:last-child { margin-bottom: 0; }
@@ -259,6 +288,14 @@
   <!-- 章 그리드 -->
   <section class="block">
     <div id="chapterGrid"></div>
+  </section>
+
+  <!-- 회차 기록 -->
+  <section class="block">
+    <span class="section-num">Log · 회차 기록</span>
+    <h2>함께한 새벽들</h2>
+    <p class="log-lead" id="logLead"></p>
+    <div id="sessionLog"></div>
   </section>
 
   <!-- 참고 -->
@@ -455,6 +492,7 @@ function render() {
     : '계획 일정 기준 — 회차 기록이 입력되면 실제 진도로 바뀝니다';
 
   renderChapterGrid(statuses);
+  renderSessionLog();
 }
 
 function itemLabel(t) {
@@ -494,6 +532,90 @@ function renderFinishEstimate(pagesRead, doneSessions) {
 
 function partName(key) {
   return key === 'part1' ? '1부' : key === 'part2' ? '2부' : '서문';
+}
+
+// ── 회차 기록 ────────────────────────────────────────
+// 낭독 대상 쪽수만 센다 (부 사이 빈 페이지 제외)
+function realPages(a, b) {
+  if (isNaN(a)) return 0;
+  const hi = isNaN(b) ? a : b;
+  return CITY_OF_FICTION_TOC.reduce((sum, t) =>
+    sum + Math.max(0, Math.min(t.e, hi) - Math.max(t.s, a) + 1), 0);
+}
+
+function chapterRange(a, b) {
+  if (isNaN(a)) return '';
+  const hi = isNaN(b) ? a : b;
+  const hit = CITY_OF_FICTION_TOC.filter(t => t.s <= hi && t.e >= a);
+  if (!hit.length) return '';
+  const parts = [];
+  ['preface', 'part1', 'part2'].forEach(key => {
+    const g = hit.filter(t => t.part === key);
+    if (!g.length) return;
+    if (key === 'preface') { parts.push('한국어판 서문'); return; }
+    const ns = g.map(t => t.n);
+    const span = ns[0] === ns[ns.length - 1] ? `${ns[0]}장` : `${ns[0]}~${ns[ns.length - 1]}장`;
+    parts.push(`${key === 'part1' ? '1부' : '2부'} ${span}`);
+  });
+  return parts.join(' · ');
+}
+
+function renderSessionLog() {
+  const host = document.getElementById('sessionLog');
+  const lead = document.getElementById('logLead');
+  if (!host) return;
+
+  const rows = sessions
+    .filter(s => isPastStart(extractKSTDate(s.date)))
+    .slice()
+    .sort((a, b) => (Number(a.day) || 0) - (Number(b.day) || 0));
+
+  if (!rows.length) {
+    lead.textContent = '';
+    host.innerHTML = '<div class="log-empty">아직 기록된 새벽이 없어. 첫 회차가 입력되면 여기에 하나씩 쌓일 거야.</div>';
+    return;
+  }
+
+  const totalPages = rows.reduce((n, s) =>
+    n + realPages(parseInt(s.start_page, 10), parseInt(s.end_page, 10)), 0);
+  const everyone = new Set();
+  rows.forEach(s => (s.attendees || []).forEach(a => everyone.add(a.alias || a)));
+  lead.textContent = `${rows.length}번의 새벽 · ${totalPages}쪽 · 지금까지 함께한 사람 ${everyone.size}명`;
+
+  host.innerHTML = rows.map(s => {
+    const ymd = extractKSTDate(s.date);
+    const d = ymd ? new Date(Date.UTC(ymd.y, ymd.m - 1, ymd.d)) : null;
+    const dateStr = d ? `${d.getUTCMonth() + 1}월 ${d.getUTCDate()}일 (${DOW[d.getUTCDay()]})` : '날짜 미상';
+
+    const a = parseInt(s.start_page, 10);
+    const b = parseInt(s.end_page, 10);
+    const pageStr = isNaN(a) ? '' : (isNaN(b) || b === a ? `p.${a}` : `p.${a}~${b}`);
+    const pg = realPages(a, b);
+    const chapters = chapterRange(a, b);
+
+    const list = (s.attendees || []).map(x => typeof x === 'string' ? { alias: x } : x);
+    const people = list.length
+      ? `<span class="log-count">${list.length}명</span>` + list.map(x =>
+          `<span class="log-name">${escapeHtml(x.alias)}</span>`).join('')
+      : '<span class="log-none">참가자 기록 없음</span>';
+
+    return `<div class="log-row">
+      <div class="log-day">Day ${escapeHtml(String(s.day ?? '?'))}</div>
+      <div>
+        <div class="log-head">
+          <span class="log-date">${dateStr}</span>
+          ${chapters ? `<span class="log-range">${chapters}</span>` : ''}
+          ${pageStr ? `<span class="log-pages">${pageStr} · ${pg}쪽</span>` : ''}
+        </div>
+        <div class="log-people">${people}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
 function renderChapterGrid(statuses) {
