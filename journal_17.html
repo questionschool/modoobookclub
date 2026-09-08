@@ -1848,6 +1848,18 @@
 // ════════════════════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
 const TOTAL_PAGES = 578;   // 낭독 대상: 서문 3 + 1부 391 + 2부 184 (책 전체는 588쪽)
+const READ_FIRST_PAGE = 5;                    // 한국어판 서문 시작
+const READ_GAPS = [[8, 10], [402, 403]];      // 낭독 대상이 아닌 간지·부 표지
+
+// 두 쪽 사이의 '실제 낭독 쪽수' (간지 제외)
+function realPages(a, b) {
+  if (isNaN(a) || isNaN(b) || b < a) return 0;
+  let n = b - a + 1;
+  READ_GAPS.forEach(([gs, ge]) => {
+    n -= Math.max(0, Math.min(ge, b) - Math.max(gs, a) + 1);
+  });
+  return Math.max(0, n);
+}
 const TOTAL_DAYS = 35;
 
 // 책 정보 (인용 표시에 사용)
@@ -1855,7 +1867,8 @@ const BOOK_AUTHOR = '위화';
 const BOOK_TITLE = '원청 (文城)';
 
 const WEEKDAYS = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
-const SECTION_LABELS = { front: 'Prologue', main: '본문', back: 'Epilogue' };
+const SECTION_LABELS = { front: '한국어판 서문', main: '본문', back: 'Epilogue',
+                         part1: '1부 「원청」', part2: '2부 「또 하나의 이야기」' };
 
 // 시즌 17 참가자 (가나다 순) — 농담 첫째 · 지평 마지막
 const DEFAULT_MEMBERS = [
@@ -2116,29 +2129,24 @@ function renderDashboard() {
   document.getElementById('statRecords').textContent = recordCount;
 
   // Progress bar — 시간상 끝난 회차만 반영
-  const finishedMainSessions = finishedSessions.filter(s => s.section === 'main');
-  const maxMainPage = finishedMainSessions.length > 0
-    ? Math.max(...finishedMainSessions.map(s => Number(s.end_page) || Number(s.start_page) || 0))
-    : 0;
-  const hasFinishedFront = finishedSessions.some(s => s.section === 'front');
-  let pagesRead = maxMainPage + (hasFinishedFront ? 17 : 0);
-  const hasFinishedBack = finishedSessions.some(s => s.section === 'back');
-  if (hasFinishedBack) {
-    const backEnds = finishedSessions.filter(s => s.section === 'back').map(s => Number(s.end_page) || 0);
-    pagesRead = Math.max(pagesRead, Math.max(...backEnds) + 17);
-  }
+  // 쪽 번호만으로 계산한다. 시트의 section 값(front/main/back·part1/part2 등)에
+  // 기대지 않으므로 어떤 시즌 표기를 쓰든 그대로 동작한다.
+  const finishedEnds = finishedSessions
+    .map(s => Number(s.end_page) || Number(s.start_page) || 0)
+    .filter(n => n > 0);
+  const maxReadPage = finishedEnds.length > 0 ? Math.max(...finishedEnds) : 0;
+  const pagesRead = realPages(READ_FIRST_PAGE, maxReadPage);
 
   const pct = Math.min(100, Math.round((pagesRead / TOTAL_PAGES) * 100));
   document.getElementById('progressFill').style.width = pct + '%';
 
   let currentChapter = '';
-  if (maxMainPage > 0) {
+  if (maxReadPage > 0) {
     const ch = contents.find(c =>
-      c.section_type === 'main' &&
-      Number(c.page_start) <= maxMainPage &&
-      Number(c.page_end) >= maxMainPage
+      Number(c.page_start) <= maxReadPage &&
+      Number(c.page_end) >= maxReadPage
     );
-    if (ch) currentChapter = ` · Ch. ${ch.num} 진행 중`;
+    if (ch) currentChapter = ` · ${ch.num}장 진행 중`;
   }
 
   document.getElementById('progressText').textContent =
@@ -2650,13 +2658,12 @@ function renderSectionInfo(s) {
   const sectionLabel = SECTION_LABELS[s.section] || s.section || '';
   if (!sectionLabel) return { num: '', title: '', titleLines: [], multi: false };
 
-  // 본문 회차: Chapter N + 챕터 제목
-  if (s.section === 'main') {
+  // 낭독 회차: 쪽 범위로 장을 찾는다 (section 값에 기대지 않음)
+  {
     const startNum = parseInt(s.start_page, 10);
     const endNum = parseInt(s.end_page, 10) || startNum;
     if (!isNaN(startNum)) {
       const matches = contents.filter(c =>
-        c.section_type === 'main' &&
         Number(c.page_start) <= endNum &&
         Number(c.page_end) >= startNum
       );
