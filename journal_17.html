@@ -1848,6 +1848,9 @@
 // ════════════════════════════════════════════════════════
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbyN5Gzjrzvf_hnewWGnFdeQpl0YpSbcR8aRsW8BGQbOsd2_ajsuAkwD228JwyccQj1h/exec';
 const TOTAL_PAGES = 578;   // 낭독 대상: 서문 3 + 1부 391 + 2부 184 (책 전체는 588쪽)
+// 『원청』 목차 — 쪽 범위로 장을 찾기 위한 기준. 시트에 기대지 않는다.
+const TOC_17 = [{"part":"preface","n":null,"s":5,"e":7},{"part":"part1","n":1,"s":11,"e":15},{"part":"part1","n":2,"s":16,"e":23},{"part":"part1","n":3,"s":24,"e":29},{"part":"part1","n":4,"s":30,"e":32},{"part":"part1","n":5,"s":33,"e":40},{"part":"part1","n":6,"s":41,"e":43},{"part":"part1","n":7,"s":44,"e":50},{"part":"part1","n":8,"s":51,"e":53},{"part":"part1","n":9,"s":54,"e":62},{"part":"part1","n":10,"s":63,"e":67},{"part":"part1","n":11,"s":68,"e":75},{"part":"part1","n":12,"s":76,"e":82},{"part":"part1","n":13,"s":83,"e":87},{"part":"part1","n":14,"s":88,"e":91},{"part":"part1","n":15,"s":92,"e":96},{"part":"part1","n":16,"s":97,"e":103},{"part":"part1","n":17,"s":104,"e":107},{"part":"part1","n":18,"s":108,"e":111},{"part":"part1","n":19,"s":112,"e":118},{"part":"part1","n":20,"s":119,"e":126},{"part":"part1","n":21,"s":127,"e":130},{"part":"part1","n":22,"s":131,"e":135},{"part":"part1","n":23,"s":136,"e":141},{"part":"part1","n":24,"s":142,"e":147},{"part":"part1","n":25,"s":148,"e":150},{"part":"part1","n":26,"s":151,"e":154},{"part":"part1","n":27,"s":155,"e":158},{"part":"part1","n":28,"s":159,"e":160},{"part":"part1","n":29,"s":161,"e":163},{"part":"part1","n":30,"s":164,"e":166},{"part":"part1","n":31,"s":167,"e":170},{"part":"part1","n":32,"s":171,"e":175},{"part":"part1","n":33,"s":176,"e":182},{"part":"part1","n":34,"s":183,"e":187},{"part":"part1","n":35,"s":188,"e":191},{"part":"part1","n":36,"s":192,"e":198},{"part":"part1","n":37,"s":199,"e":203},{"part":"part1","n":38,"s":204,"e":207},{"part":"part1","n":39,"s":208,"e":211},{"part":"part1","n":40,"s":212,"e":214},{"part":"part1","n":41,"s":215,"e":218},{"part":"part1","n":42,"s":219,"e":223},{"part":"part1","n":43,"s":224,"e":228},{"part":"part1","n":44,"s":229,"e":233},{"part":"part1","n":45,"s":234,"e":242},{"part":"part1","n":46,"s":243,"e":248},{"part":"part1","n":47,"s":249,"e":255},{"part":"part1","n":48,"s":256,"e":262},{"part":"part1","n":49,"s":263,"e":268},{"part":"part1","n":50,"s":269,"e":271},{"part":"part1","n":51,"s":272,"e":274},{"part":"part1","n":52,"s":275,"e":279},{"part":"part1","n":53,"s":280,"e":283},{"part":"part1","n":54,"s":284,"e":287},{"part":"part1","n":55,"s":288,"e":289},{"part":"part1","n":56,"s":290,"e":303},{"part":"part1","n":57,"s":304,"e":305},{"part":"part1","n":58,"s":306,"e":308},{"part":"part1","n":59,"s":309,"e":314},{"part":"part1","n":60,"s":315,"e":318},{"part":"part1","n":61,"s":319,"e":322},{"part":"part1","n":62,"s":323,"e":325},{"part":"part1","n":63,"s":326,"e":330},{"part":"part1","n":64,"s":331,"e":333},{"part":"part1","n":65,"s":334,"e":344},{"part":"part1","n":66,"s":345,"e":350},{"part":"part1","n":67,"s":351,"e":353},{"part":"part1","n":68,"s":354,"e":358},{"part":"part1","n":69,"s":359,"e":369},{"part":"part1","n":70,"s":370,"e":372},{"part":"part1","n":71,"s":373,"e":376},{"part":"part1","n":72,"s":377,"e":381},{"part":"part1","n":73,"s":382,"e":387},{"part":"part1","n":74,"s":388,"e":391},{"part":"part1","n":75,"s":392,"e":401},{"part":"part2","n":1,"s":404,"e":408},{"part":"part2","n":2,"s":409,"e":412},{"part":"part2","n":3,"s":413,"e":415},{"part":"part2","n":4,"s":416,"e":419},{"part":"part2","n":5,"s":420,"e":423},{"part":"part2","n":6,"s":424,"e":429},{"part":"part2","n":7,"s":430,"e":432},{"part":"part2","n":8,"s":433,"e":437},{"part":"part2","n":9,"s":438,"e":445},{"part":"part2","n":10,"s":446,"e":448},{"part":"part2","n":11,"s":449,"e":451},{"part":"part2","n":12,"s":452,"e":456},{"part":"part2","n":13,"s":457,"e":460},{"part":"part2","n":14,"s":461,"e":467},{"part":"part2","n":15,"s":468,"e":471},{"part":"part2","n":16,"s":472,"e":475},{"part":"part2","n":17,"s":476,"e":488},{"part":"part2","n":18,"s":489,"e":492},{"part":"part2","n":19,"s":493,"e":495},{"part":"part2","n":20,"s":496,"e":500},{"part":"part2","n":21,"s":501,"e":507},{"part":"part2","n":22,"s":508,"e":513},{"part":"part2","n":23,"s":514,"e":519},{"part":"part2","n":24,"s":520,"e":523},{"part":"part2","n":25,"s":524,"e":527},{"part":"part2","n":26,"s":528,"e":532},{"part":"part2","n":27,"s":533,"e":538},{"part":"part2","n":28,"s":539,"e":543},{"part":"part2","n":29,"s":544,"e":549},{"part":"part2","n":30,"s":550,"e":555},{"part":"part2","n":31,"s":556,"e":559},{"part":"part2","n":32,"s":560,"e":562},{"part":"part2","n":33,"s":563,"e":567},{"part":"part2","n":34,"s":568,"e":574},{"part":"part2","n":35,"s":575,"e":578},{"part":"part2","n":36,"s":579,"e":587}];
+
 const READ_FIRST_PAGE = 5;                    // 한국어판 서문 시작
 const READ_GAPS = [[8, 10], [402, 403]];      // 낭독 대상이 아닌 간지·부 표지
 
@@ -2655,40 +2658,37 @@ function isSameDayLocal(iso, d2) {
 }
 
 function renderSectionInfo(s) {
-  const sectionLabel = SECTION_LABELS[s.section] || s.section || '';
-  if (!sectionLabel) return { num: '', title: '', titleLines: [], multi: false };
+  const startNum = parseInt(s.start_page, 10);
+  const endNum = parseInt(s.end_page, 10) || startNum;
+  const empty = { num: '', title: '', titleLines: [], multi: false };
+  if (isNaN(startNum)) return empty;
 
-  // 낭독 회차: 쪽 범위로 장을 찾는다 (section 값에 기대지 않음)
-  {
-    const startNum = parseInt(s.start_page, 10);
-    const endNum = parseInt(s.end_page, 10) || startNum;
-    if (!isNaN(startNum)) {
-      const matches = contents.filter(c =>
-        Number(c.page_start) <= endNum &&
-        Number(c.page_end) >= startNum
-      );
-      if (matches.length === 1) {
-        const ch = matches[0];
-        const t = ch.title || '';
-        return { num: `Chapter ${ch.num}`, title: t, titleLines: t ? [t] : [], multi: false };
-      } else if (matches.length > 1) {
-        const first = matches[0];
-        const last = matches[matches.length - 1];
-        // 걸친 각 챕터를 "번호. 제목" 한 줄씩 (제목 없으면 "N장")
-        const lines = matches.map(c => c.title ? `${c.num}. ${c.title}` : `${c.num}장`);
-        return {
-          num: `Chapter ${first.num} & ${last.num}`,
-          title: lines.join(' & '),   // 기존 호환용 (한 줄 문자열)
-          titleLines: lines,          // 줄 단위 배열
-          multi: true
-        };
-      }
-    }
-    return { num: '', title: '', titleLines: [], multi: false };
-  }
+  const hit = TOC_17.filter(t => t.s <= endNum && t.e >= startNum);
+  if (!hit.length) return empty;
 
-  // 서론/후기 등은 라벨만
-  return { num: sectionLabel, title: '', titleLines: [], multi: false };
+  // 「8장」 ~ 「10장」 형태의 한 줄. 2부는 부를 앞에 붙인다.
+  const name = (t, withPart) => {
+    if (t.part === 'preface') return '한국어판 서문';
+    const prefix = (withPart && t.part === 'part2') ? '2부 ' : '';
+    return `${prefix}${t.n}장`;
+  };
+
+  const first = hit[0], last = hit[hit.length - 1];
+  const crossParts = first.part !== last.part;
+  const line = (first === last)
+    ? `「${name(first, true)}」`
+    : `「${name(first, true)}」 ~ 「${name(last, crossParts)}」`;
+
+  // 상단 이탤릭 라벨
+  const numOf = t => t.part === 'preface' ? null : t.n;
+  const a = numOf(first), b = numOf(last);
+  let num;
+  if (a === null && b === null) num = 'Preface';
+  else if (a === null) num = `Preface – Chapter ${b}`;
+  else if (a === b) num = `Chapter ${a}`;
+  else num = `Chapter ${a} – ${b}`;
+
+  return { num, title: line, titleLines: [line], multi: false };
 }
 
 function computePageCount(s) {
@@ -2937,17 +2937,8 @@ function buildPrintableReflection(r, s) {
 
   // 헤더 본문 구성 (두 줄: 챕터줄 / 페이지줄)
   // 단일 본문 회차: "Chapter N. 챕터 제목" + "p. X ~ p. Y"
-  // 다중 챕터 회차: "1. 제목 & 2. 제목" + "p. X ~ p. Y" (제목에 번호 포함 → Chapter N&M 생략)
-  // 서론/후기: "서론" + "p. X ~ p. Y"
-  let chapterLine = '';
-  if (sectionInfoObj.multi) {
-    chapterLine = sectionInfoObj.title || '';
-  } else {
-    const parts = [];
-    if (sectionInfoObj.num) parts.push(sectionInfoObj.num);
-    if (sectionInfoObj.title) parts.push(sectionInfoObj.title);
-    chapterLine = parts.join('. ');
-  }
+  // 「8장」 ~ 「10장」 한 줄
+  const chapterLine = sectionInfoObj.title || sectionInfoObj.num || '';
 
   return `
     <div style="font-family: 'Noto Serif KR', 'Gowun Batang', serif; background: #f7f4ee; padding: 44px 50px; max-width: 680px; box-sizing: border-box; color: #242020; line-height: 1.7;">
@@ -3145,15 +3136,8 @@ function buildSessionMarkdown(session) {
   });
 
   // 챕터 정보 한 줄
-  let chapterLine = '';
-  if (sectionInfoObj.multi) {
-    chapterLine = sectionInfoObj.title || '';
-  } else {
-    const parts = [];
-    if (sectionInfoObj.num) parts.push(sectionInfoObj.num);
-    if (sectionInfoObj.title) parts.push(sectionInfoObj.title);
-    chapterLine = parts.join('. ');
-  }
+  // 「8장」 ~ 「10장」 한 줄
+  const chapterLine = sectionInfoObj.title || sectionInfoObj.num || '';
 
   const lines = [];
   lines.push(`# 원청 — 모두의 기록`);
