@@ -1211,3 +1211,24 @@
     word-break: keep-all;
   }
   .header-note strong { color: var(--ink-muted); font-weight: 700; }
+
+  /* ── 실습 앱으로 건너가는 다리 ── */
+  .try-app {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 7px 16px;
+    font-family: 'Gowun Batang', serif;
+    font-size: 13px;
+    color: #fff;
+    background: var(--accent);
+    border-radius: 18px;
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .try-app:hover { background: var(--gold-deep); }
+  .also .app-line a { font-weight: 600; }
+  .part-head .pall.app { margin-left: 14px; color: var(--gold-deep); }
+  .card-tags .app-tag { color: #fff; background: var(--accent-soft); }
+  @media (max-width: 640px) {
+    .part-head .pall.app { margin-left: 0; }
+  }
