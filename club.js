@@ -1,0 +1,7 @@
+const menu=document.querySelector('.menu-toggle');
+const nav=document.querySelector('#site-nav');
+menu?.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));nav.classList.toggle('open',open)});
+nav?.addEventListener('click',e=>{if(e.target.closest('a')){menu.setAttribute('aria-expanded','false');nav.classList.remove('open')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&nav?.classList.contains('open')){menu.setAttribute('aria-expanded','false');nav.classList.remove('open');menu.focus()}});
+const search=document.querySelector('#book-search');
+if(search){let category='전체';const rows=[...document.querySelectorAll('.archive-row')];const buttons=[...document.querySelectorAll('[data-filter]')];const update=()=>{const q=search.value.trim().toLocaleLowerCase();let count=0;rows.forEach(row=>{const show=(category==='전체'||row.dataset.category===category)&&row.dataset.search.toLocaleLowerCase().includes(q);row.hidden=!show;if(show)count++});document.querySelector('#result-count').textContent=`${count}개 시즌`;document.querySelector('#empty-state').hidden=count!==0};search.addEventListener('input',update);buttons.forEach(button=>button.addEventListener('click',()=>{category=button.dataset.filter;buttons.forEach(b=>{const chosen=b===button;b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen))});update()}));}

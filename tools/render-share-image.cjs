@@ -1,0 +1,3 @@
+const {chromium}=require(process.env.PLAYWRIGHT_PACKAGE || 'playwright');
+const path=require('node:path');
+(async()=>{const browser=await chromium.launch({headless:true,channel:'chrome'});try{const page=await browser.newPage({viewport:{width:1200,height:630},deviceScaleFactor:1});await page.goto('http://127.0.0.1:8765/tools/og-season18.html',{waitUntil:'networkidle'});await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(__dirname,'../assets/og-season18-v1.jpg'),type:'jpeg',quality:92});console.log('Rendered 1200 × 630 social card');}finally{await browser.close();}})().catch(e=>{console.error(e);process.exitCode=1});
