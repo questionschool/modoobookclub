@@ -30,7 +30,7 @@ Google 스프레드시트의 기존 `참가자` 탭 A:G는 유지합니다. H:O�
 - `welcome_18.html`: 신청 비밀번호, 관리자 연결, 편집창
 - `signup.js`: 카드 렌더링, 수정·삭제, 접수·저장 결과 확인
 - `club.css`: 카드·연필 버튼·모바일 편집창
-- `appsscript-greetings.json`: Google Apps Script 권한 명세 백업 — 현재 참가자 시트·기존 신청 알림·관리자 이메일 확인
+- `appsscript-greetings.json`: Google Apps Script 권한 명세 백업 — Google Sheets 연결·기존 신청 알림·관리자 이메일 확인
 - `greetings-server.gs`: 기존 기능을 포함한 Google Apps Script 전체 코드 백업
 - `GREETING-ADMIN.md`: 이 사용 안내
 
@@ -40,3 +40,5 @@ Google Apps Script 프로젝트: `138FdWBrr-de1vPdwWxX4o0mjsQH1pmLSENMXfBI29Ibmy
 검증: 작성자 비밀번호·위조 관리자 거부, 관리자 만료, 기존 글 비밀번호 지정, 중복 접수 방지, 동시 수정 충돌, 연결 끊김 후 결과 확인, 삭제 후 신청 정보 보존, 데스크톱·모바일 화면.
 
 관리자 확인은 별도 배포 `AKfycbwkHgX_KY0vr-5FRzGmkoXmaL_ybY5G_bM7vGX_nIElUw8DvXv79rguwVEi-xQZNT8ZYA`를 사용합니다. 실행 계정은 웹 앱을 액세스하는 사용자, 접근 권한은 나만입니다. 참가자용 공개 배포는 기존 주소를 유지합니다. 두 배포는 같은 프로젝트의 Cache를 사용하여 단기 관리자 인증을 확인합니다. 서버 코드를 바꿀 때는 두 배포를 함께 새 버전으로 갱신해 주세요.
+
+웹앱에서는 참가자 스프레드시트 ID `1cCTYljHwrG-3jqX9Vb103B88-IB1Zzgpk3_U4f1eLPo`를 명시하여 연결합니다. Google의 Sheets 권한은 계정의 스프레드시트 조회·수정 범위를 포함하나, 구현에서는 위 문서 하나만 사용합니다. 브라우저에는 시트 접근 권한이나 OAuth 토큰을 전달하지 않습니다.

@@ -1,4 +1,3 @@
-/** @OnlyCurrentDoc */
 /**
  * 모두의 새벽 + 낭만북클럽 — 참가자 기록 백엔드 v5
  * Google Apps Script (코드.gs)
@@ -42,7 +41,7 @@ const NOTIFY_EMAIL = 'thomas@questionschool.net';
  */
 function legacyDoGet_(e) {
   try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+    const sheet = SpreadsheetApp.openById('1cCTYljHwrG-3jqX9Vb103B88-IB1Zzgpk3_U4f1eLPo').getSheetByName(SHEET_NAME);
     if (!sheet) {
       return jsonResponse({ entries: [] });
     }
@@ -111,7 +110,7 @@ function legacyDoPost_(e) {
       return jsonResponse({ ok: false, error: 'Too long' });
     }
 
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const ss = SpreadsheetApp.openById('1cCTYljHwrG-3jqX9Vb103B88-IB1Zzgpk3_U4f1eLPo');
     let sheet = ss.getSheetByName(SHEET_NAME);
 
     // 시트가 없으면 자동 생성 (7열 헤더)
@@ -184,7 +183,7 @@ function safeAlert(msg) {
  */
 function setupSheet() {
   greetingRequireOwner_();
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById('1cCTYljHwrG-3jqX9Vb103B88-IB1Zzgpk3_U4f1eLPo');
   let sheet = ss.getSheetByName(SHEET_NAME);
 
   if (!sheet) {
@@ -211,7 +210,7 @@ function setupSheet() {
  */
 function migrateSeason15Data() {
   greetingRequireOwner_();
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const ss = SpreadsheetApp.openById('1cCTYljHwrG-3jqX9Vb103B88-IB1Zzgpk3_U4f1eLPo');
   const sheet = ss.getSheetByName(SHEET_NAME);
   if (!sheet) {
     safeAlert('시트가 없어.');
@@ -314,7 +313,7 @@ function greetingEqual_(a, b) {
 // Escape formula prefixes before writing any user-supplied text to Sheets.
 function greetingCell_(s) { return /^[=+\-@]/.test(s) ? "'" + s : s; }
 function greetingSheet_() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+  const sheet = SpreadsheetApp.openById('1cCTYljHwrG-3jqX9Vb103B88-IB1Zzgpk3_U4f1eLPo').getSheetByName(SHEET_NAME);
   if (!sheet) greetingFail_('not_configured');
   return sheet;
 }
@@ -421,4 +420,11 @@ function greetingAdminPage_() {
     content='<h1>지평님, 안녕하세요.</h1><p>참가자 인사글을 수정·삭제하고, 기존 글에 수정 비밀번호를 지정하실 수 있습니다.</p><a rel="noreferrer" target="_blank" href="'+GREETING_SITE+'#admin='+token+'">관리자 화면 열기 →</a><p class="note">이 브라우저에서 최대 6시간 동안 관리하실 수 있습니다. 사용 후 사이트에서 관리자 나가기를 눌러 주세요.</p>';
   }
   return HtmlService.createHtmlOutput('<!doctype html><html lang="ko"><head><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="referrer" content="no-referrer"><title>낭만북클럽 관리자 확인</title><style>body{max-width:580px;margin:12vh auto;padding:28px;background:#f6f3e9;color:#193d52;font-family:system-ui,sans-serif;line-height:1.9}h1{font-size:27px}a{display:inline-block;background:#193d52;color:white;padding:14px 22px;text-decoration:none;border-radius:6px}.note{font-size:13px;color:#66766d}</style></head><body>'+content+'</body></html>').setTitle('낭만북클럽 관리자 확인');
+}
+
+function verifyGreetingsV6() {
+  greetingRequireOwner_();
+  const started=Date.now(), sheet=greetingSheet_();
+  const count=greetingRows_(sheet).filter(r=>String(r[5])==='18' && r[7] && !r[11]).length;
+  Logger.log('참가자 시트 연결 정상 · 시즌 18 공개 인사 '+count+'개 · '+(Date.now()-started)+'ms');
 }
