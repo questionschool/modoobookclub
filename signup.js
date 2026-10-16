@@ -6,7 +6,6 @@
   const status = document.querySelector('#signup-status');
   const button = document.querySelector('#signup-submit');
   const board = document.querySelector('#season18-greetings');
-  const refresh = document.querySelector('#greetings-refresh');
   const notice = document.querySelector('#greetings-notice');
   const adminLink = document.querySelector('#greetings-admin');
   const logout = document.querySelector('#greetings-logout');
@@ -28,7 +27,7 @@
     rate_limited: '비밀번호 확인이 여러 번 실패했습니다. 5분 뒤 다시 시도해 주세요.',
     conflict: '다른 곳에서 글이 변경되었습니다. 창을 닫고 새로고침한 뒤 다시 수정해 주세요.',
     not_found: '글을 찾을 수 없습니다. 새로고침해 주세요.',
-    admin_expired: '관리자 인증이 만료되었습니다. 관리자 버튼에서 다시 확인해 주세요.',
+    admin_expired: '관리자 인증이 만료되었습니다. G 버튼에서 다시 확인해 주세요.',
     invalid_fields: '필수 내용과 글자 수를 확인해 주세요.',
     forbidden: '이 작업을 할 권한이 없습니다.',
     request_conflict: '접수 정보를 확인할 수 없습니다. 진행자에게 문의해 주세요.'
@@ -98,10 +97,8 @@
     return data.entries;
   }
   async function loadEntries() {
-    refresh.disabled = true;
     try { entries = await readEntries(); render(); }
     catch { if (!entries.length) board.replaceChildren(el('p', 'small', '인사를 불러오지 못했습니다. 잠시 후 새로고침해 주세요. 작성 중인 내용은 그대로 유지됩니다.')); else notice.textContent = '목록을 새로 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.'; }
-    finally { refresh.disabled = false; }
   }
   function finish() {
     completed = true; pending = null; form.reset();
@@ -116,7 +113,6 @@
     status.textContent = '아직 접수 결과를 확인하지 못했습니다. 중복 신청을 막기 위해 다시 전송하지 않았습니다. 잠시 후 접수 결과를 확인하거나 카카오톡 채널로 문의해 주세요.';
     button.textContent = '접수 결과 다시 확인';
   }
-  refresh.addEventListener('click', loadEntries);
   form.addEventListener('submit', async event => {
     event.preventDefault(); if (busy || completed) return;
     if (!pending && !form.reportValidity()) return;
