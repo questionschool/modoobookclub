@@ -19,7 +19,7 @@
         visitorId = crypto.randomUUID();
         localStorage.setItem('bookclub-visitor-id-v1', visitorId);
       }
-    } catch { /* Storage unavailable: show shared statistics without inflating visits. */ }
+    } catch { visitorId = null; /* Storage unavailable: show shared statistics without inflating visits. */ }
     try {
       const options = {cache:'no-store', signal:AbortSignal.timeout(20000)};
       let url = endpoint + '?action=visitorStats&page=' + page;
