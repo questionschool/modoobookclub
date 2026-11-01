@@ -8,7 +8,7 @@ function j18Date(s,writing){if(!/^2026-11-\d{2}$/.test(s)||s<'2026-11-02'||s>'20
 function j18Text(v,max){var s=String(v||'').trim();if(s.length>max)j18Fail('입력한 내용이 너무 길어.');return s;}
 function j18Handle(b){
  var lock=LockService.getScriptLock();if(!lock.tryLock(15000))return jsonResponse({ok:false,error:'잠시 뒤 다시 저장해 줘.',status:503});
- try{return jsonResponse(Object.assign({ok:true},j18Dispatch(b)));}catch(e){return jsonResponse({ok:false,error:e.status?e.message:'저장소 연결을 확인하지 못했어. 잠시 뒤 다시 시도해 줘.',status:e.status||500});}finally{lock.releaseLock();}
+ try{return jsonResponse(Object.assign({ok:true},j18LikesDispatch(b)));}catch(e){return jsonResponse({ok:false,error:e.status?e.message:'저장소 연결을 확인하지 못했어. 잠시 뒤 다시 시도해 줘.',status:e.status||500});}finally{lock.releaseLock();}
 }
 function j18Dispatch(b){
  var path=String(b.path||'records'),method=b.method||'GET',d=b.data||{},cache=CacheService.getScriptCache(),session=j18Hash(b.adminToken||''),admin=!!b.adminToken&&cache.get('j18session:'+session)==='1',now=new Date().toISOString();
