@@ -23,7 +23,7 @@ async function downloadEntryImage(entry,button){
   }
   if(entry.mind){
    const mind=add('div','','background:#edf4f1;border-top:1px solid #ccdfd9;padding:23px 24px 24px;margin:0 -12px',body);
-   add('div','남기고 싶은 나의 마음','font:500 11px "Noto Sans KR",sans-serif;letter-spacing:.7px;color:#257f79;margin-bottom:13px',mind);
+   add('div','남겨두고 싶은 나의 마음','font:500 11px "Noto Sans KR",sans-serif;letter-spacing:.7px;color:#257f79;margin-bottom:13px',mind);
    add('div',entry.mind,'font-size:18px;line-height:1.95;white-space:pre-wrap;word-break:keep-all;color:#315354',mind);
   }
   if(!entry.quote)add('div','김정규 · 『뉴런하우스』'+(entry.page?' · p. '+entry.page:''),'font-size:12px;text-align:right;color:#28766f;margin-top:18px',body);
