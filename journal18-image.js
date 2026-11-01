@@ -29,11 +29,11 @@ async function downloadEntryImage(entry,button){
   if(!entry.quote)add('div','김정규 · 『뉴런하우스』'+(entry.page?' · p. '+entry.page:''),'font-size:12px;text-align:right;color:#28766f;margin-top:18px',body);
   const signature=add('div','','display:flex;align-items:center;justify-content:space-between;gap:24px;padding:21px 0 22px;margin-top:8px',body);
   add('div',entry.date.replaceAll('-','. '),'font:12px "Noto Sans KR",sans-serif;letter-spacing:.8px;color:#8b8b7f;flex-shrink:0',signature);
-  add('div',entry.alias,'font-size:19px;font-weight:700;color:#28766f;text-align:right',signature);
+  add('div',entry.alias,'font-size:13px;font-weight:400;color:#527b75;text-align:right',signature);
   const footer=add('div','','display:flex;align-items:center;justify-content:center;gap:12px;padding-top:17px');
   add('div','bookclub.questionschool.net','font:11px "Noto Sans KR",sans-serif;letter-spacing:.8px;color:#e1f6f0',footer);
   wrapper.append(card);document.body.append(wrapper);
-  if(document.fonts){await Promise.all([document.fonts.load('22px "Gowun Batang"'),document.fonts.load('700 19px "Gowun Batang"'),document.fonts.load('12px "Noto Sans KR"')]);await document.fonts.ready;}
+  if(document.fonts){await Promise.all([document.fonts.load('22px "Gowun Batang"'),document.fonts.load('12px "Noto Sans KR"')]);await document.fonts.ready;}
   // Keep long entries inside common mobile canvas memory and dimension limits.
   const height=Math.ceil(card.getBoundingClientRect().height),scale=Math.min(2,16000/height,Math.sqrt(15000000/(680*height)));
   const canvas=await html2canvas(card,{scale,backgroundColor:'#078f8b',logging:false,useCORS:true,windowWidth:1000,scrollX:0,scrollY:0});
