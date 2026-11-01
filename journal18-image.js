@@ -7,7 +7,7 @@ async function downloadEntryImage(entry,button){
  try{
   if(typeof html2canvas!=='function')throw Error('이미지 도구를 불러오지 못했어. 연결을 확인하고 다시 시도해 줘.');
   wrapper=document.createElement('div');wrapper.style.cssText='position:fixed;left:-10000px;top:0;width:680px;pointer-events:none';wrapper.setAttribute('aria-hidden','true');
-  const card=document.createElement('article');card.style.cssText="all:initial;display:block;box-sizing:border-box;width:680px;padding:26px 26px 20px;background:#078f8b;color:#254650;font-family:'Gowun Batang',serif;line-height:1.85;overflow-wrap:anywhere";
+  const card=document.createElement('article');card.style.cssText="all:initial;display:block;box-sizing:border-box;width:680px;padding:26px 26px 0;background:#078f8b;color:#254650;font-family:'Gowun Batang',serif;line-height:1.85;overflow-wrap:anywhere";
   // Reset every printable element so the website's blockquote and heading rules cannot leak in.
   const add=(tag,text,style,parent=card)=>{const node=document.createElement(tag);node.textContent=text;node.style.cssText='all:initial;display:block;box-sizing:border-box;color:inherit;font-family:inherit;overflow-wrap:anywhere;'+style;parent.append(node);return node;};
   const header=add('div','','display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 5px 19px');
@@ -30,13 +30,20 @@ async function downloadEntryImage(entry,button){
   const signature=add('div','','display:flex;align-items:center;justify-content:space-between;gap:24px;padding:21px 0 22px;margin-top:8px',body);
   add('div',entry.date.replaceAll('-','. '),'font:12px "Noto Sans KR",sans-serif;letter-spacing:.8px;color:#8b8b7f;flex-shrink:0',signature);
   add('div',entry.alias,'font-size:13px;font-weight:400;color:#527b75;text-align:right',signature);
-  const footer=add('div','','display:flex;align-items:center;justify-content:center;gap:12px;padding-top:17px');
-  add('div','bookclub.questionschool.net','font:11px "Noto Sans KR",sans-serif;letter-spacing:.8px;color:#e1f6f0',footer);
+  const footer=add('div','','height:56px;position:relative;text-align:center');
+
   wrapper.append(card);document.body.append(wrapper);
   if(document.fonts){await Promise.all([document.fonts.load('22px "Gowun Batang"'),document.fonts.load('12px "Noto Sans KR"')]);await document.fonts.ready;}
   // Keep long entries inside common mobile canvas memory and dimension limits.
   const height=Math.ceil(card.getBoundingClientRect().height),scale=Math.min(2,16000/height,Math.sqrt(15000000/(680*height)));
   const canvas=await html2canvas(card,{scale,backgroundColor:'#078f8b',logging:false,useCORS:true,windowWidth:1000,scrollX:0,scrollY:0});
+  // Center the actual glyph bounds: html2canvas's font baseline can shift DOM text downward.
+  const context=canvas.getContext('2d'),address='bookclub.questionschool.net';
+  context.setTransform(1,0,0,1,0,0);
+  context.font=(11*scale)+'px "Noto Sans KR",sans-serif';context.fillStyle='#e1f6f0';context.textAlign='center';context.textBaseline='alphabetic';
+  const metrics=context.measureText(address),footerTop=(footer.getBoundingClientRect().top-card.getBoundingClientRect().top)*scale;
+  const ascent=metrics.actualBoundingBoxAscent,descent=metrics.actualBoundingBoxDescent;
+  context.fillText(address,canvas.width/2,footerTop+28*scale+(ascent-descent)/2);
   const blob=await new Promise((resolve,reject)=>canvas.toBlob(value=>value?resolve(value):reject(Error('이미지를 만들지 못했어. 다시 시도해 줘.')),'image/png'));
   const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;
   const safe=value=>String(value).replace(/[\\/:*?"<>|\u0000-\u001f]/g,'_').slice(0,60);
