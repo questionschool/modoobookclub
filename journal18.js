@@ -6,7 +6,7 @@ let likesVersion=0;
 function today(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());}
 function el(tag,text,cls){const e=document.createElement(tag);e.textContent=text;if(cls)e.className=cls;return e;}
 const api=journal18Api;
-function setMembers(next){members=next;const selected=$('alias').value;$('alias').replaceChildren(new Option('별칭 선택',''));for(const name of members)$('alias').append(new Option(name,name));$('alias').value=selected;$('member-count').textContent=members.length;}
+function setMembers(next){members=[...next].sort((a,b)=>a.localeCompare(b,'ko'));const selected=$('alias').value;$('alias').replaceChildren(new Option('별칭 선택',''));for(const name of members)$('alias').append(new Option(name,name));$('alias').value=selected;$('member-count').textContent=members.length;}
 function choose(name){filter=name;const url=new URL(location.href);if(name)url.searchParams.set('alias',name);else url.searchParams.delete('alias');history.replaceState(null,'',url);render();}
 function reset(){editing=null;pendingId=null;$('quote').value='';$('mind').value='';$('page').value='';$('date').value=today()<'2026-11-02'?'2026-11-02':today();$('save').textContent='기록 남기기 ↗';$('cancel').hidden=true;}
 function render(){
