@@ -30,7 +30,7 @@ function statisticsToday(){return new Intl.DateTimeFormat('en-CA',{timeZone:'Asi
 function renderStatistics(){
  if(!overviewRecords)return;
  const today=statisticsToday(), target=Number($('reading-target').value);
- const stats=season18Statistics(overviewRecords,memberNames,today,target);
+ const stats=season18Statistics(overviewRecords,memberNames,today,target,Number($('reading-first').value));
  $('ranking-summary').textContent=today+' 기준 · 저장된 '+stats.days.length+'회 중 출석 비율이야. 미기록·미래 날짜는 제외하고, 같은 출석 횟수는 공동 순위로 표시해.';
  const list=$('attendance-ranking');list.replaceChildren();
  if(!stats.days.length){list.append(element('p','아직 저장된 출석 기록이 없어.','admin-status'));}
@@ -51,17 +51,24 @@ function renderStatistics(){
 function renderForecast(stats,target,today){
  const box=$('reading-forecast');box.replaceChildren();
  if(!Number.isInteger(target)||target<1||target>10000){box.append(element('p','마지막 쪽을 1~10000 사이의 정수로 입력해 줘.'));return;}
- if(stats.current===null){box.append(element('p','실제 읽은 끝 쪽을 저장하면 낭독 진도와 완독 예상을 보여 줄게.'));return;}
+ if(!Number.isInteger(Number($('reading-first').value))||Number($('reading-first').value)<1||Number($('reading-first').value)>target){box.append(element('p','첫 쪽을 1 이상, 마지막 쪽 이하의 정수로 입력해 줘.'));return;}
+ if(stats.current===null){box.append(element('p','읽은 구간의 시작·끝 쪽을 함께 저장하면 미독 구간과 완독 예상을 계산할 수 있어.'));return;}
  const cards=element('div','','forecast-grid');
- for(const [title,value] of [['도달한 쪽',stats.current+' / '+target+'쪽'],['남은 쪽',stats.remaining+'쪽'],['최근 평균',stats.average===null?'자료 없음':stats.average.toFixed(1)+'쪽 / 회']]){
+ for(const [title,value] of [['읽은 쪽 · 중복 제외',stats.current+' / '+stats.total+'쪽'],['기록상 미독',stats.remaining+'쪽'],['최근 평균',stats.average===null?'자료 없음':stats.average.toFixed(1)+'쪽 / 회']]){
   const card=element('div','','forecast-card');card.append(element('span',title),element('strong',value));cards.append(card);
  }
  box.append(cards);
- const headline=stats.remaining===0?'목표 쪽까지 읽었어!':stats.sessions===null?'속도를 계산하려면 시작·끝 쪽이 있는 기록이 2회 이상 필요해.':'약 '+stats.sessions+'회 더 읽으면 · '+stats.finish+' 완독 예상';
+ const headline=stats.remaining===0?'목표 쪽까지 읽었어!':stats.sessions===null?'예상을 계산하려면 낭독 범위 안의 구간 기록이 2회 이상이고, 최근에 새로 읽은 쪽이 있어야 해.':'약 '+stats.sessions+'회 더 읽으면 · '+stats.finish+' 완독 예상';
  box.append(element('p',headline,'forecast-result'));
- box.append(element('p','최근 쪽수 기록 '+stats.samples.length+'회'+(stats.samples.length?' ('+stats.samples[0].date+' ~ '+stats.samples.at(-1).date+')':'')+'의 회당 평균 (끝 쪽 − 시작 쪽 + 1)으로 계산해. 도달한 쪽은 저장된 끝 쪽 중 가장 큰 값이며, 건너뛴 구간이나 다시 읽기는 별도로 보정하지 않아.','admin-status'));
+ const ranges=element('details','','unread-ranges');ranges.append(element('summary','아직 읽지 않은 구간 · '+stats.remaining+'쪽'));
+ ranges.append(element('p',stats.unread.length?stats.unread.map(([a,b])=>a===b?'p.'+a:'p.'+a+'–'+b).join(' · '):'낭독 범위의 모든 쪽이 기록되어 있어.'));box.append(ranges);
+ box.append(element('p','p.'+stats.first+'–'+target+' 중 날짜별 읽은 구간을 합치고 중복을 제외했어. 부록을 먼저 읽어도 그 사이의 페이지는 읽은 것으로 처리하지 않아. 기록이 없는 구간은 미독으로 계산하므로 실제로 읽었다면 해당 날짜의 구간을 보완해 줘.','admin-status'));
+ box.append(element('p','최근 '+stats.samples.length+'회'+(stats.samples.length?' ('+stats.samples[0].date+' ~ '+stats.samples.at(-1).date+')':'')+'에서 새로 읽은 쪽수의 평균으로 남은 기간을 계산해. 이전에 읽은 구간과 겹치는 쪽은 속도에서도 제외해.','admin-status'));
+ if(stats.incomplete)box.append(element('p','시작·끝 쪽이 불완전한 기록 '+stats.incomplete+'회는 읽은 구간에 포함하지 않았어. 해당 기록을 보완해 줘.','admin-status'));
  box.append(element('p','마지막 진도 입력 '+stats.latest+' · '+today+' 다음 날부터 평일에 하루 한 번 읽는다고 가정해. 오늘의 미입력 기록·휴강·공휴일은 반영하지 않은 추정이야.','admin-status'));
  if(stats.finish && stats.finish>'2026-11-30')box.append(element('p','시즌 예정 종료일 (11/30) 이후에도 같은 평일 일정으로 계속 읽는다는 가정이야.','admin-status'));
- if(stats.current>target)box.append(element('p','기록된 끝 쪽이 목표보다 커. 완독 목표와 입력한 쪽수를 확인해 줘.','admin-status'));
+
 }
 $('reading-target').addEventListener('input',renderStatistics);
+
+$('reading-first').addEventListener('input',renderStatistics);

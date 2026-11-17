@@ -9,11 +9,28 @@ assert.equal(stats([],['가'],'2026-11-06').ranking[0].rate,null);
 assert.equal(stats([records[0]],[],'2026-11-06').sessions,null);
 assert.equal(stats(records,[],'2026-11-06',20).sessions,0);
 assert.equal(stats(records,[],'2026-11-06',10).remaining,0);
-assert.equal(stats([r('2026-11-02',[],null,40)],[],'2026-11-06').current,40);
+assert.equal(stats([r('2026-11-02',[],null,40)],[],'2026-11-06').current,null);
 assert.equal(stats([r('2026-11-02',[],50,40)],[],'2026-11-06').current,null);
 assert.equal(stats([r('2026-11-02',[],null,null)],[],'2026-11-06').current,null);
 assert.equal(stats([records[0],r('2026-11-02',['나'],1,15)],[],'2026-11-06').days.length,1);
 assert.equal(stats(records,[],'2026-11-06',Infinity).remaining,368);
 const six=Array.from({length:6},(_,i)=>r('2026-11-'+String(i+2).padStart(2,'0'),[],1,i+1));
-assert.equal(stats(six,[],'2026-11-10').average,4);
+assert.equal(stats(six,[],'2026-11-10').average,1);
 console.log('PASS: attendance denominator, duplicates, ordering, future/season filtering, empty/missing/invalid pages, recent five, completion, weekday forecast, invalid target');
+
+// Appendix first must not mark the intervening body pages as read.
+const appendix=[r('2026-11-02',[],1,100),r('2026-11-03',[],370,388)];
+s=stats(appendix,[],'2026-11-06');
+assert.equal(s.current,119);assert.equal(s.remaining,269);assert.deepEqual(s.unread,[[101,369]]);assert.equal(s.sessions,5);
+// Overlaps and rereading count only once, including in recent speed.
+s=stats([...appendix,r('2026-11-04',[],90,110)],[],'2026-11-06');
+assert.equal(s.current,129);assert.equal(s.remaining,259);assert.equal(s.samples.at(-1).newPages,10);
+assert.equal(stats([r('2026-11-02',[],1,10),r('2026-11-03',[],1,10)],[],'2026-11-06',20).average,5);
+// Configurable reading bounds exclude front matter and clip appendix beyond goal.
+s=stats(appendix,[],'2026-11-06',380,8);assert.equal(s.total,373);assert.equal(s.current,104);assert.equal(s.remaining,269);
+assert.equal(stats([r('2026-11-02',[],8,20)],[],'2026-11-06',20,8).remaining,0);
+// Missing endpoints must not imply a read range, and all-reread recent sessions have no forecast.
+s=stats([r('2026-11-02',[],null,388)],[],'2026-11-06');assert.equal(s.current,null);assert.equal(s.incomplete,1);
+const repeats=Array.from({length:6},(_,i)=>r('2026-11-'+String(i+2).padStart(2,'0'),[],1,10));
+s=stats(repeats,[],'2026-11-10',20);assert.equal(s.average,0);assert.equal(s.sessions,null);assert.equal(s.finish,null);
+console.log('PASS: appendix gaps, union, overlap, rereads, bounds, incomplete records and zero new-page speed');
