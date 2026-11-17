@@ -1,0 +1,17 @@
+.journal-content .season-stats{margin:48px 0 60px;padding-top:32px;border-top:1px solid var(--line)}
+.journal-content .season-stats .eyebrow{margin-bottom:12px}
+.journal-content .member-stat{display:grid;grid-template-columns:42px minmax(0,1fr) 150px;gap:10px 16px;padding:20px 4px;border-bottom:1px solid var(--line);align-items:center;font-size:14px;overflow-wrap:anywhere}
+.journal-content .member-rank{color:#697957;font-size:12px}
+.journal-content .member-score{display:grid;gap:7px;font-size:13px;text-align:right}
+.journal-content .member-score progress{width:100%;height:6px;accent-color:#687c59}
+.journal-content .member-dates{grid-column:2/-1;color:var(--soft);font-size:12px}
+.journal-content .member-dates summary{cursor:pointer;width:fit-content}
+.journal-content .member-dates p{line-height:2;margin:8px 0 0}
+.journal-content #reading-target{display:block;width:150px;margin-top:8px}
+.journal-content #target-help a{text-decoration:underline}
+.journal-content .forecast-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px}
+.journal-content .forecast-card{background:#edf0e5;border:1px solid var(--line);padding:18px 14px;border-radius:6px;display:grid;gap:9px}
+.journal-content .forecast-card span{font-size:12px;color:var(--soft)}
+.journal-content .forecast-card strong{font-size:18px;font-weight:500}
+.journal-content .forecast-result{font-family:'Gowun Batang',serif;font-size:23px;line-height:1.7;margin:24px 0 16px}
+@media(max-width:520px){.journal-content .member-stat{grid-template-columns:30px minmax(0,1fr) 110px;gap:10px}.journal-content .forecast-grid{grid-template-columns:1fr}.journal-content .forecast-card{grid-template-columns:1fr 1fr;align-items:center}.journal-content .forecast-card strong{text-align:right;font-size:17px}.journal-content .forecast-result{font-size:21px}}
