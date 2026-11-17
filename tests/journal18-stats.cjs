@@ -16,7 +16,7 @@ assert.equal(stats([records[0],r('2026-11-02',['나'],1,15)],[],'2026-11-06').da
 assert.equal(stats(records,[],'2026-11-06',Infinity).remaining,368);
 const six=Array.from({length:6},(_,i)=>r('2026-11-'+String(i+2).padStart(2,'0'),[],1,i+1));
 assert.equal(stats(six,[],'2026-11-10').average,1);
-console.log('PASS: attendance denominator, duplicates, ordering, future/season filtering, empty/missing/invalid pages, recent five, completion, weekday forecast, invalid target');
+console.log('PASS: attendance denominator, duplicates, ordering, future/season filtering, empty/missing/invalid pages, all sessions, completion, weekday forecast, invalid target');
 
 // Appendix first must not mark the intervening body pages as read.
 const appendix=[r('2026-11-02',[],1,100),r('2026-11-03',[],370,388)];
@@ -29,8 +29,14 @@ assert.equal(stats([r('2026-11-02',[],1,10),r('2026-11-03',[],1,10)],[],'2026-11
 // Configurable reading bounds exclude front matter and clip appendix beyond goal.
 s=stats(appendix,[],'2026-11-06',380,8);assert.equal(s.total,373);assert.equal(s.current,104);assert.equal(s.remaining,269);
 assert.equal(stats([r('2026-11-02',[],8,20)],[],'2026-11-06',20,8).remaining,0);
-// Missing endpoints must not imply a read range, and all-reread recent sessions have no forecast.
+// Missing endpoints must not imply a read range, and reread sessions remain in the all-session denominator.
 s=stats([r('2026-11-02',[],null,388)],[],'2026-11-06');assert.equal(s.current,null);assert.equal(s.incomplete,1);
 const repeats=Array.from({length:6},(_,i)=>r('2026-11-'+String(i+2).padStart(2,'0'),[],1,10));
-s=stats(repeats,[],'2026-11-10',20);assert.equal(s.average,0);assert.equal(s.sessions,null);assert.equal(s.finish,null);
-console.log('PASS: appendix gaps, union, overlap, rereads, bounds, incomplete records and zero new-page speed');
+s=stats(repeats,[],'2026-11-10',20);assert.equal(s.average,10/6);assert.equal(s.sessions,6);assert.equal(s.samples.length,6);
+console.log('PASS: appendix gaps, union, overlap, rereads, bounds, incomplete records and all-session reread denominator');
+
+// Earlier sessions must contribute even when the last five were slower.
+const history=[r('2026-11-02',[],1,100),...Array.from({length:5},(_,i)=>r('2026-11-'+String(i+3).padStart(2,'0'),[],101+i*10,110+i*10))];
+s=stats(history,[],'2026-11-10',200);
+assert.equal(s.samples.length,6);assert.equal(s.current,150);assert.equal(s.average,25);assert.equal(s.remaining,50);assert.equal(s.sessions,2);
+console.log('PASS: entire history average = 150 pages / 6 sessions = 25, not recent-five average of 10');

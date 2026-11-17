@@ -30,7 +30,7 @@ function season18Statistics(records, members, today, target = 388, first = 1) {
  const total = target - first + 1;
  const current = valid.length ? read.size : null;
  const remaining = current === null ? null : total - read.size;
- const samples = sessionsRead.slice(-5);
+ const samples = sessionsRead;
  const average = samples.length ? samples.reduce((sum,r) => sum + r.newPages, 0) / samples.length : null;
  const sessions = remaining === 0 ? 0 : remaining !== null && samples.length >= 2 && average > 0 ? Math.ceil(remaining / average) : null;
  let finish = null;
