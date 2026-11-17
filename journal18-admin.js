@@ -31,20 +31,30 @@ function renderStatistics(){
  if(!overviewRecords)return;
  const today=statisticsToday(), target=Number($('reading-target').value);
  const stats=season18Statistics(overviewRecords,memberNames,today,target,Number($('reading-first').value));
- $('ranking-summary').textContent=today+' 기준 · 저장된 '+stats.days.length+'회 중 출석 비율이야. 미기록·미래 날짜는 제외하고, 같은 출석 횟수는 공동 순위로 표시해.';
+ $('ranking-summary').textContent=today+' 기준 · 기록된 '+stats.days.length+'회 기준. 미기록·미래 날짜는 제외해. 빠진 날짜를 누르면 그날 기록을 확인할 수 있어.';
  const list=$('attendance-ranking');list.replaceChildren();
  if(!stats.days.length){list.append(element('p','아직 저장된 출석 기록이 없어.','admin-status'));}
  else {
- let rank=0,previous=-1;
+ const table=element('table','','attendance-table');
+ const caption=element('caption','출석이 많은 순 · 같은 횟수는 공동 순위');table.append(caption);
+ const head=element('thead',''),headers=element('tr','');
+ for(const title of ['순위','친구','출석','빠진 날']){const th=element('th',title);th.scope='col';headers.append(th);}head.append(headers);table.append(head);
+ const body=element('tbody','');let rank=0,previous=-1;
  stats.ranking.forEach((person,index)=>{
   if(person.dates.length!==previous)rank=index+1;previous=person.dates.length;
-  const row=element('article','','member-stat');
-  row.append(element('span',rank+'위','member-rank'),element('strong',person.name));
-  const score=element('div','','member-score');score.append(element('strong',person.dates.length+'회 · '+person.rate.toFixed(1)+'%'));
-  const bar=element('progress','');bar.max=100;bar.value=person.rate;bar.setAttribute('aria-label',person.name+' 출석률');score.append(bar);row.append(score);
-  const details=element('details','','member-dates');details.append(element('summary','출석일 '+person.dates.length+'일 보기'));
-  details.append(element('p',person.dates.length?person.dates.map(d=>Number(d.slice(5,7))+'/'+Number(d.slice(8))).join(' · '):'아직 출석한 날이 없어.'));row.append(details);list.append(row);
+  const row=element('tr','');row.append(element('td',String(rank),'member-rank'));
+  const name=element('th',person.name,'member-name');name.scope='row';row.append(name);
+  const score=element('td','','member-score');score.append(element('strong',person.dates.length+'회'),element('span',person.rate.toFixed(1)+'%','member-rate'));row.append(score);
+  const absent=stats.days.filter(day=>!person.dates.includes(day.date));
+  const dates=element('td','','member-absences');
+  if(!absent.length)dates.append(element('span','빠진 날 없음','attendance-perfect'));
+  else {const chips=element('div','','absence-dates');for(const day of absent){
+   const button=element('button',Number(day.date.slice(5,7))+'/'+Number(day.date.slice(8)),'absence-date');button.type='button';button.setAttribute('aria-label',person.name+' · '+day.date+' 빠진 날 기록 확인');
+   button.onclick=async()=>{if(loading)return;await loadDate(day.date);if(loadedDate===day.date){$('day-editor').open=true;$('day-editor').scrollIntoView({behavior:'smooth',block:'start'});}};chips.append(button);
+  }dates.append(chips);}
+  row.append(dates);body.append(row);
  });
+ table.append(body);list.append(table);
  }
  renderForecast(stats,target,today);
 }
@@ -62,11 +72,13 @@ function renderForecast(stats,target,today){
  box.append(element('p',headline,'forecast-result'));
  const ranges=element('details','','unread-ranges');ranges.append(element('summary','아직 읽지 않은 구간 · '+stats.remaining+'쪽'));
  ranges.append(element('p',stats.unread.length?stats.unread.map(([a,b])=>a===b?'p.'+a:'p.'+a+'–'+b).join(' · '):'낭독 범위의 모든 쪽이 기록되어 있어.'));box.append(ranges);
- box.append(element('p','p.'+stats.first+'–'+target+' 중 날짜별 읽은 구간을 합치고 중복을 제외했어. 부록을 먼저 읽어도 그 사이의 페이지는 읽은 것으로 처리하지 않아. 기록이 없는 구간은 미독으로 계산하므로 실제로 읽었다면 해당 날짜의 구간을 보완해 줘.','admin-status'));
- box.append(element('p','전체 '+stats.samples.length+'회'+(stats.samples.length?' ('+stats.samples[0].date+' ~ '+stats.samples.at(-1).date+')':'')+' · 중복을 뺀 '+stats.current+'쪽 ÷ '+stats.samples.length+'회 = 회당 '+(stats.average===null?'—':stats.average.toFixed(1))+'쪽으로 남은 기간을 계산해. 시작·끝 쪽이 있는 전체 낭독 기록을 사용하고, 같은 쪽을 다시 읽은 분량은 중복 계산하지 않아.','admin-status'));
- if(stats.incomplete)box.append(element('p','시작·끝 쪽이 불완전한 기록 '+stats.incomplete+'회는 읽은 구간에 포함하지 않았어. 해당 기록을 보완해 줘.','admin-status'));
- box.append(element('p','마지막 진도 입력 '+stats.latest+' · '+today+' 다음 날부터 평일에 하루 한 번 읽는다고 가정해. 오늘의 미입력 기록·휴강·공휴일은 반영하지 않은 추정이야.','admin-status'));
- if(stats.finish && stats.finish>'2026-11-30')box.append(element('p','시즌 예정 종료일 (11/30) 이후에도 같은 평일 일정으로 계속 읽는다는 가정이야.','admin-status'));
+ const notes=element('details','','forecast-notes');notes.append(element('summary','계산 기준과 기록 안내'));
+ notes.append(element('p','p.'+stats.first+'–'+target+' 중 날짜별 읽은 구간을 합치고 중복을 제외했어. 부록을 먼저 읽어도 그 사이의 페이지는 읽은 것으로 처리하지 않아. 기록이 없는 구간은 미독으로 계산하므로 실제로 읽었다면 해당 날짜의 구간을 보완해 줘.','admin-status'));
+ notes.append(element('p','전체 '+stats.samples.length+'회'+(stats.samples.length?' ('+stats.samples[0].date+' ~ '+stats.samples.at(-1).date+')':'')+' · 중복을 뺀 '+stats.current+'쪽 ÷ '+stats.samples.length+'회 = 회당 '+(stats.average===null?'—':stats.average.toFixed(1))+'쪽으로 남은 기간을 계산해. 시작·끝 쪽이 있는 전체 낭독 기록을 사용하고, 같은 쪽을 다시 읽은 분량은 중복 계산하지 않아.','admin-status'));
+ if(stats.incomplete)notes.append(element('p','시작·끝 쪽이 불완전한 기록 '+stats.incomplete+'회는 읽은 구간에 포함하지 않았어. 해당 기록을 보완해 줘.','admin-status'));
+ notes.append(element('p','마지막 진도 입력 '+stats.latest+' · '+today+' 다음 날부터 평일에 하루 한 번 읽는다고 가정해. 오늘의 미입력 기록·휴강·공휴일은 반영하지 않은 추정이야.','admin-status'));
+ if(stats.finish && stats.finish>'2026-11-30')notes.append(element('p','시즌 예정 종료일 (11/30) 이후에도 같은 평일 일정으로 계속 읽는다는 가정이야.','admin-status'));
+ box.append(notes);
 
 }
 $('reading-target').addEventListener('input',renderStatistics);

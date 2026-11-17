@@ -1,17 +1,47 @@
-.journal-content .season-stats{margin:48px 0 60px;padding-top:32px;border-top:1px solid var(--line)}
-.journal-content .season-stats .eyebrow{margin-bottom:12px}
-.journal-content .member-stat{display:grid;grid-template-columns:42px minmax(0,1fr) 150px;gap:10px 16px;padding:20px 4px;border-bottom:1px solid var(--line);align-items:center;font-size:14px;overflow-wrap:anywhere}
-.journal-content .member-rank{color:#697957;font-size:12px}
-.journal-content .member-score{display:grid;gap:7px;font-size:13px;text-align:right}
-.journal-content .member-score progress{width:100%;height:6px;accent-color:#687c59}
-.journal-content .member-dates{grid-column:2/-1;color:var(--soft);font-size:12px}
-.journal-content .member-dates summary{cursor:pointer;width:fit-content}
-.journal-content .member-dates p{line-height:2;margin:8px 0 0}
-.journal-content #reading-target{display:block;width:150px;margin-top:8px}
+/* Admin-only styles: keep the book club palette, use compact operational typography. */
+.journal-content.admin-wrap{max-width:960px;padding-top:42px;padding-bottom:40px}
+.journal-content.admin-wrap h1{font-size:36px;letter-spacing:-1.2px;margin-bottom:14px}
+.journal-content.admin-wrap h2{font-size:23px;line-height:1.5}
+.journal-content.admin-wrap .admin-intro{font-size:13px;line-height:1.8;margin-bottom:28px}
+.journal-content.admin-wrap .admin-status{font-size:12px;line-height:1.8;color:#66716b}
+.journal-content.admin-wrap .eyebrow{font-size:10px;letter-spacing:1.8px}
+.journal-content.admin-wrap #day-editor{background:#f1f2eb;border:1px solid #dfe3d9;padding:22px;border-radius:12px;margin:24px 0 36px}
+.journal-content.admin-wrap #day-editor>summary{font:600 17px/1.6 'Noto Sans KR',sans-serif;padding:0}
+.journal-content.admin-wrap .attendance-list label{padding:12px;font-size:13px;border-radius:7px}
+.journal-content.admin-wrap .admin-toolbar{margin:22px 0}
+.journal-content.admin-wrap .attendance-row{padding:15px 8px}
+.journal-content.admin-wrap .attendance-overview{margin:32px 0 40px}
+.journal-content .season-stats{margin:28px 0;padding:28px;background:#fffef9;border:1px solid #dfe3d9;border-radius:12px}
+.journal-content .season-stats .eyebrow{margin-bottom:7px}
+.journal-content #ranking-summary{margin:10px 0 20px}
+.journal-content .attendance-table{border-collapse:collapse;width:100%;table-layout:fixed;font:13px/1.6 'Noto Sans KR',sans-serif;text-align:left}
+.journal-content .attendance-table caption{text-align:left;font-size:11px;color:#738077;padding:0 0 10px;caption-side:bottom;padding-top:12px}
+.journal-content .attendance-table thead th{font-size:11px;font-weight:500;color:#68756c;background:#f3f5ef;padding:10px 12px;border-bottom:1px solid #dfe3d9}
+.journal-content .attendance-table th:first-child{width:48px}
+.journal-content .attendance-table th:nth-child(2){width:22%}
+.journal-content .attendance-table th:nth-child(3){width:110px}
+.journal-content .attendance-table tbody td,.journal-content .attendance-table tbody th{padding:13px 12px;border-bottom:1px solid #e9ece4;vertical-align:middle;overflow-wrap:anywhere}
+.journal-content .attendance-table tbody tr:last-child>*{border-bottom:0}
+.journal-content .attendance-table tbody tr:hover{background:#fafbf7}
+.journal-content .attendance-table .member-rank{font-size:11px;color:#8a938d;font-variant-numeric:tabular-nums}
+.journal-content .attendance-table .member-name{font-size:13px;font-weight:500;color:#2b4037}
+.journal-content .member-score{font-variant-numeric:tabular-nums;white-space:nowrap}
+.journal-content .member-score strong{font-size:13px;font-weight:500}
+.journal-content .member-rate{display:block;color:#768077;font-size:11px;margin-top:2px}
+.journal-content .absence-dates{display:flex;flex-wrap:wrap;gap:5px}
+.journal-content button.absence-date{border:1px solid #e3e1da;border-radius:4px;background:#f7f6f1;color:#726658;font-size:11px;font-weight:400;line-height:1.5;padding:3px 7px;margin:0;min-height:28px;font-variant-numeric:tabular-nums}
+.journal-content button.absence-date:hover{background:#eeeadd;border-color:#bcb49f}
+.journal-content .attendance-perfect{font-size:11px;color:#738367}
+.journal-content .forecast-settings,.journal-content .forecast-notes,.journal-content .unread-ranges{margin:14px 0;padding:0;border:0;border-radius:0;background:transparent;font-size:12px}
+.journal-content .forecast-settings>summary,.journal-content .forecast-notes>summary,.journal-content .unread-ranges>summary{font:500 12px/1.8 'Noto Sans KR',sans-serif;color:#66756b;padding:6px 0;cursor:pointer}
+.journal-content .forecast-inputs{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.journal-content #reading-first,.journal-content #reading-target{display:block;width:150px;margin-top:6px;padding:8px 10px}
 .journal-content #target-help a{text-decoration:underline}
-.journal-content .forecast-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:24px}
-.journal-content .forecast-card{background:#edf0e5;border:1px solid var(--line);padding:18px 14px;border-radius:6px;display:grid;gap:9px}
-.journal-content .forecast-card span{font-size:12px;color:var(--soft)}
-.journal-content .forecast-card strong{font-size:18px;font-weight:500}
-.journal-content .forecast-result{font-family:'Gowun Batang',serif;font-size:23px;line-height:1.7;margin:24px 0 16px}
-@media(max-width:520px){.journal-content .member-stat{grid-template-columns:30px minmax(0,1fr) 110px;gap:10px}.journal-content .forecast-grid{grid-template-columns:1fr}.journal-content .forecast-card{grid-template-columns:1fr 1fr;align-items:center}.journal-content .forecast-card strong{text-align:right;font-size:17px}.journal-content .forecast-result{font-size:21px}}
+.journal-content .forecast-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px}
+.journal-content .forecast-card{background:#f1f4ec;border:0;padding:18px 16px;border-radius:8px;display:grid;gap:9px}
+.journal-content .forecast-card span{font-size:11px;color:#69766c}
+.journal-content .forecast-card strong{font-size:19px;font-weight:500;font-variant-numeric:tabular-nums}
+.journal-content .forecast-result{font:500 19px/1.7 'Noto Sans KR',sans-serif;color:#294d3d;margin:24px 0 16px;letter-spacing:-.3px}
+.journal-content .forecast-notes{border-top:1px solid #e9ece4;padding-top:10px;margin-top:18px}
+.journal-content .unread-ranges p{font-size:12px;line-height:1.9;color:#68756c}
+@media(max-width:600px){.journal-content.admin-wrap{padding-inline:16px}.journal-content.admin-wrap h1{font-size:29px}.journal-content .season-stats{padding:20px 14px}.journal-content.admin-wrap h2{font-size:21px}.journal-content .attendance-table thead th,.journal-content .attendance-table tbody td,.journal-content .attendance-table tbody th{padding:11px 6px}.journal-content .attendance-table th:first-child{width:30px}.journal-content .attendance-table th:nth-child(2){width:22%}.journal-content .attendance-table th:nth-child(3){width:62px}.journal-content .attendance-table .member-name{font-size:12px}.journal-content button.absence-date{padding:4px 6px;min-height:30px}.journal-content .forecast-grid{gap:6px}.journal-content .forecast-card{padding:14px 10px}.journal-content .forecast-card strong{font-size:15px}.journal-content .forecast-result{font-size:17px}.journal-content .forecast-inputs{gap:12px}.journal-content #reading-first,.journal-content #reading-target{width:125px}}
